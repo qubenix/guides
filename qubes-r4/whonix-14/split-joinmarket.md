@@ -13,7 +13,7 @@ The only way a remote attacker can compromise this system is to successfully exp
 
 ## I. Create VMs
 
-### A. Clone Whonix TemplateVM and install packages.
+### A. Clone Whonix TemplateVM and install dependencies.
 
 1. In a `dom0` terminal, clone a Whonix workstation TemplateVM and launch a terminal.
 
@@ -22,7 +22,7 @@ The only way a remote attacker can compromise this system is to successfully exp
 [user@dom0 ~]$ qvm-run whonix-ws-14-jm konsole
 ```
 
-2. In the `whonix-ws-14-jm` terminal, install packages and shutdown VM.
+2. In the `whonix-ws-14-jm` terminal, install dependencies and shutdown.
 
 ```
 user@host:~$ sudo apt-get update && sudo apt-get install automake build-essential curl git libffi-dev libsecp256k1-dev libsodium-dev libtool pkg-config python-dev python-pip python-sip python-virtualenv -y
@@ -105,7 +105,7 @@ gpg:          There is no indication that the signature belongs to the owner.
 Primary key fingerprint: 4668 9728 A9F6 4B39 1FA8  71B7 B3AE 09F1 E9A3 197A
 ```
 
-3. Create python virtual environment and install packages to it.
+3. Create python virtual environment and install dependencies to it.
 
 ```
 user@host:~/joinmarket-clientserver$ virtualenv jmvenv
