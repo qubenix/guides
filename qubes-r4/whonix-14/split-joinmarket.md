@@ -18,11 +18,11 @@ The only way a remote attacker can compromise this system is to successfully exp
 1. In a `dom0` terminal, clone a Whonix workstation TemplateVM and launch a terminal.
 
 ```
-[user@dom0 ~]$ qvm-clone whonix-ws-14 whonix-ws-jm-14
-[user@dom0 ~]$ qvm-run whonix-ws-jm-14 konsole
+[user@dom0 ~]$ qvm-clone whonix-ws-14 whonix-ws-14-jm
+[user@dom0 ~]$ qvm-run whonix-ws-14-jm konsole
 ```
 
-2. In the `whonix-ws-jm-14` terminal, install packages and shutdown VM.
+2. In the `whonix-ws-14-jm` terminal, install packages and shutdown VM.
 
 ```
 user@host:~$ sudo apt-get update && sudo apt-get install automake build-essential curl git libffi-dev libsecp256k1-dev libsodium-dev libtool pkg-config python-dev python-pip python-sip python-virtualenv -y
@@ -36,14 +36,14 @@ user@host:~$ sudo shutdown now
 **Note:** You must pick some label color for your VMs upon creation. The color does not have to match what is shown in these examples.
 
 ```
-[user@dom0 ~]$ qvm-create --label red --prop netvm='sys-whonix' --template whonix-ws-jm-14 jm-bitcoind
+[user@dom0 ~]$ qvm-create --label red --prop netvm='sys-whonix' --template whonix-ws-14-jm jm-bitcoind
 [user@dom0 ~]$ qvm-volume resize jm-bitcoind:private 20G
 ```
 
 2. Create the VM for JoinMarket's wallet with no networking.
 
 ```
-[user@dom0 ~]$ qvm-create --label black --prop netvm='' --template whonix-ws-jm-14 jm-wallet
+[user@dom0 ~]$ qvm-create --label black --prop netvm='' --template whonix-ws-14-jm jm-wallet
 ```
 
 ## II. Install Bitcoin and JoinMarket
