@@ -277,7 +277,7 @@ user@host:~$ sudo kwrite /rw/config/rc.local
 2. Paste the following at the bottom of the file.
 
 ```
-cp /rw/config/bitcoind.service /rw/config/joinmarketd.service -t /etc/systemd/system/multi-user.target.wants/
+ln -s /rw/config/bitcoind.service /rw/config/joinmarketd.service -t /etc/systemd/system/multi-user.target.wants/
 systemctl daemon-reload
 systemctl start bitcoind.service
 systemctl start joinmarketd.service
