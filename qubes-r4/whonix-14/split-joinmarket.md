@@ -31,7 +31,7 @@ user@host:~$ sudo shutdown now
 
 ### B. In a `dom0` terminal, create two AppVMs from the new Whonix TemplateVM.
 
-1. Create the VM for `bitcoind` and `joinmarketd` using a Whonix gateway for networking, and increase the private volume size.
+1. Create the VM for `bitcoind` and `joinmarketd`, use a Whonix gateway for networking, and increase the private volume size.
 
 **Note:** You must pick some label color for your VMs upon creation. The color does not have to match what is shown in these examples.
 
