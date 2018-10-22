@@ -52,6 +52,7 @@ In addition to the security improvements, using a pruned Bitcoin node only requi
 ```
 [user@dom0 ~]$ qvm-service --enable jm-bitcoind bitcoind
 [user@dom0 ~]$ qvm-service --enable jm-bitcoind joinmarketd
+```
 
 ## II. Set Up TemplateVM
 
