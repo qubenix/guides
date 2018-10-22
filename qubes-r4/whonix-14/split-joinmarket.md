@@ -1,5 +1,5 @@
 # Qubes 4 & Whonix 14: Split JoinMarket Wallet
-Create a two VM system for a fully functional JoinMarket wallet in an offline VM. The `joinmarketd` daemon and pruned `bitcoind` node run in a separate Whonix VM, communicate only over Tor, prefer hidden services, and use stream isolation.
+Create a two VM system for a fully functional JoinMarket wallet in an offline VM. The `joinmarketd` daemon and `bitcoind` node run in a separate Whonix VM, communicate only over Tor, prefer hidden services, and use stream isolation.
 
 ## What is JoinMarket?
 Joinmarket is a decentralized, open source, and trustless market for Bitcoin privacy using [coinjoin](https://en.bitcoin.it/wiki/CoinJoin). Anyone holding Bitcoin can offer coinjoins for a fee, and anyone can pay a fee to have their transactions obfuscated.
@@ -10,6 +10,10 @@ There is a detailed explanation of the concept by the creator [here](https://bit
 The benefit of this setup is that your wallet VM is essentially cold storage, yet retains all the functionality of an internet connected JoinMarket wallet (send payment, yield generator, etc).
 
 The only way a remote attacker can compromise this system is to successfully exploit one of your internet connected VMs and then use a Qubes/Xen 0-day to escape that VM.
+
+## Prerequisites
+
+- Have completed `build-bitcoind` guide.
 
 ## I. Create VMs
 
