@@ -180,7 +180,10 @@ remote: Compressing objects: 100% (9/9), done.
 remote: Total 124912 (delta 6), reused 3 (delta 3), pack-reused 124900
 Receiving objects: 100% (124912/124912), 111.85 MiB | 537.00 KiB/s, done.
 Resolving deltas: 100% (87124/87124), done.
-user@host:~$ gpg --recv-keys AC6626172E00A82CFFAE8972A636E97631F767E0gpg: key 0x860FEB804E669320: public key "Pieter Wuille <pieter.wuille@gmail.com>" imported
+user@host:~$ gpg --recv-keys AC6626172E00A82CFFAE8972A636E97631F767E0
+gpg: keybox '/home/user/.gnupg/pubring.kbx' created
+gpg: /home/user/.gnupg/trustdb.gpg: trustdb created
+gpg: key 0x860FEB804E669320: public key "Pieter Wuille <pieter.wuille@gmail.com>" imported
 gpg: no ultimately trusted keys found
 gpg: Total number processed: 1
 gpg:               imported: 1
