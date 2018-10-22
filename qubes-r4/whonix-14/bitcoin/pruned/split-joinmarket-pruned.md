@@ -464,7 +464,7 @@ port = 6698, 6667
 usessl = true, false
 socks5 = true, true
 socks5_host = <gateway-ip>, <gateway-ip>
-socks5_port = 9112, 9113
+socks5_port = 9180, 9181
 host = 6dvj6v5imhny3anf.onion, cfyfz6afpgfeirst.onion
 
 [LOGGING]
