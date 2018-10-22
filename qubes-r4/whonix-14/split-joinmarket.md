@@ -78,26 +78,23 @@ user@host:~$ sudo install -g staff -m 0755 -o root bitcoin-0.17.0/bin/bitcoin* -
 
 2. Download and verify [JoinMarket](https://github.com/JoinMarket-Org/joinmarket-clientserver).
 
-**Note:** at the time of writing the most recent version of JoinMarket is `0.3.5`, modify the following steps accordingly if the version has changed.
-
 ```
 user@host:~$ git clone https://github.com/JoinMarket-Org/joinmarket-clientserver ~/joinmarket-clientserver
-Cloning into '/home/user/joinmarket-clientserver'...
-remote: Enumerating objects: 11, done.
-remote: Counting objects: 100% (11/11), done.
-remote: Compressing objects: 100% (11/11), done.
-remote: Total 3203 (delta 3), reused 4 (delta 0), pack-reused 3192
-Receiving objects: 100% (3203/3203), 2.86 MiB | 19.00 KiB/s, done.
-Resolving deltas: 100% (2101/2101), done.
+Cloning into 'joinmarket-clientserver'...
+remote: Enumerating objects: 18, done.
+remote: Counting objects: 100% (18/18), done.
+remote: Compressing objects: 100% (14/14), done.
+remote: Total 3210 (delta 6), reused 13 (delta 4), pack-reused 3192
+Receiving objects: 100% (3210/3210), 2.86 MiB | 605.00 KiB/s, done.
+Resolving deltas: 100% (2104/2104), done.
 user@host:~$ gpg --recv-keys 46689728A9F64B391FA871B7B3AE09F1E9A3197A
 gpg: key 0xB3AE09F1E9A3197A: public key "Adam Gibson <ekaggata@gmail.com>" imported
 gpg: no ultimately trusted keys found
 gpg: Total number processed: 1
 gpg:               imported: 1
 user@host:~$ cd ~/joinmarket-clientserver/
-user@host:~/joinmarket-clientserver$ git checkout -q v0.3.5
 user@host:~/joinmarket-clientserver$ git verify-commit HEAD
-gpg: Signature made Fri 03 Aug 2018 09:39:47 PM UTC
+gpg: Signature made Tue 16 Oct 2018 07:24:58 PM UTC
 gpg:                using RSA key B3AE09F1E9A3197A
 gpg: Good signature from "Adam Gibson <ekaggata@gmail.com>" [unknown]
 gpg: WARNING: This key is not certified with a trusted signature!
@@ -172,7 +169,6 @@ user@host:~$ kwrite ~/.bitcoin/bitcoin.conf
 
 ```
 daemon=1
-deprecatedrpc=accounts
 discover=0
 listen=0
 listenonion=0
@@ -456,6 +452,4 @@ Once `bitcoind` has finished syncing in the `jm-bitcoind` VM you will be able to
 
 ## VIII. To Do
 
-- Watch for new release of JM to remove `deprecatedrpc=accounts` from bitcoin.conf.
-
-- Watch [here](https://github.com/bitcoin/bitcoin/issues/14292) for rpcauth.py to be added to Bitcoin's bins and replace `rpc{user,pass}=` with `rpcauth=` in bitcoin.conf.
+- Merge with `build-bitcoind` guide.
