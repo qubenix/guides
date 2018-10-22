@@ -11,39 +11,157 @@ The benefit of this setup is that your wallet VM is essentially cold storage, ye
 
 In addition to the security improvements, using a pruned Bitcoin node only requires about 10G of disk space.
 
-## I. Create VMs
+## I. Set Up Dom0
 
-### A. Clone Whonix TemplateVM and install dependencies.
-
-1. In a `dom0` terminal, clone a Whonix workstation TemplateVM and launch a terminal.
+### A. In a `dom0` terminal, clone Whonix TemplateVM.
 
 ```
 [user@dom0 ~]$ qvm-clone whonix-ws-14 whonix-ws-14-jm
-[user@dom0 ~]$ qvm-run whonix-ws-14-jm konsole
 ```
 
-2. In the `whonix-ws-14-jm` terminal, install dependencies and shutdown.
+### B. Create two AppVMs from the new Whonix TemplateVM.
 
-```
-user@host:~$ sudo apt-get update && sudo apt-get install automake build-essential curl git libffi-dev libsecp256k1-dev libsodium-dev libtool pkg-config python-dev python-pip python-sip python-virtualenv -y
-user@host:~$ sudo shutdown now
-```
-
-### B. In a `dom0` terminal, create two AppVMs from the new Whonix TemplateVM.
-
-1. Create the VM for `bitcoind` and `joinmarketd`, use a Whonix gateway for networking, and increase the private volume size.
+1. Create the VM for `bitcoind` and `joinmarketd`, use a Whonix gateway for networking.
 
 **Note:** You must pick some label color for your VMs upon creation. The color does not have to match what is shown in these examples.
 
 ```
 [user@dom0 ~]$ qvm-create --label red --prop netvm='sys-whonix' --template whonix-ws-14-jm jm-bitcoind
-[user@dom0 ~]$ qvm-volume resize jm-bitcoind:private 20G
 ```
 
 2. Create the VM for JoinMarket's wallet with no networking.
 
 ```
 [user@dom0 ~]$ qvm-create --label black --prop netvm='' --template whonix-ws-14-jm jm-wallet
+```
+
+3. Resize `jm-bitcoind`.
+
+```
+[user@dom0 ~]$ qvm-volume resize jm-bitcoind:private 20G
+```
+
+### D. Create rpc policies for comms from `jm-wallet` to `jm-bitcoind`.
+
+```
+[user@dom0 ~]$ echo 'jm-wallet jm-bitcoind allow' | sudo tee /etc/qubes-rpc/policy/qubes.{bitcoind,joinmarketd} > /dev/null
+```
+
+### E. Enable `bitcoind` and `joinmarketd` services.
+
+```
+[user@dom0 ~]$ qvm-service --enable jm-bitcoind bitcoind
+[user@dom0 ~]$ qvm-service --enable jm-bitcoind joinmarketd
+
+## II. Set Up TemplateVM
+
+### A. In the `whonix-ws-14-jm` terminal, update and install dependencies.
+
+```
+user@host:~$ sudo apt-get update && sudo apt-get install automake build-essential curl git libffi-dev libsecp256k1-dev libsodium-dev libtool pkg-config python-dev python-pip python-sip python-virtualenv -y
+```
+
+### B. Create system user.
+
+```
+user@host:~$ sudo adduser --group --system bitcoind
+Adding system user `bitcoind' (UID 116) ...
+Adding new group `bitcoind' (GID 122) ...
+Adding new user `bitcoind' (UID 116) with group `bitcoind' ...
+Creating home directory `/home/bitcoind' ...
+```
+
+### C. Use `systemd` to keep `bitcoind` always running.
+
+1. Create `systemd` service file.
+
+```
+user@host:~$ sudo kwrite /lib/systemd/system/bitcoind.service
+```
+
+2. Paste the following.
+
+```
+[Unit]
+Description=Bitcoin's distributed currency daemon
+ConditionPathExists=/var/run/qubes-service/bitcoind
+After=qubes-sysinit.service
+
+[Service]
+User=bitcoind
+Group=bitcoind
+
+Type=forking
+PIDFile=/home/user/.bitcoin/bitcoind.pid
+ExecStart=/usr/local/bin/bitcoind
+ExecStop=/usr/local/bin/bitcoin-cli stop
+
+Restart=always
+PrivateTmp=true
+TimeoutStopSec=60s
+TimeoutStartSec=2s
+StartLimitInterval=120s
+StartLimitBurst=5
+
+[Install]
+WantedBy=multi-user.target
+```
+
+3. Save the file and switch back to the terminal.
+
+### D. Use `systemd` to keep `joinmarketd` always running.
+
+1. Create `systemd` service file.
+
+```
+user@host:~$ sudo kwrite /lib/systemd/system/joinmarketd.service
+```
+
+2. Paste the following.
+
+```
+[Unit]
+Description=JoinMarket's server daemon
+ConditionPathExists=/var/run/qubes-service/joinmarketd
+After=qubes-sysinit.service
+
+[Service]
+User=user
+Group=user
+
+Type=idle
+WorkingDirectory=/home/user/joinmarket-clientserver
+ExecStart=/bin/sh -c 'jmvenv/bin/python scripts/joinmarketd.py > scripts/logs/joinmarketd.log'
+
+Restart=always
+PrivateTmp=true
+TimeoutStopSec=60s
+TimeoutStartSec=2s
+StartLimitInterval=120s
+StartLimitBurst=5
+
+[Install]
+WantedBy=multi-user.target
+```
+
+3. Save the file, switch back to the terminal, and fix permissions.
+
+```
+user@host:~$ sudo chmod 0644 /lib/systemd/system/bitcoind.service /lib/systemd/system/joinmarketd.service
+```
+
+4. Enable the services.
+
+```
+user@host:~$ sudo systemctl enable {bitcoind,joinmarketd}.service
+Created symlink /etc/systemd/system/multi-user.target.wants/bitcoind.service → /lib/systemd/system/bitcoind.service.
+Created symlink /etc/systemd/system/multi-user.target.wants/joinmarketd.service → /lib/systemd/system/joinmarketd.service.
+```
+
+### E. Shutdown TemplateVM.
+
+```
+user@host:~$ sudo shutdown now
 ```
 
 ## II. Install Bitcoin and JoinMarket
@@ -123,7 +241,7 @@ user@host:~/joinmarket-clientserver$ source jmvenv/bin/activate
 user@host:~/joinmarket-clientserver$ qvm-copy ~/joinmarket-clientserver/
 ```
 
-## III. Configure `bitcoind` and `joinmarketd`
+## III. Configure Gateway
 
 ### A. In a `sys-whonix` terminal, find out the gateway IP.
 
@@ -134,7 +252,54 @@ user@host:~$ qubesdb-read /qubes-ip
 10.137.0.xx
 ```
 
-### B. In a `jm-bitcoind` terminal, create RPC credentials for JoinMarket to communicate with `bitcoind`.
+### B. Configure `onion-grater`.
+
+1. Create persistent directory and `onion-grater` profile.
+
+```
+user@host:~$ sudo mkdir -m 0755 /usr/local/etc/onion-grater-merger.d
+user@host:~$ sudo kwrite /usr/local/etc/onion-grater-merger.d/40_bitcoind.yml
+```
+
+2. Paste the following.
+
+```
+---
+- exe-paths:
+    - '*'
+  users:
+    - '*'
+  hosts:
+    - '*'
+  commands:
+    ADD_ONION:
+      ## {{{ Mainnet onion service.
+      - pattern:     'NEW:(\S+) Port=8333,127.0.0.1:8333'
+        replacement: 'NEW:{} Port=8333,{client-address}:8333 Flags=DiscardPK'
+      ## Testnet onion service.
+      - pattern:     'NEW:(\S+) Port=18333,127.0.0.1:18333'
+        replacement: 'NEW:{} Port=18333,{client-address}:18333 Flags=DiscardPK'
+      ## Needed to make services ephemeral.
+      - pattern:     '250-PrivateKey=(\S+):\S+'
+        replacement: '250-PrivateKey={}:redacted'
+      ## }}}
+```
+
+3. Save the file, switch back to the terminal, and fix permissions.
+
+```
+user@host:~$ sudo chmod 0644 /usr/local/etc/onion-grater-merger.d/40_bitcoind.yml
+```
+
+4. Restart `onion-grater` service.
+
+```
+user@host:~$ sudo systemctl restart onion-grater.service
+```
+
+## IV. Configure `bitcoind` and `joinmarketd`
+
+### A. In a `jm-bitcoind` terminal, create RPC credentials.
 
 1. Create a random RPC username. Do not use the one shown.
 
@@ -169,9 +334,7 @@ user@host:~$ kwrite ~/.bitcoin/bitcoin.conf
 
 ```
 daemon=1
-discover=0
-listen=0
-listenonion=0
+listen=1
 onlynet=onion
 proxy=<gateway-ip>:9111
 prune=550
@@ -187,105 +350,7 @@ wallet=jm-wallet.dat
 user@host:~$ chmod 0600 ~/.bitcoin/bitcoin.conf
 ```
 
-### D. Use `systemd` to keep `bitcoind` always running.
-
-1. Create `systemd` service file.
-
-```
-user@host:~$ sudo kwrite /rw/config/bitcoind.service
-```
-
-2. Paste the following.
-
-```
-[Unit]
-Description=Bitcoin's distributed currency daemon
-
-[Service]
-User=user
-Group=user
-
-Type=forking
-PIDFile=/home/user/.bitcoin/bitcoind.pid
-ExecStart=/usr/local/bin/bitcoind
-ExecStop=/usr/local/bin/bitcoin-cli stop
-
-Restart=always
-PrivateTmp=true
-TimeoutStopSec=60s
-TimeoutStartSec=2s
-StartLimitInterval=120s
-StartLimitBurst=5
-
-[Install]
-WantedBy=multi-user.target
-```
-
-3. Save the file and switch back to the terminal.
-
-### E. Use `systemd` to keep `joinmarketd` always running.
-
-1. Create `systemd` service file.
-
-```
-user@host:~$ sudo kwrite /rw/config/joinmarketd.service
-```
-
-2. Paste the following.
-
-```
-[Unit]
-Description=JoinMarket's server daemon
-
-[Service]
-User=user
-Group=user
-
-Type=idle
-WorkingDirectory=/home/user/joinmarket-clientserver
-ExecStart=/bin/sh -c 'jmvenv/bin/python scripts/joinmarketd.py > scripts/logs/joinmarketd.log'
-
-Restart=always
-PrivateTmp=true
-TimeoutStopSec=60s
-TimeoutStartSec=2s
-StartLimitInterval=120s
-StartLimitBurst=5
-
-[Install]
-WantedBy=multi-user.target
-```
-
-3. Save the file, switch back to the terminal, and fix permissions.
-
-```
-user@host:~$ sudo chmod 0644 /rw/config/bitcoind.service /rw/config/joinmarketd.service
-```
-
-### F. Start the services on boot.
-
-1. Edit the file `/rw/config/rc.local`.
-
-```
-user@host:~$ sudo kwrite /rw/config/rc.local
-```
-
-2. Paste the following at the bottom of the file.
-
-```
-ln -s /rw/config/bitcoind.service /rw/config/joinmarketd.service -t /etc/systemd/system/multi-user.target.wants/
-systemctl daemon-reload
-systemctl start bitcoind.service
-systemctl start joinmarketd.service
-```
-
-3. Save the file, switch back to the terminal, and fix permissions.
-
-```
-user@host:~$ sudo chmod 0755 /rw/config/rc.local
-```
-
-## IV. Create Communication Channels for Wallet VM
+## V. Create Communication Channels
 
 ### A. In a `jm-bitcoind` terminal, create `qubes-rpc` action files.
 
@@ -307,13 +372,7 @@ user@host:~$ sudo sh -c "echo 'socat STDIO TCP:localhost:8332' > /rw/usrlocal/et
 user@host:~$ sudo sh -c "echo 'socat STDIO TCP:localhost:27183' > /rw/usrlocal/etc/qubes-rpc/qubes.joinmarketd"
 ```
 
-### B. In a `dom0` terminal, allow `jm-wallet` access to action files.
-
-```
-[user@dom0 ~]$ echo 'jm-wallet jm-bitcoind allow' | sudo tee /etc/qubes-rpc/policy/qubes.{bitcoind,joinmarketd} > /dev/null
-```
-
-## V. Configure JoinMarket Wallet VM.
+## VI. Configure JoinMarket.
 
 ### A. In a `jm-wallet` terminal, open communication ports on boot.
 
@@ -437,19 +496,3 @@ accept_commitment_broadcasts = 1
 The guide is complete.
 
 Once `bitcoind` has finished syncing in the `jm-bitcoind` VM you will be able to use JoinMarket's wallet from the `jm-wallet` VM. To learn more about using JoinMarket's wallet please see their [wiki](https://github.com/JoinMarket-Org/joinmarket/wiki).
-
-## VII. Possible Improvements
-
-- Create system users in TemplateVM for running `bitcoind` and `joinmarketd`.
-
-- Enable `systemd` units in TemplateVM with `qubes-service` condition path.
-
-- Enable AppArmor, create profiles.
-
-- `onion-grater` profile for `bitcoind` and remove `listenonion=0`.
-
-- [VM hardening](https://github.com/tasket/Qubes-VM-hardening).
-
-## VIII. To Do
-
-- Merge with `build-bitcoind` guide.

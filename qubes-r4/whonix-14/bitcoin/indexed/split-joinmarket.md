@@ -15,7 +15,7 @@ The only way a remote attacker can compromise this system is to successfully exp
 
 - Have completed [`build-bitcoind`](https://github.com/qubenix/guides/blob/master/qubes-r4/whonix-14/bitcoin/indexed/build-bitcoind.md) guide.
 
-## I. Create VMs
+## I. Set Up Dom0
 
 ### A. Create an AppVM.
 
@@ -37,7 +37,7 @@ The only way a remote attacker can compromise this system is to successfully exp
 [user@dom0 ~]$ echo 'joinmarket bitcoind allow' | sudo tee /etc/qubes-rpc/policy/qubes.{bitcoind,joinmarketd} > /dev/null
 ```
 
-## II. Set Up TemplateVM.
+## II. Set Up TemplateVM
 
 ### A. In a `whonix-ws-14-bitcoin` terminal, update and install dependencies.
 
@@ -202,12 +202,13 @@ user@host:~$ sudo -u bitcoind kwrite /home/bitcoind/.bitcoin/bitcoin.conf
 ```
 # JoinMarket Auth
 rpcauth=<rpc-user>:<hashed-pass>
+# JoinMarket Wallet
 wallet=joinmarket.dat
 ```
 
 3. Save the file.
 
-## V. Create Communication Channels for Wallet VM
+## V. Create Communication Channels
 
 ### A. In a `bitcoind` terminal, create `qubes-rpc` action files.
 
@@ -229,7 +230,7 @@ user@host:~$ sudo sh -c "echo 'socat STDIO TCP:localhost:8332' > /rw/usrlocal/et
 user@host:~$ sudo sh -c "echo 'socat STDIO TCP:localhost:27183' > /rw/usrlocal/etc/qubes-rpc/qubes.joinmarketd"
 ```
 
-## VI. Configure `joinmarket` VM.
+## VI. Configure `joinmarket` VM
 
 ### A. In a `joinmarket` terminal, open communication ports on boot.
 
@@ -355,15 +356,3 @@ accept_commitment_broadcasts = 1
 The guide is complete.
 
 Once `bitcoind` has finished syncing in the `bitcoind` VM you will be able to use JoinMarket's wallet from the `joinmarket` VM. To learn more about using JoinMarket's wallet please see their [wiki](https://github.com/JoinMarket-Org/joinmarket/wiki).
-
-## VII. Possible Improvements
-
-- Enable AppArmor, create profiles.
-
-- `onion-grater` profile for `bitcoind` and remove `listenonion=0`.
-
-- [VM hardening](https://github.com/tasket/Qubes-VM-hardening).
-
-## VIII. To Do
-
-- Merge with `build-bitcoind` guide.

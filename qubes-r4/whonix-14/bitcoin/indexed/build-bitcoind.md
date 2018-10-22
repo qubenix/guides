@@ -7,7 +7,7 @@ The server daemon for the Bitcoin distributed cryptocurrency (`bitcoind`), comma
 ## Why Do This?
 Bitcoin Core is a "full node" implementation, meaning it will verify that all incoming transactions and blocks are following Bitcoin's rules. This allows you to validate transactions without trusting third parties. Furthermore, an indexed node can be used as a backend for other software which needs access to the blockchain (block explorers, [c-lightning](https://github.com/ElementsProject/lightning), [electrum personal server](https://github.com/chris-belcher/electrum-personal-server), [joinmarket](https://github.com/JoinMarket-Org/joinmarket-clientserver), [lnd](https://github.com/LightningNetwork/lnd), etc.).
 
-## I. Create VMs
+## I. Set Up Dom0
 
 ### A. In a `dom0` terminal, clone a Whonix TemplateVM.
 
