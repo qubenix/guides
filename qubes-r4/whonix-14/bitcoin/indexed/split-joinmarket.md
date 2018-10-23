@@ -34,7 +34,7 @@ The only way a remote attacker can compromise this system is to successfully exp
 ### C. Create rpc policies for comms from `joinmarket` to `bitcoind` VM.
 
 ```
-[user@dom0 ~]$ echo 'joinmarket bitcoind allow' | sudo tee /etc/qubes-rpc/policy/qubes.{bitcoind,joinmarketd} > /dev/null
+[user@dom0 ~]$ echo 'joinmarket bitcoind allow' | sudo tee -a /etc/qubes-rpc/policy/qubes.{bitcoind,joinmarketd} > /dev/null
 ```
 
 ## II. Set Up TemplateVM
@@ -197,7 +197,7 @@ user@host:~$ sudo -u bitcoind kwrite /home/bitcoind/.bitcoin/bitcoin.conf
 
 2. Paste the following at the bottom of the file.
 
-**Note:** be sure not to alter any of the existing information.
+**Note:** be sure not to alter any of the existing information. Replace `<rpc-user>` and `<hashed-pass>` with the information noted earlier.
 
 ```
 # JoinMarket Auth
@@ -208,23 +208,7 @@ wallet=joinmarket.dat
 
 3. Save the file.
 
-## V. Create Communication Channels
-
-### A. In a `bitcoind` terminal, create `qubes-rpc` action files.
-
-1. Create persistent directory for `qrexec` action files.
-
-```
-user@host:~$ sudo mkdir -m 0755 /rw/usrlocal/etc/qubes-rpc
-```
-
-2. Create `bitcoind` action file.
-
-```
-user@host:~$ sudo sh -c "echo 'socat STDIO TCP:localhost:8332' > /rw/usrlocal/etc/qubes-rpc/qubes.bitcoind"
-```
-
-3. Create `joinmarketd` action file.
+### D. Create `joinmarketd` action file.
 
 ```
 user@host:~$ sudo sh -c "echo 'socat STDIO TCP:localhost:27183' > /rw/usrlocal/etc/qubes-rpc/qubes.joinmarketd"

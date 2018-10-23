@@ -44,7 +44,7 @@ In addition to the security improvements, using a pruned Bitcoin node only requi
 ### D. Create rpc policies for comms from `jm-wallet` to `jm-bitcoind`.
 
 ```
-[user@dom0 ~]$ echo 'jm-wallet jm-bitcoind allow' | sudo tee /etc/qubes-rpc/policy/qubes.{bitcoind,joinmarketd} > /dev/null
+[user@dom0 ~]$ echo 'jm-wallet jm-bitcoind allow' | sudo tee -a /etc/qubes-rpc/policy/qubes.{bitcoind,joinmarketd} > /dev/null
 ```
 
 ### E. Enable `bitcoind` and `joinmarketd` services.

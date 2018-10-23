@@ -262,3 +262,21 @@ user@host:~$ sudo chmod 0644 /rw/config/whonix_firewall.d/50_user.conf
 ```
 user@host:~$ sudo systemctl restart whonix-firewall.service
 ```
+
+## VI. Create Communication Channel
+
+**Note:** this only creates the possibility for other VMs to communicate with `bitcoind`, it does not yet give them permission.
+
+### A. In a `bitcoind` terminal, create `qubes-rpc` action files.
+
+1. Create persistent directory for `qrexec` action files.
+
+```
+user@host:~$ sudo mkdir -m 0755 /rw/usrlocal/etc/qubes-rpc
+```
+
+2. Create `bitcoind` action file.
+
+```
+user@host:~$ sudo sh -c "echo 'socat STDIO TCP:localhost:8332' > /rw/usrlocal/etc/qubes-rpc/qubes.bitcoind"
+```
