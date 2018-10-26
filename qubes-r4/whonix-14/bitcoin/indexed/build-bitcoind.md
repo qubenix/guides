@@ -236,7 +236,6 @@ listen=1
 onlynet=onion
 proxy=<gateway-ip>:9111
 proxyrandomize=1
-server=1
 txindex=1
 ```
 

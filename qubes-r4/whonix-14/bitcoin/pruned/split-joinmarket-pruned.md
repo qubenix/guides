@@ -341,7 +341,6 @@ proxy=<gateway-ip>:9111
 prune=550
 rpcuser=<rpc-user>
 rpcpassword=<rpc-pass>
-server=1
 wallet=jm-wallet.dat
 ```
 
