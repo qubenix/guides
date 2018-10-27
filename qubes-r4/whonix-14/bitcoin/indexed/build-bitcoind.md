@@ -172,7 +172,7 @@ user@host:~$ sudo systemctl restart onion-grater.service
 **Note:** at the time of writing the branch of the current release is `0.17`, modify the following steps accordingly if the version has changed.
 
 ```
-user@host:~$ git clone -b 0.17 https://github.com/bitcoin/bitcoin
+user@host:~$ git clone --branch 0.17 https://github.com/bitcoin/bitcoin
 Cloning into 'bitcoin'...
 remote: Enumerating objects: 195, done.
 remote: Counting objects: 100% (195/195), done.
