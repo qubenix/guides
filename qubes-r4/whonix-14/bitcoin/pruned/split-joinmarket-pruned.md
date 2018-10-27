@@ -223,7 +223,7 @@ gpg:          There is no indication that the signature belongs to the owner.
 Primary key fingerprint: F618 702C F144 C903 718E  7954 F0DF 5443 BD2F 3520
 ```
 
-3. Create python virtual environment and install dependencies to it.
+3. Create python virtual environment.
 
 ```
 user@host:~/joinmarket-clientserver$ virtualenv jmvenv
@@ -232,11 +232,23 @@ New python executable in /home/user/joinmarket-clientserver/jmvenv/bin/python2
 Also creating executable in /home/user/joinmarket-clientserver/jmvenv/bin/python
 Installing setuptools, pkg_resources, pip, wheel...done.
 user@host:~/joinmarket-clientserver$ source jmvenv/bin/activate
+```
+
+4. Install dependencies to virtual environment.
+
+**Note:** this will produce a lot of output. This is normal, be patient.
+
+```
 (jmvenv) user@host:~/joinmarket-clientserver$ python setupall.py --client-bitcoin && python setupall.py --daemon
+```
+
+5. Deactivate virtual environment.
+
+```
 (jmvenv) user@host:~/joinmarket-clientserver$ deactivate
 ```
 
-4. Copy `joinmarket-clientserver/` directory to the `jm-wallet` VM.
+### B. Copy `joinmarket-clientserver/` directory to the `jm-wallet` VM.
 
 **Note:** select `jm-wallet` from the `dom0` pop-up.
 
