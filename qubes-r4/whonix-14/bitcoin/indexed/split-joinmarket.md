@@ -301,14 +301,25 @@ rpc_user = <rpc-user>
 rpc_password = <rpc-pass>
 rpc_wallet_file = joinmarket.dat
 
-[MESSAGING]
-channel = joinmarket-pit, joinmarket-pit
-port = 6698, 6667 
-usessl = true, false
-socks5 = true, true
-socks5_host = <gateway-ip>, <gateway-ip>
-socks5_port = 9180, 9181
-host = 6dvj6v5imhny3anf.onion, cfyfz6afpgfeirst.onion
+[MESSAGING:server1]
+# Cyberguerrilla IRC
+channel = joinmarket-pit
+port = 6698
+usessl = true
+socks5 = true
+socks5_host = <gateway-ip>
+socks5_port = 9180
+host = 6dvj6v5imhny3anf.onion
+
+[MESSAGING:server2]
+# Agora Anarplex IRC
+channel = joinmarket-pit
+port = 6667
+usessl = false
+socks5 = true
+socks5_host = <gateway-ip>
+socks5_port = 9181
+host = cfyfz6afpgfeirst.onion
 
 [LOGGING]
 console_log_level = INFO
