@@ -330,7 +330,7 @@ unconfirm_timeout_sec = 90
 confirm_timeout_hours = 6
 
 [POLICY]
-segwit=true
+segwit = true
 # merge_algorithm = greediest, greedy, gradual, default
 merge_algorithm = default
 # tx_fees = less than 144 is block time, more than 144 is satoshi/Kb
