@@ -201,7 +201,7 @@ Primary key fingerprint: 133E AC17 9436 F14A 5CF1  B794 860F EB80 4E66 9320
 
 ### B. Build Berkeley DB and Bitcoin.
 
-**Note:** each of these next steps will produce a lot of output in the terminal. This is normal, be patient.
+**Note:** these next two steps will produce a lot of output. This is normal, be patient.
 
 1. Build Berkeley DB using the provided script.
 
