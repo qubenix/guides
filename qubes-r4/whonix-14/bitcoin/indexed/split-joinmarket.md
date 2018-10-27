@@ -290,7 +290,7 @@ cd /home/user/joinmarket-clientserver/scripts/
 ```
 [DAEMON]
 no_daemon = 0
-daemon_port = 27183                                                                           
+daemon_port = 27183
 daemon_host = localhost
 use_ssl = false
 
@@ -340,9 +340,9 @@ tx_fees = 3
 absurd_fee_per_kb = 350000
 tx_broadcast = self
 minimum_makers = 2
-taker_utxo_retries = 3                                                                        
-taker_utxo_age = 5                                                                            
-taker_utxo_amtpercent = 20                                                                    
+taker_utxo_retries = 3
+taker_utxo_age = 5
+taker_utxo_amtpercent = 20
 accept_commitment_broadcasts = 1
 ```
 

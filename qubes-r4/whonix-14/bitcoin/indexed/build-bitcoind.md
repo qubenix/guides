@@ -172,31 +172,30 @@ user@host:~$ sudo systemctl restart onion-grater.service
 **Note:** at the time of writing the branch of the current release is `0.17`, modify the following steps accordingly if the version has changed.
 
 ```
-user@host:~$ git clone --branch 0.17 https://github.com/bitcoin/bitcoin
+user@host:~$ git clone -b 0.17 https://github.com/bitcoin/bitcoin
 Cloning into 'bitcoin'...
-remote: Enumerating objects: 12, done.
-remote: Counting objects: 100% (12/12), done.
-remote: Compressing objects: 100% (9/9), done.
-remote: Total 124912 (delta 6), reused 3 (delta 3), pack-reused 124900
-Receiving objects: 100% (124912/124912), 111.85 MiB | 537.00 KiB/s, done.
-Resolving deltas: 100% (87124/87124), done.
-user@host:~$ gpg --recv-keys AC6626172E00A82CFFAE8972A636E97631F767E0
-gpg: keybox '/home/user/.gnupg/pubring.kbx' created
-gpg: /home/user/.gnupg/trustdb.gpg: trustdb created
+remote: Enumerating objects: 195, done.
+remote: Counting objects: 100% (195/195), done.
+remote: Compressing objects: 100% (107/107), done.
+remote: Total 125318 (delta 115), reused 129 (delta 88), pack-reused 125123
+Receiving objects: 100% (125318/125318), 112.17 MiB | 328.00 KiB/s, done.
+Resolving deltas: 100% (87399/87399), done.
+user@host:~$ gpg --recv-keys 9DEAE0DC7063249FB05474681E4AED62986CD25D AC6626172E00A82CFFAE8972A636E97631F767E0
 gpg: key 0x860FEB804E669320: public key "Pieter Wuille <pieter.wuille@gmail.com>" imported
+gpg: key 0x74810B012346C9A6: public key "Wladimir J. van der Laan <laanwj@protonmail.com>" imported
 gpg: no ultimately trusted keys found
-gpg: Total number processed: 1
-gpg:               imported: 1
+gpg: Total number processed: 2
+gpg:               imported: 2
 user@host:~$ cd bitcoin/
 user@host:~/bitcoin$ git verify-commit HEAD
-gpg: Signature made Sat 20 Oct 2018 02:04:39 AM UTC
-gpg:                using RSA key AC6626172E00A82CFFAE8972A636E97631F767E0
-gpg: Good signature from "Pieter Wuille <pieter.wuille@gmail.com>" [unknown]
-gpg:                 aka "[jpeg image of size 5996]" [unknown]
+gpg: Signature made Fri 26 Oct 2018 10:01:33 AM UTC
+gpg:                using RSA key 9DEAE0DC7063249FB05474681E4AED62986CD25D
+gpg: Good signature from "Wladimir J. van der Laan <laanwj@visucore.com>" [unknown]
+gpg:                 aka "Wladimir J. van der Laan <laanwj@gmail.com>" [unknown]
 gpg: WARNING: This key is not certified with a trusted signature!
 gpg:          There is no indication that the signature belongs to the owner.
-Primary key fingerprint: 133E AC17 9436 F14A 5CF1  B794 860F EB80 4E66 9320
-     Subkey fingerprint: AC66 2617 2E00 A82C FFAE  8972 A636 E976 31F7 67E0
+Primary key fingerprint: 71A3 B167 3540 5025 D447  E8F2 7481 0B01 2346 C9A6
+     Subkey fingerprint: 9DEA E0DC 7063 249F B054  7468 1E4A ED62 986C D25D
 ```
 
 ### B. Build Berkeley DB and Bitcoin.
