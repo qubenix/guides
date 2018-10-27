@@ -206,19 +206,21 @@ remote: Compressing objects: 100% (14/14), done.
 remote: Total 3210 (delta 6), reused 13 (delta 4), pack-reused 3192
 Receiving objects: 100% (3210/3210), 2.86 MiB | 605.00 KiB/s, done.
 Resolving deltas: 100% (2104/2104), done.
-user@host:~$ gpg --recv-keys 46689728A9F64B391FA871B7B3AE09F1E9A3197A
+user@host:~$ gpg --recv-keys 46689728A9F64B391FA871B7B3AE09F1E9A3197A F618702CF144C903718E7954F0DF5443BD2F3520
+gpg: key 0xF0DF5443BD2F3520: public key "undeath <undeath@users.noreply.github.com>" imported
 gpg: key 0xB3AE09F1E9A3197A: public key "Adam Gibson <ekaggata@gmail.com>" imported
 gpg: no ultimately trusted keys found
-gpg: Total number processed: 1
-gpg:               imported: 1
+gpg: Total number processed: 2
+gpg:               imported: 2
 user@host:~$ cd ~/joinmarket-clientserver/
 user@host:~/joinmarket-clientserver$ git verify-commit HEAD
-gpg: Signature made Tue 16 Oct 2018 07:24:58 PM UTC
-gpg:                using RSA key B3AE09F1E9A3197A
-gpg: Good signature from "Adam Gibson <ekaggata@gmail.com>" [unknown]
+gpg: Signature made Sat 27 Oct 2018 12:40:58 PM UTC
+gpg:                using RSA key F618702CF144C903718E7954F0DF5443BD2F3520
+gpg: Good signature from "undeath <undeath@users.noreply.github.com>" [unknown]
+gpg:                 aka "undeath <undeath@gpgkey>" [unknown]
 gpg: WARNING: This key is not certified with a trusted signature!
 gpg:          There is no indication that the signature belongs to the owner.
-Primary key fingerprint: 4668 9728 A9F6 4B39 1FA8  71B7 B3AE 09F1 E9A3 197A
+Primary key fingerprint: F618 702C F144 C903 718E  7954 F0DF 5443 BD2F 3520
 ```
 
 3. Create python virtual environment and install dependencies to it.
