@@ -221,7 +221,7 @@ user@host:~/bitcoin$ ./contrib/install_db4.sh `pwd`
 2. Build and install Bitcoin Core.
 
 ```
-user@host:~/bitcoin$ export BDB_PREFIX='/home/user/bitcoin/db4'; ./autogen.sh && ./configure BDB_LIBS="-L${BDB_PREFIX}/lib -ldb_cxx-4.8" BDB_CFLAGS="-I${BDB_PREFIX}/include" --without-miniupnpc && make && sudo make install
+user@host:~/bitcoin$ export BDB_PREFIX='/home/user/bitcoin/db4'; ./autogen.sh && ./configure BDB_LIBS="-L${BDB_PREFIX}/lib -ldb_cxx-4.8" BDB_CFLAGS="-I${BDB_PREFIX}/include" && sudo make install
 ```
 
 ## V. Set Up Bitcoin.
