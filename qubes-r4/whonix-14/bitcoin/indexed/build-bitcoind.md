@@ -167,40 +167,50 @@ user@host:~$ sudo systemctl restart onion-grater.service
 
 ### A. In a `bitcoind` terminal, download and verify the Bitcoin source code.
 
-1. Clone the repository, receive signing keys, and verify source.
+1. Clone the repository.
 
 **Note:** at the time of writing the branch of the current release is `0.17`, modify the following steps accordingly if the version has changed.
 
 ```
 user@host:~$ git clone --branch 0.17 https://github.com/bitcoin/bitcoin
 Cloning into 'bitcoin'...
-remote: Enumerating objects: 195, done.
-remote: Counting objects: 100% (195/195), done.
-remote: Compressing objects: 100% (107/107), done.
-remote: Total 125318 (delta 115), reused 129 (delta 88), pack-reused 125123
-Receiving objects: 100% (125318/125318), 112.17 MiB | 328.00 KiB/s, done.
-Resolving deltas: 100% (87399/87399), done.
-user@host:~$ gpg --recv-keys 9DEAE0DC7063249FB05474681E4AED62986CD25D AC6626172E00A82CFFAE8972A636E97631F767E0
-gpg: key 0x860FEB804E669320: public key "Pieter Wuille <pieter.wuille@gmail.com>" imported
-gpg: key 0x74810B012346C9A6: public key "Wladimir J. van der Laan <laanwj@protonmail.com>" imported
-gpg: no ultimately trusted keys found
-gpg: Total number processed: 2
-gpg:               imported: 2
-user@host:~$ cd bitcoin/
+remote: Enumerating objects: 289, done.
+remote: Counting objects: 100% (289/289), done.
+remote: Compressing objects: 100% (152/152), done.
+remote: Total 125433 (delta 171), reused 202 (delta 137), pack-reused 125144
+Receiving objects: 100% (125433/125433), 112.22 MiB | 398.00 KiB/s, done.
+Resolving deltas: 100% (87476/87476), done.
+```
+
+2. Receive signing keys.
+
+**Note:** this step will take some time and produce a lot of output. This is normal, be patient.
+
+```
+user@host:~$ cd ~/bitcoin/contrib/gitian-keys/
+user@host:~/bitcoin/contrib/gitian-keys$ while read fingerprint keyholder_name; do gpg --recv-keys ${fingerprint}; done < ./keys.txt
+```
+
+3. Verify source code.
+
+**Note:** your signature may not match the example. Just check that it says `Good signature`.
+
+```
+user@host:~/bitcoin/contrib/gitian-keys$ cd ~/bitcoin/
 user@host:~/bitcoin$ git verify-commit HEAD
-gpg: Signature made Fri 26 Oct 2018 10:01:33 AM UTC
-gpg:                using RSA key 9DEAE0DC7063249FB05474681E4AED62986CD25D
-gpg: Good signature from "Wladimir J. van der Laan <laanwj@visucore.com>" [unknown]
-gpg:                 aka "Wladimir J. van der Laan <laanwj@gmail.com>" [unknown]
+gpg: Signature made Sun 28 Oct 2018 10:48:16 AM UTC
+gpg:                using RSA key D2EA4850E7528B25
+gpg: Good signature from "Marco Falke <marco.falke@tum.de>" [unknown]
+gpg:                 aka "Marco Falke <falke.marco@gmail.com>" [unknown]
 gpg: WARNING: This key is not certified with a trusted signature!
 gpg:          There is no indication that the signature belongs to the owner.
-Primary key fingerprint: 71A3 B167 3540 5025 D447  E8F2 7481 0B01 2346 C9A6
-     Subkey fingerprint: 9DEA E0DC 7063 249F B054  7468 1E4A ED62 986C D25D
+Primary key fingerprint: B8B3 F1C0 E58C 15DB 6A81  D30C 3648 A882 F431 6B9B
+     Subkey fingerprint: 60B0 B8A4 02FB 386B 24A0  39AC D2EA 4850 E752 8B25
 ```
 
 ### B. Build Berkeley DB and Bitcoin.
 
-**Note:** these next two steps will produce a lot of output. This is normal, be patient.
+**Note:** these next two steps will take some time and produce a lot of output. This is normal, be patient.
 
 1. Build Berkeley DB using the provided script.
 
