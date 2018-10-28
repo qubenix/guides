@@ -1,33 +1,26 @@
 # Qubes 4 & Whonix 14: Building a Bitcoin Core Full Node
 Build a [Bitcoin Core](https://github.com/bitcoin/bitcoin) full node from source code and configure it to:
-
++ allow other VMs to connect when given permission
 + communicate only over Tor
 + index all transactions
 + prefer hidden services, use them exclusively if possible
-+ qrexec first steps
 + use ephemeral hidden services to serve peers
 + utilize stream isolation
 
 ## What is Bitcoin Core?
 The server daemon for the Bitcoin distributed cryptocurrency (`bitcoind`), command line tools (`bitcoin-cli`), and a gui wallet (`bitcoin-qt`). These tools can be used to observe and interact with Bitcoin's blockchain.
-
 ## Why Do This?
 Bitcoin Core is a "full node" implementation, meaning it will verify that all incoming transactions and blocks are following Bitcoin's rules. This allows you to validate transactions without trusting third parties.
 
 An indexed node can be used as a backend for other software which needs access to the blockchain (block explorers, [c-lightning](https://github.com/ElementsProject/lightning), [electrum personal server](https://github.com/chris-belcher/electrum-personal-server), [joinmarket](https://github.com/JoinMarket-Org/joinmarket-clientserver), [lnd](https://github.com/LightningNetwork/lnd), etc.). Using `qrexec` we can connect any of these tools to `bitcoind` from their own VM, making use of Qubes' security by isolation.
-
 ## I. Set Up Dom0
-
 ### A. In a `dom0` terminal, clone a Whonix TemplateVM.
-
 1. In a `dom0` terminal, clone a Whonix workstation TemplateVM and launch a terminal.
 
 ```
 [user@dom0 ~]$ qvm-clone whonix-ws-14 whonix-ws-14-bitcoin
 ```
-
 ### B. Create an AppVM from the new Whonix TemplateVM.
-
 1. Create the VM for running `bitcoind` using a Whonix gateway for networking.
 
 **Note:** You must pick some label color for your VMs upon creation, it does not have to match what is shown here. `sys-whonix` is the default name of the Whonix gateway.
@@ -42,17 +35,12 @@ An indexed node can be used as a backend for other software which needs access t
 [user@dom0 ~]$ qvm-volume resize bitcoind:private 250G
 [user@dom0 ~]$ qvm-service --enable bitcoind bitcoind
 ```
-
 ## II. Set Up TemplateVM.
-
 ### A. In the `whonix-ws-14-bitcoin` terminal, update and install dependencies.
-
 ```
 user@host:~$ sudo apt-get update && sudo apt-get install -y automake autotools-dev bsdmainutils build-essential git libboost-chrono-dev libboost-filesystem-dev libboost-system-dev libboost-test-dev libboost-thread-dev libevent-dev libprotobuf-dev libqrencode-dev libqt5core5a libqt5dbus5 libqt5gui5 libssl-dev libtool libzmq3-dev pkg-config protobuf-compiler python3 qttools5-dev qttools5-dev-tools
 ```
-
 ### B. Create system user.
-
 ```
 user@host:~$ sudo adduser --group --system bitcoind
 Adding system user `bitcoind' (UID 116) ...
@@ -60,9 +48,7 @@ Adding new group `bitcoind' (GID 122) ...
 Adding new user `bitcoind' (UID 116) with group `bitcoind' ...
 Creating home directory `/home/bitcoind' ...
 ```
-
 ### C. Use `systemd` to keep `bitcoind` always running.
-
 1. Create `systemd` service file.
 
 ```
@@ -109,26 +95,19 @@ user@host:~$ sudo chmod 0644 /lib/systemd/system/bitcoind.service
 user@host:~$ sudo systemctl enable bitcoind.service
 Created symlink /etc/systemd/system/multi-user.target.wants/bitcoind.service → /lib/systemd/system/bitcoind.service.
 ```
-
 ### D. Shutdown TemplateVM.
-
 ```
 user@host:~$ sudo shutdown now
 ```
-
 ## III. Set Up Gateway.
-
 ### A. In a `sys-whonix` terminal, find out the gateway IP.
-
 **Note:** save your gateway IP for later to replace `<gateway-ip>` in examples.
 
 ```
 user@host:~$ qubesdb-read /qubes-ip
 10.137.0.xx
 ```
-
 ### B. Configure `onion-grater`.
-
 1. Create persistent directory and `onion-grater` profile.
 
 ```
@@ -171,11 +150,8 @@ user@host:~$ sudo chmod 0644 /usr/local/etc/onion-grater-merger.d/40_bitcoind.ym
 ```
 user@host:~$ sudo systemctl restart onion-grater.service
 ```
-
 ## IV. Install Bitcoin
-
 ### A. In a `bitcoind` terminal, download and verify the Bitcoin source code.
-
 1. Clone the repository.
 
 **Note:** at the time of writing the branch of the current release is `0.17`, modify the following steps accordingly if the version has changed.
@@ -216,9 +192,7 @@ gpg:          There is no indication that the signature belongs to the owner.
 Primary key fingerprint: B8B3 F1C0 E58C 15DB 6A81  D30C 3648 A882 F431 6B9B
      Subkey fingerprint: 60B0 B8A4 02FB 386B 24A0  39AC D2EA 4850 E752 8B25
 ```
-
 ### B. Build Berkeley DB and Bitcoin.
-
 **Note:** these next two steps will take some time and produce a lot of output. This is normal, be patient.
 
 1. Build Berkeley DB using the provided script.
@@ -232,11 +206,8 @@ user@host:~/bitcoin$ ./contrib/install_db4.sh `pwd`
 ```
 user@host:~/bitcoin$ export BDB_PREFIX='/home/user/bitcoin/db4'; ./autogen.sh && ./configure BDB_LIBS="-L${BDB_PREFIX}/lib -ldb_cxx-4.8" BDB_CFLAGS="-I${BDB_PREFIX}/include" && sudo make install
 ```
-
 ## V. Set Up Bitcoin.
-
 ### A. In a `bitcoind` terminal, configure Bitcoin.
-
 1. Create Bitcoin's data directory and configuration file.
 
 ```
@@ -262,9 +233,7 @@ txindex=1
 user@host:~$ sudo chmod 0600 /home/bitcoind/.bitcoin/bitcoin.conf
 user@host:~$ sudo chown -R bitcoind:bitcoind /home/bitcoind/.bitcoin
 ```
-
 ### B. Open p2p port.
-
 1. Make persistent directory, configure firewall, and fix permissions.
 
 ```
@@ -278,13 +247,9 @@ user@host:~$ sudo chmod 0644 /rw/config/whonix_firewall.d/50_user.conf
 ```
 user@host:~$ sudo systemctl restart whonix-firewall.service
 ```
-
 ## VI. Create Communication Channel
-
 **Note:** this only creates the possibility for other VMs to communicate with `bitcoind`, it does not yet give them permission.
-
 ### A. In a `bitcoind` terminal, create `qubes-rpc` action files.
-
 1. Create persistent directory for `qrexec` action files.
 
 ```
@@ -296,11 +261,8 @@ user@host:~$ sudo mkdir -m 0755 /rw/usrlocal/etc/qubes-rpc
 ```
 user@host:~$ sudo sh -c 'echo "socat STDIO TCP:localhost:8332" > /rw/usrlocal/etc/qubes-rpc/qubes.bitcoind'
 ```
-
 ## VII. Begin Bitcoin Sync
-
 ### A. In a `bitcoind` terminal, start `bitcoind`.
-
 **Note:** the Bitcoin blockchain is currently about 220G on disk. This can take over a week to sync.
 
 ```
