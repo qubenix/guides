@@ -1,11 +1,20 @@
 # Qubes 4 & Whonix 14: Building a Bitcoin Core Full Node
-Build a [Bitcoin Core](https://github.com/bitcoin/bitcoin) full node from source code and configure it to communicate only over Tor, prefer hidden services, utilize stream isolation, index all transactions, and use ephemeral hidden services to serve peers.
+Build a [Bitcoin Core](https://github.com/bitcoin/bitcoin) full node from source code and configure it to:
+
++ communicate only over Tor
++ index all transactions
++ prefer hidden services, use them exclusively if possible
++ qrexec first steps
++ use ephemeral hidden services to serve peers
++ utilize stream isolation
 
 ## What is Bitcoin Core?
 The server daemon for the Bitcoin distributed cryptocurrency (`bitcoind`), command line tools (`bitcoin-cli`), and a gui wallet (`bitcoin-qt`). These tools can be used to observe and interact with Bitcoin's blockchain.
 
 ## Why Do This?
-Bitcoin Core is a "full node" implementation, meaning it will verify that all incoming transactions and blocks are following Bitcoin's rules. This allows you to validate transactions without trusting third parties. Furthermore, an indexed node can be used as a backend for other software which needs access to the blockchain (block explorers, [c-lightning](https://github.com/ElementsProject/lightning), [electrum personal server](https://github.com/chris-belcher/electrum-personal-server), [joinmarket](https://github.com/JoinMarket-Org/joinmarket-clientserver), [lnd](https://github.com/LightningNetwork/lnd), etc.).
+Bitcoin Core is a "full node" implementation, meaning it will verify that all incoming transactions and blocks are following Bitcoin's rules. This allows you to validate transactions without trusting third parties.
+
+An indexed node can be used as a backend for other software which needs access to the blockchain (block explorers, [c-lightning](https://github.com/ElementsProject/lightning), [electrum personal server](https://github.com/chris-belcher/electrum-personal-server), [joinmarket](https://github.com/JoinMarket-Org/joinmarket-clientserver), [lnd](https://github.com/LightningNetwork/lnd), etc.). Using `qrexec` we can connect any of these tools to `bitcoind` from their own VM, making use of Qubes' security by isolation.
 
 ## I. Set Up Dom0
 
@@ -286,4 +295,14 @@ user@host:~$ sudo mkdir -m 0755 /rw/usrlocal/etc/qubes-rpc
 
 ```
 user@host:~$ sudo sh -c 'echo "socat STDIO TCP:localhost:8332" > /rw/usrlocal/etc/qubes-rpc/qubes.bitcoind'
+```
+
+## VII. Begin Bitcoin Sync
+
+### A. In a `bitcoind` terminal, start `bitcoind`.
+
+**Note:** the Bitcoin blockchain is currently about 220G on disk. This can take over a week to sync.
+
+```
+user@host:~$ sudo systemctl start bitcoind
 ```
