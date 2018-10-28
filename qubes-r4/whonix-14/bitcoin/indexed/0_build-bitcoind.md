@@ -285,5 +285,5 @@ user@host:~$ sudo mkdir -m 0755 /rw/usrlocal/etc/qubes-rpc
 2. Create `bitcoind` action file.
 
 ```
-user@host:~$ sudo sh -c "echo 'socat STDIO TCP:localhost:8332' > /rw/usrlocal/etc/qubes-rpc/qubes.bitcoind"
+user@host:~$ sudo sh -c 'echo "socat STDIO TCP:localhost:8332" > /rw/usrlocal/etc/qubes-rpc/qubes.bitcoind'
 ```
