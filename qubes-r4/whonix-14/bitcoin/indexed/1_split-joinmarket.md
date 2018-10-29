@@ -6,7 +6,7 @@ Joinmarket is a decentralized, open source, and trustless market for Bitcoin pri
 
 There is a detailed explanation of the concept by the creator [here](https://bitcointalk.org/index.php?topic=919116.0), and a descriptive infographic [here](https://imgur.com/C6w0Pgf).
 
-## How Safe is This?
+## Why Do This?
 The benefit of this setup is that your wallet VM is essentially cold storage, yet retains all the functionality of an internet connected JoinMarket wallet (send payment, yield generator, etc).
 
 The only way a remote attacker can compromise this system is to successfully exploit one of your internet connected VMs and then use a Qubes/Xen 0-day to escape that VM.
