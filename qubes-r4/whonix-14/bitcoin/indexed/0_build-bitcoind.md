@@ -261,8 +261,8 @@ user@host:~$ sudo mkdir -m 0755 /rw/usrlocal/etc/qubes-rpc
 ```
 user@host:~$ sudo sh -c 'echo "socat STDIO TCP:localhost:8332" > /rw/usrlocal/etc/qubes-rpc/qubes.bitcoind'
 ```
-## VII. Begin Bitcoin Sync
-### A. In a `bitcoind` terminal, start `bitcoind`.
+## VII. Initial Blockchain Download
+### A. In a `bitcoind` terminal, start the `bitcoind` service.
 **Note:** the Bitcoin blockchain is currently about 220G on disk. This can take over a week to sync.
 
 ```
