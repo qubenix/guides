@@ -197,6 +197,8 @@ user@host:~$ sudo install -g staff -m 0755 -o root bitcoin-0.17.0/bin/bitcoin* -
 
 2. Download and verify [JoinMarket](https://github.com/JoinMarket-Org/joinmarket-clientserver).
 
+**Note:** your signature may not match the example. Just check that it says `Good signature`.
+
 ```
 user@host:~$ git clone https://github.com/JoinMarket-Org/joinmarket-clientserver ~/joinmarket-clientserver
 Cloning into 'joinmarket-clientserver'...
