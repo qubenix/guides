@@ -178,13 +178,13 @@ user@host:~$ curl -O "https://bitcoincore.org/bin/bitcoin-core-0.17.0.1/bitcoin-
 user@host:~$ gpg --recv-keys 01EA5486DE18A882D4C2684590C8019E36C2E964
 gpg: keybox '/home/user/.gnupg/pubring.kbx' created
 gpg: /home/user/.gnupg/trustdb.gpg: trustdb created
-gpg: key 0x90C8019E36C2E964: public key "Wladimir J. van der Laan (Bitcoin Core binary release signing key) <laanwj@gmail.com>" imported                                                    
-gpg: no ultimately trusted keys found                                                         
-gpg: Total number processed: 1                                                                
-gpg:               imported: 1                                                                
-user@host:~$ gpg --verify SHA256SUMS.asc                                                      
-gpg: Signature made Tue 30 Oct 2018 11:38:47 AM UTC                                           
-gpg:                using RSA key 0x90C8019E36C2E964                                          
+gpg: key 0x90C8019E36C2E964: public key "Wladimir J. van der Laan (Bitcoin Core binary release signing key) <laanwj@gmail.com>" imported
+gpg: no ultimately trusted keys found
+gpg: Total number processed: 1
+gpg:               imported: 1
+user@host:~$ gpg --verify SHA256SUMS.asc
+gpg: Signature made Tue 30 Oct 2018 11:38:47 AM UTC
+gpg:                using RSA key 0x90C8019E36C2E964
 gpg: Good signature from "Wladimir J. van der Laan (Bitcoin Core binary release signing key) <laanwj@gmail.com>" [unknown]
 gpg: WARNING: This key is not certified with a trusted signature!
 gpg:          There is no indication that the signature belongs to the owner.
@@ -201,13 +201,13 @@ user@host:~$ sudo install -g staff -m 0755 -o root bitcoin-0.17.0.1/bin/bitcoin*
 
 ```
 user@host:~$ git clone https://github.com/JoinMarket-Org/joinmarket-clientserver ~/joinmarket-clientserver
-Cloning into 'joinmarket-clientserver'...
-remote: Enumerating objects: 18, done.
-remote: Counting objects: 100% (18/18), done.
-remote: Compressing objects: 100% (14/14), done.
-remote: Total 3210 (delta 6), reused 13 (delta 4), pack-reused 3192
-Receiving objects: 100% (3210/3210), 2.86 MiB | 605.00 KiB/s, done.
-Resolving deltas: 100% (2104/2104), done.
+Cloning into '/home/user/joinmarket-clientserver'...
+remote: Enumerating objects: 61, done.
+remote: Counting objects: 100% (61/61), done.
+remote: Compressing objects: 100% (40/40), done.
+remote: Total 3260 (delta 27), reused 44 (delta 21), pack-reused 3199
+Receiving objects: 100% (3260/3260), 2.91 MiB | 301.00 KiB/s, done.
+Resolving deltas: 100% (2132/2132), done.
 user@host:~$ gpg --recv-keys 46689728A9F64B391FA871B7B3AE09F1E9A3197A F618702CF144C903718E7954F0DF5443BD2F3520
 gpg: key 0xF0DF5443BD2F3520: public key "undeath <undeath@users.noreply.github.com>" imported
 gpg: key 0xB3AE09F1E9A3197A: public key "Adam Gibson <ekaggata@gmail.com>" imported
@@ -216,7 +216,7 @@ gpg: Total number processed: 2
 gpg:               imported: 2
 user@host:~$ cd ~/joinmarket-clientserver/
 user@host:~/joinmarket-clientserver$ git verify-commit HEAD
-gpg: Signature made Sat 27 Oct 2018 12:40:58 PM UTC
+gpg: Signature made Mon 29 Oct 2018 05:23:58 PM UTC
 gpg:                using RSA key F618702CF144C903718E7954F0DF5443BD2F3520
 gpg: Good signature from "undeath <undeath@users.noreply.github.com>" [unknown]
 gpg:                 aka "undeath <undeath@gpgkey>" [unknown]
@@ -241,7 +241,7 @@ user@host:~/joinmarket-clientserver$ source jmvenv/bin/activate
 **Note:** this will produce a lot of output. This is normal, be patient.
 
 ```
-(jmvenv) user@host:~/joinmarket-clientserver$ python setupall.py --client-bitcoin && python setupall.py --daemon
+(jmvenv) user@host:~/joinmarket-clientserver$ python setupall.py --all
 ```
 
 5. Deactivate virtual environment.
