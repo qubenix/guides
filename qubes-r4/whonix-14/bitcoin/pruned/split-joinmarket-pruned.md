@@ -171,28 +171,28 @@ user@host:~$ sudo shutdown now
 
 1. Download, verify, and install the Linux 64 bit version of [Bitcoin Core](https://bitcoincore.org/en/download/).
 
-**Note:** at the time of writing the most recent version of Bitcoin Core is `0.17.0`, modify the following steps accordingly if the version has changed.
+**Note:** at the time of writing the most recent version of Bitcoin Core is `0.17.0.1`, modify the following steps accordingly if the version has changed.
 
 ```
-user@host:~$ curl -O "https://bitcoincore.org/bin/bitcoin-core-0.17.0/bitcoin-0.17.0-x86_64-linux-gnu.tar.gz" -O "https://bitcoincore.org/bin/bitcoin-core-0.17.0/SHA256SUMS.asc"
+user@host:~$ curl -O "https://bitcoincore.org/bin/bitcoin-core-0.17.0.1/bitcoin-0.17.0.1-x86_64-linux-gnu.tar.gz" -O "https://bitcoincore.org/bin/bitcoin-core-0.17.0.1/SHA256SUMS.asc"
 user@host:~$ gpg --recv-keys 01EA5486DE18A882D4C2684590C8019E36C2E964
 gpg: keybox '/home/user/.gnupg/pubring.kbx' created
 gpg: /home/user/.gnupg/trustdb.gpg: trustdb created
-gpg: key 0x90C8019E36C2E964: public key "Wladimir J. van der Laan (Bitcoin Core binary release signing key) <laanwj@gmail.com>" imported
-gpg: no ultimately trusted keys found
-gpg: Total number processed: 1
-gpg:               imported: 1
-user@host:~$ gpg --verify SHA256SUMS.asc 
-gpg: Signature made Wed 03 Oct 2018 08:53:25 AM UTC
-gpg:                using RSA key 0x90C8019E36C2E964
+gpg: key 0x90C8019E36C2E964: public key "Wladimir J. van der Laan (Bitcoin Core binary release signing key) <laanwj@gmail.com>" imported                                                    
+gpg: no ultimately trusted keys found                                                         
+gpg: Total number processed: 1                                                                
+gpg:               imported: 1                                                                
+user@host:~$ gpg --verify SHA256SUMS.asc                                                      
+gpg: Signature made Tue 30 Oct 2018 11:38:47 AM UTC                                           
+gpg:                using RSA key 0x90C8019E36C2E964                                          
 gpg: Good signature from "Wladimir J. van der Laan (Bitcoin Core binary release signing key) <laanwj@gmail.com>" [unknown]
 gpg: WARNING: This key is not certified with a trusted signature!
 gpg:          There is no indication that the signature belongs to the owner.
 Primary key fingerprint: 01EA 5486 DE18 A882 D4C2  6845 90C8 019E 36C2 E964
 user@host:~$ cat SHA256SUMS.asc | grep x86_64 | shasum -c
-bitcoin-0.17.0-x86_64-linux-gnu.tar.gz: OK
-user@host:~$ tar xf bitcoin-0.17.0-x86_64-linux-gnu.tar.gz
-user@host:~$ sudo install -g staff -m 0755 -o root bitcoin-0.17.0/bin/bitcoin* -t /usr/local/bin/
+bitcoin-0.17.0.1-x86_64-linux-gnu.tar.gz: OK
+user@host:~$ tar xf bitcoin-0.17.0.1-x86_64-linux-gnu.tar.gz
+user@host:~$ sudo install -g staff -m 0755 -o root bitcoin-0.17.0.1/bin/bitcoin* -t /usr/local/bin/
 ```
 
 2. Download and verify [JoinMarket](https://github.com/JoinMarket-Org/joinmarket-clientserver).
