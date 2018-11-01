@@ -158,7 +158,7 @@ user@host:~$ sudo systemctl restart onion-grater.service
 
 ```
 user@host:~$ git clone --branch 0.17 https://github.com/bitcoin/bitcoin ~/bitcoin
-Cloning into 'bitcoin'...
+Cloning into '/home/user/bitcoin'...
 remote: Enumerating objects: 289, done.
 remote: Counting objects: 100% (289/289), done.
 remote: Compressing objects: 100% (152/152), done.
@@ -172,8 +172,7 @@ Resolving deltas: 100% (87476/87476), done.
 **Note:** this step will take some time and produce a lot of output. This is normal, be patient.
 
 ```
-user@host:~$ cd ~/bitcoin/contrib/gitian-keys/
-user@host:~/bitcoin/contrib/gitian-keys$ while read fingerprint keyholder_name; do gpg --recv-keys ${fingerprint}; done < ./keys.txt
+user@host:~$ cat ~/bitcoin/contrib/gitian-keys/keys.txt | while read fingerprint keyholder_name; do gpg --recv-keys ${fingerprint}; done
 ```
 
 3. Verify source code.
