@@ -12,7 +12,7 @@ The server daemon for the Bitcoin distributed cryptocurrency (`bitcoind`), comma
 ## Why Do This?
 Bitcoin Core is a "full node" implementation, meaning it will verify that all incoming transactions and blocks are following Bitcoin's rules. This allows you to validate transactions without trusting third parties.
 
-An indexed node can be used as a backend for other software which needs access to the blockchain (block explorers, [c-lightning](https://github.com/ElementsProject/lightning), [electrum personal server](https://github.com/chris-belcher/electrum-personal-server), [joinmarket](https://github.com/JoinMarket-Org/joinmarket-clientserver), [lnd](https://github.com/LightningNetwork/lnd), etc.). Using `qrexec` we can connect any of these tools to `bitcoind` from their own VM, making use of Qubes' security by isolation.
+An indexed node can be used as a backend for other software which needs access to the blockchain ([BTCPay Server](https://github.com/btcpayserver/btcpayserver), [c-lightning](https://github.com/ElementsProject/lightning), [electrum personal server](https://github.com/chris-belcher/electrum-personal-server), [joinmarket](https://github.com/JoinMarket-Org/joinmarket-clientserver), [lnd](https://github.com/LightningNetwork/lnd), etc.). Using `qrexec` we can connect any of these tools to `bitcoind` from their own VM, making use of the Qubes security by isolation model.
 ## I. Set Up Dom0
 ### A. In a `dom0` terminal, clone a Whonix TemplateVM.
 1. In a `dom0` terminal, clone a Whonix workstation TemplateVM and launch a terminal.
