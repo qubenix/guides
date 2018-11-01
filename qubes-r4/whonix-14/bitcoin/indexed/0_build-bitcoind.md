@@ -180,7 +180,7 @@ user@host:~$ cat ~/bitcoin/contrib/gitian-keys/keys.txt | while read fingerprint
 **Note:** your signature may not match the example. Just check that it says `Good signature`.
 
 ```
-user@host:~/bitcoin/contrib/gitian-keys$ cd ~/bitcoin/
+user@host:~$ cd ~/bitcoin/
 user@host:~/bitcoin$ git verify-commit HEAD
 gpg: Signature made Sun 28 Oct 2018 10:48:16 AM UTC
 gpg:                using RSA key D2EA4850E7528B25
