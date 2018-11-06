@@ -197,32 +197,31 @@ user@host:~$ sudo install -g staff -m 0755 -o root bitcoin-0.17.0.1/bin/bitcoin*
 
 2. Download and verify [JoinMarket](https://github.com/JoinMarket-Org/joinmarket-clientserver).
 
-**Note:** your signature may not match the example. Just check that it says `Good signature`.
+**Note:** at the time of writing the most recent version of JoinMarket is `v0.4.0`, modify the following steps accordingly if the version has changed.
 
 ```
 user@host:~$ git clone https://github.com/JoinMarket-Org/joinmarket-clientserver ~/joinmarket-clientserver
 Cloning into '/home/user/joinmarket-clientserver'...
-remote: Enumerating objects: 61, done.
-remote: Counting objects: 100% (61/61), done.
-remote: Compressing objects: 100% (40/40), done.
-remote: Total 3260 (delta 27), reused 44 (delta 21), pack-reused 3199
-Receiving objects: 100% (3260/3260), 2.91 MiB | 301.00 KiB/s, done.
-Resolving deltas: 100% (2132/2132), done.
-user@host:~$ gpg --recv-keys 46689728A9F64B391FA871B7B3AE09F1E9A3197A F618702CF144C903718E7954F0DF5443BD2F3520
-gpg: key 0xF0DF5443BD2F3520: public key "undeath <undeath@users.noreply.github.com>" imported
+remote: Enumerating objects: 37, done.
+remote: Counting objects: 100% (37/37), done.
+remote: Compressing objects: 100% (29/29), done.
+remote: Total 3312 (delta 14), reused 22 (delta 8), pack-reused 3275
+Receiving objects: 100% (3312/3312), 2.93 MiB | 99.00 KiB/s, done.
+Resolving deltas: 100% (2166/2166), done.
+user@host:~$ gpg --recv-keys 46689728A9F64B391FA871B7B3AE09F1E9A3197A
 gpg: key 0xB3AE09F1E9A3197A: public key "Adam Gibson <ekaggata@gmail.com>" imported
 gpg: no ultimately trusted keys found
-gpg: Total number processed: 2
-gpg:               imported: 2
+gpg: Total number processed: 1
+gpg:               imported: 1
 user@host:~$ cd ~/joinmarket-clientserver/
+user@host:~/joinmarket-clientserver$ git checkout -q v0.4.0
 user@host:~/joinmarket-clientserver$ git verify-commit HEAD
-gpg: Signature made Mon 29 Oct 2018 05:23:58 PM UTC
-gpg:                using RSA key F618702CF144C903718E7954F0DF5443BD2F3520
-gpg: Good signature from "undeath <undeath@users.noreply.github.com>" [unknown]
-gpg:                 aka "undeath <undeath@gpgkey>" [unknown]
+gpg: Signature made Sun 04 Nov 2018 03:54:05 PM UTC
+gpg:                using RSA key B3AE09F1E9A3197A
+gpg: Good signature from "Adam Gibson <ekaggata@gmail.com>" [unknown]
 gpg: WARNING: This key is not certified with a trusted signature!
 gpg:          There is no indication that the signature belongs to the owner.
-Primary key fingerprint: F618 702C F144 C903 718E  7954 F0DF 5443 BD2F 3520
+Primary key fingerprint: 4668 9728 A9F6 4B39 1FA8  71B7 B3AE 09F1 E9A3 197A
 ```
 
 3. Create python virtual environment.
