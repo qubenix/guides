@@ -4,4 +4,4 @@
 Please use Github for issues.
 ## Git Mirrors
 - https://github.com/qubenix/guides
-- http://qvxaztqqycmpr6qqvoxzyjpfieqq3zehdkycxev7m5sbmwh3earridid.onion/qubenix/guides
+- http://qubenixibxoyldm3l3a5fobreaydmvdweqqojllutyyi4vgtbmugvhad.onion/qubenix/guides
