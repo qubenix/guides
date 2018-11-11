@@ -13,7 +13,7 @@ The only way a remote attacker can compromise this system is to successfully exp
 
 ## Prerequisites
 
-- Have completed [`build-bitcoind`](https://github.com/qubenix/guides/blob/master/qubes-r4/whonix-14/bitcoin/indexed/build-bitcoind.md) guide.
+- Have completed [`0_build-bitcoind`](https://github.com/qubenix/guides/blob/master/qubes-r4/whonix-14/bitcoin/indexed/0_build-bitcoind.md) guide.
 
 ## I. Set Up Dom0
 
