@@ -105,26 +105,26 @@ user@host:~$ sudo shutdown now
 
 1. Download and verify [JoinMarket](https://github.com/JoinMarket-Org/joinmarket-clientserver).
 
-**Note:** at the time of writing the most recent version of JoinMarket is `v0.4.0`, modify the following steps accordingly if the version has changed.
+**Note:** at the time of writing the most recent version of JoinMarket is `v0.4.1`, modify the following steps accordingly if the version has changed.
 
 ```
-user@host:~$ git clone https://github.com/JoinMarket-Org/joinmarket-clientserver ~/joinmarket-clientserver
-Cloning into '/home/user/joinmarket-clientserver'...
-remote: Enumerating objects: 37, done.
-remote: Counting objects: 100% (37/37), done.
-remote: Compressing objects: 100% (29/29), done.
-remote: Total 3312 (delta 14), reused 22 (delta 8), pack-reused 3275
-Receiving objects: 100% (3312/3312), 2.93 MiB | 99.00 KiB/s, done.
-Resolving deltas: 100% (2166/2166), done.
+uuser@host:~$ git clone https://github.com/JoinMarket-Org/joinmarket-clientserver ~/joinmarket-clientserver                                                                                  
+Cloning into '/home/user/joinmarket-clientserver'...                                          
+remote: Enumerating objects: 64, done.
+remote: Counting objects: 100% (64/64), done.
+remote: Compressing objects: 100% (43/43), done.
+remote: Total 3339 (delta 28), reused 50 (delta 21), pack-reused 3275
+Receiving objects: 100% (3339/3339), 2.94 MiB | 241.00 KiB/s, done.
+Resolving deltas: 100% (2180/2180), done.
 user@host:~$ gpg --recv-keys 46689728A9F64B391FA871B7B3AE09F1E9A3197A
 gpg: key 0xB3AE09F1E9A3197A: public key "Adam Gibson <ekaggata@gmail.com>" imported
 gpg: no ultimately trusted keys found
 gpg: Total number processed: 1
 gpg:               imported: 1
 user@host:~$ cd ~/joinmarket-clientserver/
-user@host:~/joinmarket-clientserver$ git checkout -q v0.4.0
+user@host:~/joinmarket-clientserver$ git checkout -q v0.4.1
 user@host:~/joinmarket-clientserver$ git verify-commit HEAD
-gpg: Signature made Sun 04 Nov 2018 03:54:05 PM UTC
+gpg: Signature made Sun 11 Nov 2018 07:57:10 PM UTC
 gpg:                using RSA key B3AE09F1E9A3197A
 gpg: Good signature from "Adam Gibson <ekaggata@gmail.com>" [unknown]
 gpg: WARNING: This key is not certified with a trusted signature!
