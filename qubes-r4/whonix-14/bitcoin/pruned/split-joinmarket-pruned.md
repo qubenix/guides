@@ -351,6 +351,7 @@ user@host:~$ kwrite ~/.bitcoin/bitcoin.conf
 ```
 daemon=1
 listen=1
+onion=<gateway-ip>:9111
 onlynet=onion
 proxy=<gateway-ip>:9111
 prune=550

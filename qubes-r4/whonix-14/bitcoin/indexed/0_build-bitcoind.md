@@ -221,6 +221,7 @@ user@host:~$ sudo kwrite /home/bitcoind/.bitcoin/bitcoin.conf
 ```
 daemon=1
 listen=1
+onion=<gateway-ip>:9111
 onlynet=onion
 proxy=<gateway-ip>:9111
 txindex=1
