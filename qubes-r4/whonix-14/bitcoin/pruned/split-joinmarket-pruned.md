@@ -169,7 +169,7 @@ Primary key fingerprint: 01EA 5486 DE18 A882 D4C2  6845 90C8 019E 36C2 E964
 user@host:~$ cat SHA256SUMS.asc | grep x86_64 | shasum -c
 bitcoin-0.17.0.1-x86_64-linux-gnu.tar.gz: OK
 user@host:~$ tar xf bitcoin-0.17.0.1-x86_64-linux-gnu.tar.gz
-user@host:~$ sudo install -g staff -m 0755 -o root bitcoin-0.17.0.1/bin/bitcoin* -t /usr/local/bin/
+user@host:~$ sudo install -g staff -m 0755 -o root -t /usr/local/bin/ bitcoin-0.17.0.1/bin/bitcoin*
 ```
 
 2. Download and verify [JoinMarket](https://github.com/JoinMarket-Org/joinmarket-clientserver).
