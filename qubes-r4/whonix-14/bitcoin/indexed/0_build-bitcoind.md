@@ -107,7 +107,7 @@ user@host:~$ qubesdb-read /qubes-ip
 10.137.0.xx
 ```
 ### B. Configure `onion-grater`.
-1. Copy provided profile for `bitcoind` to persistent directory.
+1. Install provided profile for `bitcoind` to persistent directory.
 
 ```
 user@host:~$ sudo install -D -t /usr/local/etc/onion-grater-merger.d/ /usr/share/onion-grater-merger/examples/40_bitcoind.yml

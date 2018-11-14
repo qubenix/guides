@@ -240,7 +240,7 @@ user@host:~$ qubesdb-read /qubes-ip
 10.137.0.xx
 ```
 ### B. Configure `onion-grater`.
-1. Copy provided profile for `bitcoind` to persistent directory.
+1. Install provided profile for `bitcoind` to persistent directory.
 
 ```
 user@host:~$ sudo install -D -t /usr/local/etc/onion-grater-merger.d/ /usr/share/onion-grater-merger/examples/40_bitcoind.yml
@@ -380,7 +380,9 @@ cd /home/user/joinmarket-clientserver/scripts/
 (jmvenv) user@host:~/joinmarket-clientserver/scripts$ kwrite joinmarket.cfg
 ```
 
-3. Paste the following, be sure to replace `<gateway-ip>`, `<rpc-user>`, and `<rpc-pass>` with the information noted earlier.
+3. Paste the following.
+
+**Note:** be sure to replace `<gateway-ip>`, `<rpc-user>`, and `<rpc-pass>` with the information noted earlier.
 
 ```
 [DAEMON]
