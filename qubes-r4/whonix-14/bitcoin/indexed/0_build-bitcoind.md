@@ -108,7 +108,6 @@ user@host:~$ qubesdb-read /qubes-ip
 10.137.0.xx
 ```
 ### B. Configure `onion-grater`.
-
 1. Create persistent directory for `onion-grater` profile.
 
 ```

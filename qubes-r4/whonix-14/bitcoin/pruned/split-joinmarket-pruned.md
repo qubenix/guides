@@ -1,26 +1,20 @@
 # Qubes 4 & Whonix 14: Split JoinMarket Wallet & Pruned Bitcoin
 Create a two VM system for a fully functional JoinMarket wallet in an offline VM. The `joinmarketd` daemon and pruned `bitcoind` node run in a separate Whonix VM, communicate only over Tor, prefer hidden services, and use stream isolation.
-
 ## What is JoinMarket?
 Joinmarket is a decentralized, open source, and trustless market for Bitcoin privacy using [coinjoin](https://en.bitcoin.it/wiki/CoinJoin). Anyone holding Bitcoin can offer coinjoins for a fee, and anyone can pay a fee to have their transactions obfuscated.
 
 There is a detailed explanation of the concept by the creator [here](https://bitcointalk.org/index.php?topic=919116.0), and a descriptive infographic [here](https://imgur.com/C6w0Pgf).
-
 ## Why Do This?
 The benefit of this setup is that your wallet VM is essentially cold storage, yet retains all the functionality of an internet connected JoinMarket wallet (send payment, yield generator, etc). The only way a remote attacker can compromise this system is to successfully exploit one of your internet connected VMs and then use a Qubes/Xen 0-day to escape that VM.
 
 In addition to the security improvements, using a pruned Bitcoin node only requires about 10G of disk space.
-
 ## I. Set Up Dom0
-
 ### A. In a `dom0` terminal, clone Whonix TemplateVM.
 
 ```
 [user@dom0 ~]$ qvm-clone whonix-ws-14 whonix-ws-14-jm
 ```
-
 ### B. Create two AppVMs from the new Whonix TemplateVM.
-
 1. Create the VM for `bitcoind` and `joinmarketd`, use a Whonix gateway for networking.
 
 **Note:** You must pick some label color for your VMs upon creation. The color does not have to match what is shown in these examples.
@@ -40,30 +34,21 @@ In addition to the security improvements, using a pruned Bitcoin node only requi
 ```
 [user@dom0 ~]$ qvm-volume resize jm-bitcoind:private 20G
 ```
-
 ### D. Create rpc policies for comms from `jm-wallet` to `jm-bitcoind`.
-
 ```
 [user@dom0 ~]$ echo 'jm-wallet jm-bitcoind allow' | sudo tee -a /etc/qubes-rpc/policy/qubes.{bitcoind,joinmarketd} > /dev/null
 ```
-
 ### E. Enable `bitcoind` and `joinmarketd` services.
-
 ```
 [user@dom0 ~]$ qvm-service --enable jm-bitcoind bitcoind
 [user@dom0 ~]$ qvm-service --enable jm-bitcoind joinmarketd
 ```
-
 ## II. Set Up TemplateVM
-
 ### A. In the `whonix-ws-14-jm` terminal, update and install dependencies.
-
 ```
 user@host:~$ sudo apt-get update && sudo apt-get install automake build-essential curl git libffi-dev libsecp256k1-dev libsodium-dev libtool pkg-config python-dev python-pip python-sip python-virtualenv -y
 ```
-
 ### B. Create system user.
-
 ```
 user@host:~$ sudo adduser --group --system bitcoind
 Adding system user `bitcoind' (UID 116) ...
@@ -71,9 +56,7 @@ Adding new group `bitcoind' (GID 122) ...
 Adding new user `bitcoind' (UID 116) with group `bitcoind' ...
 Creating home directory `/home/bitcoind' ...
 ```
-
 ### C. Use `systemd` to keep `bitcoind` always running.
-
 1. Create `systemd` service file.
 
 ```
@@ -111,7 +94,6 @@ WantedBy=multi-user.target
 3. Save the file and switch back to the terminal.
 
 ### D. Use `systemd` to keep `joinmarketd` always running.
-
 1. Create `systemd` service file.
 
 ```
@@ -158,17 +140,12 @@ user@host:~$ sudo systemctl enable {bitcoind,joinmarketd}.service
 Created symlink /etc/systemd/system/multi-user.target.wants/bitcoind.service → /lib/systemd/system/bitcoind.service.
 Created symlink /etc/systemd/system/multi-user.target.wants/joinmarketd.service → /lib/systemd/system/joinmarketd.service.
 ```
-
 ### E. Shutdown TemplateVM.
-
 ```
 user@host:~$ sudo shutdown now
 ```
-
 ## II. Install Bitcoin and JoinMarket
-
 ### A. In a `jm-bitcoind` terminal, install Bitcoin, JoinMarket, and dependencies.
-
 1. Download, verify, and install the Linux 64 bit version of [Bitcoin Core](https://bitcoincore.org/en/download/).
 
 **Note:** at the time of writing the most recent version of Bitcoin Core is `0.17.0.1`, modify the following steps accordingly if the version has changed.
@@ -248,28 +225,21 @@ user@host:~/joinmarket-clientserver$ source jmvenv/bin/activate
 ```
 (jmvenv) user@host:~/joinmarket-clientserver$ deactivate
 ```
-
 ### B. Copy `joinmarket-clientserver/` directory to the `jm-wallet` VM.
-
 **Note:** select `jm-wallet` from the `dom0` pop-up.
 
 ```
 user@host:~/joinmarket-clientserver$ qvm-copy ~/joinmarket-clientserver/
 ```
-
 ## III. Configure Gateway
-
 ### A. In a `sys-whonix` terminal, find out the gateway IP.
-
 **Note:** save your gateway IP for later to replace `<gateway-ip>` in examples.
 
 ```
 user@host:~$ qubesdb-read /qubes-ip
 10.137.0.xx
 ```
-
 ### B. Configure `onion-grater`.
-
 1. Create persistent directory for `onion-grater` profile.
 
 ```
@@ -287,11 +257,8 @@ user@host:~$ sudo cp /usr/share/onion-grater-merger/examples/40_bitcoind.yml /us
 ```
 user@host:~$ sudo systemctl restart onion-grater.service
 ```
-
 ## IV. Configure `bitcoind` and `joinmarketd`
-
 ### A. In a `jm-bitcoind` terminal, create RPC credentials.
-
 1. Create a random RPC username. Do not use the one shown.
 
 **Note:** save your username for later to replace `<rpc-user>` in examples.
@@ -309,9 +276,7 @@ uJDzc07zxn5riJDx7N5m
 user@host:~$ head -c 30 /dev/urandom | base64
 pGw0+tSSzxwCCkJIjDHFg8Jezn1d7Yc7WkksPlQ0
 ```
-
 ### C. Configure `bitcoind`.
-
 1. Create Bitcoin's data directory and configuration file.
 
 ```
@@ -340,11 +305,8 @@ wallet=jm-wallet.dat
 ```
 user@host:~$ chmod 0600 ~/.bitcoin/bitcoin.conf
 ```
-
 ## V. Create Communication Channels
-
 ### A. In a `jm-bitcoind` terminal, create `qubes-rpc` action files.
-
 1. Create persistent directory for `qrexec` action files.
 
 ```
@@ -362,11 +324,8 @@ user@host:~$ sudo sh -c "echo 'socat STDIO TCP:localhost:8332' > /rw/usrlocal/et
 ```
 user@host:~$ sudo sh -c "echo 'socat STDIO TCP:localhost:27183' > /rw/usrlocal/etc/qubes-rpc/qubes.joinmarketd"
 ```
-
 ## VI. Configure JoinMarket.
-
 ### A. In a `jm-wallet` terminal, open communication ports on boot.
-
 1. Edit the file `/rw/config/rc.local`.
 
 ```
@@ -386,9 +345,7 @@ socat TCP-LISTEN:27183,fork,bind=127.0.0.1 EXEC:"qrexec-client-vm jm-bitcoind qu
 user@host:~$ sudo chmod 0755 /rw/config/rc.local
 user@host:~$ sudo /rw/config/rc.local
 ```
-
 ### B. Source the virtual environment and change directories on boot.
-
 1. Move the directory that was copied over from `jm-bitcoind`.
 
 **Note:** the directory must be moved to your home dir, otherwise the virtual environment will not work.
@@ -415,7 +372,6 @@ cd /home/user/joinmarket-clientserver/scripts/
 4. Save the file and open a new `jm-wallet` terminal.
 
 ### C. In a `jm-wallet` terminal, configure JoinMarket.
-
 1. Generate a JoinMarket configuration file.
 
 ```
@@ -494,7 +450,6 @@ accept_commitment_broadcasts = 1
 4. Save the file.
 
 ## VI. Finish
-
 The guide is complete.
 
 Once `bitcoind` has finished syncing in the `jm-bitcoind` VM you will be able to use JoinMarket's wallet from the `jm-wallet` VM. To learn more about using JoinMarket's wallet please see their [wiki](https://github.com/JoinMarket-Org/joinmarket/wiki).
