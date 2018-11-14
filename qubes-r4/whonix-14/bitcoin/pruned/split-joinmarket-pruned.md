@@ -270,44 +270,19 @@ user@host:~$ qubesdb-read /qubes-ip
 
 ### B. Configure `onion-grater`.
 
-1. Create persistent directory and `onion-grater` profile.
+1. Create persistent directory for `onion-grater` profile.
 
 ```
 user@host:~$ sudo mkdir -m 0755 /usr/local/etc/onion-grater-merger.d
-user@host:~$ sudo kwrite /usr/local/etc/onion-grater-merger.d/40_bitcoind.yml
 ```
 
-2. Paste the following.
+2. Copy example profile.
 
 ```
----
-- exe-paths:
-    - '*'
-  users:
-    - '*'
-  hosts:
-    - '*'
-  commands:
-    ADD_ONION:
-      ## {{{ Mainnet onion service.
-      - pattern:     'NEW:(\S+) Port=8333,127.0.0.1:8333'
-        replacement: 'NEW:{} Port=8333,{client-address}:8333 Flags=DiscardPK'
-      ## Testnet onion service.
-      - pattern:     'NEW:(\S+) Port=18333,127.0.0.1:18333'
-        replacement: 'NEW:{} Port=18333,{client-address}:18333 Flags=DiscardPK'
-      ## Needed to make services ephemeral.
-      - pattern:     '250-PrivateKey=(\S+):\S+'
-        replacement: '250-PrivateKey={}:redacted'
-      ## }}}
+user@host:~$ sudo cp /usr/share/onion-grater-merger/examples/40_bitcoind.yml /usr/local/etc/onion-grater-merger.d/
 ```
 
-3. Save the file, switch back to the terminal, and fix permissions.
-
-```
-user@host:~$ sudo chmod 0644 /usr/local/etc/onion-grater-merger.d/40_bitcoind.yml
-```
-
-4. Restart `onion-grater` service.
+3. Restart `onion-grater` service.
 
 ```
 user@host:~$ sudo systemctl restart onion-grater.service
