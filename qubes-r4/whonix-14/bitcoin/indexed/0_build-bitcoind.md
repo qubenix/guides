@@ -206,7 +206,7 @@ user@host:~$ sudo chown -R bitcoind:bitcoind /home/bitcoind/.bitcoin
 
 ```
 user@host:~$ sudo mkdir -m 0755 /rw/config/whonix_firewall.d
-user@host:~$ sudo sh -c 'echo "EXTERNAL_OPEN_PORTS+=\" 8333 \"" > /rw/config/whonix_firewall.d/50_user.conf'
+user@host:~$ sudo sh -c 'echo "EXTERNAL_OPEN_PORTS+=\" 8333 18333 \"" >> /rw/config/whonix_firewall.d/50_user.conf'
 user@host:~$ sudo chmod 0644 /rw/config/whonix_firewall.d/50_user.conf
 ```
 
