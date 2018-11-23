@@ -166,7 +166,7 @@ gpg: Good signature from "Wladimir J. van der Laan (Bitcoin Core binary release 
 gpg: WARNING: This key is not certified with a trusted signature!
 gpg:          There is no indication that the signature belongs to the owner.
 Primary key fingerprint: 01EA 5486 DE18 A882 D4C2  6845 90C8 019E 36C2 E964
-user@host:~$ cat SHA256SUMS.asc | grep x86_64 | shasum -c
+user@host:~$ grep x86_64 SHA256SUMS.asc | shasum -c
 bitcoin-0.17.0.1-x86_64-linux-gnu.tar.gz: OK
 user@host:~$ tar xf bitcoin-0.17.0.1-x86_64-linux-gnu.tar.gz
 user@host:~$ sudo install -g staff -m 0755 -o root -t /usr/local/bin/ bitcoin-0.17.0.1/bin/bitcoin*
