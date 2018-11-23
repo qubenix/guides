@@ -105,31 +105,31 @@ user@host:~$ sudo shutdown now
 
 1. Download and verify [JoinMarket](https://github.com/JoinMarket-Org/joinmarket-clientserver).
 
-**Note:** at the time of writing the most recent version of JoinMarket is `v0.4.1`, modify the following steps accordingly if the version has changed.
+**Note:** at the time of writing the most recent version of JoinMarket is `v0.4.2`, modify the following steps accordingly if the version has changed.
 
 ```
-uuser@host:~$ git clone https://github.com/JoinMarket-Org/joinmarket-clientserver ~/joinmarket-clientserver                                                                                  
-Cloning into '/home/user/joinmarket-clientserver'...                                          
-remote: Enumerating objects: 64, done.
-remote: Counting objects: 100% (64/64), done.
-remote: Compressing objects: 100% (43/43), done.
-remote: Total 3339 (delta 28), reused 50 (delta 21), pack-reused 3275
-Receiving objects: 100% (3339/3339), 2.94 MiB | 241.00 KiB/s, done.
-Resolving deltas: 100% (2180/2180), done.
-user@host:~$ gpg --recv-keys 46689728A9F64B391FA871B7B3AE09F1E9A3197A
-gpg: key 0xB3AE09F1E9A3197A: public key "Adam Gibson <ekaggata@gmail.com>" imported
+user@host:~$ git clone https://github.com/JoinMarket-Org/joinmarket-clientserver
+Cloning into 'joinmarket-clientserver'...
+remote: Enumerating objects: 78, done.
+remote: Counting objects: 100% (78/78), done.
+remote: Compressing objects: 100% (68/68), done.
+remote: Total 3531 (delta 25), reused 43 (delta 10), pack-reused 3453
+Receiving objects: 100% (3531/3531), 3.03 MiB | 69.00 KiB/s, done.
+Resolving deltas: 100% (2287/2287), done.
+user@host:~$ gpg --recv-keys 2B6FC204D9BF332D062B461A141001A1AF77F20B
+gpg: key 0x141001A1AF77F20B: public key "Adam Gibson (CODE SIGNING KEY) <ekaggata@gmail.com>" imported
 gpg: no ultimately trusted keys found
 gpg: Total number processed: 1
 gpg:               imported: 1
-user@host:~$ cd ~/joinmarket-clientserver/
-user@host:~/joinmarket-clientserver$ git checkout -q v0.4.1
-user@host:~/joinmarket-clientserver$ git verify-commit HEAD
-gpg: Signature made Sun 11 Nov 2018 07:57:10 PM UTC
-gpg:                using RSA key B3AE09F1E9A3197A
-gpg: Good signature from "Adam Gibson <ekaggata@gmail.com>" [unknown]
+user@host:~$ cd ~/joinmarket-clientserver
+user@host:~/joinmarket-clientserver$ git verify-tag v0.4.2
+gpg: Signature made Thu 22 Nov 2018 12:51:27 PM UTC
+gpg:                using RSA key 141001A1AF77F20B
+gpg: Good signature from "Adam Gibson (CODE SIGNING KEY) <ekaggata@gmail.com>" [unknown]
 gpg: WARNING: This key is not certified with a trusted signature!
 gpg:          There is no indication that the signature belongs to the owner.
-Primary key fingerprint: 4668 9728 A9F6 4B39 1FA8  71B7 B3AE 09F1 E9A3 197A
+Primary key fingerprint: 2B6F C204 D9BF 332D 062B  461A 1410 01A1 AF77 F20B
+user@host:~/joinmarket-clientserver$ git checkout -q v0.4.2
 ```
 
 2. Create python virtual environment and install dependencies to it.
