@@ -47,7 +47,7 @@ Adding new group `bitcoind' (GID 122) ...
 Adding new user `bitcoind' (UID 116) with group `bitcoind' ...
 Creating home directory `/home/bitcoind' ...
 ```
-### C. Use `systemd` to keep `bitcoind` always running.
+### C. Use `systemd` to keep `bitcoind` running.
 1. Create `systemd` service file.
 
 ```
@@ -127,12 +127,12 @@ user@host:~$ sudo systemctl restart onion-grater.service
 ```
 user@host:~$ git clone --branch 0.17 https://github.com/bitcoin/bitcoin ~/bitcoin
 Cloning into '/home/user/bitcoin'...
-remote: Enumerating objects: 289, done.
-remote: Counting objects: 100% (289/289), done.
-remote: Compressing objects: 100% (152/152), done.
-remote: Total 125433 (delta 171), reused 202 (delta 137), pack-reused 125144
-Receiving objects: 100% (125433/125433), 112.22 MiB | 398.00 KiB/s, done.
-Resolving deltas: 100% (87476/87476), done.
+remote: Enumerating objects: 12, done.
+remote: Counting objects: 100% (12/12), done.
+remote: Compressing objects: 100% (9/9), done.
+remote: Total 127081 (delta 6), reused 3 (delta 3), pack-reused 127069
+Receiving objects: 100% (127081/127081), 113.85 MiB | 235.00 KiB/s, done.
+Resolving deltas: 100% (88595/88595), done.
 ```
 
 2. Receive signing keys.
@@ -150,14 +150,15 @@ user@host:~$ cat ~/bitcoin/contrib/gitian-keys/keys.txt | while read fingerprint
 ```
 user@host:~$ cd ~/bitcoin/
 user@host:~/bitcoin$ git verify-commit HEAD
-gpg: Signature made Sun 28 Oct 2018 10:48:16 AM UTC
-gpg:                using RSA key D2EA4850E7528B25
-gpg: Good signature from "Marco Falke <marco.falke@tum.de>" [unknown]
-gpg:                 aka "Marco Falke <falke.marco@gmail.com>" [unknown]
+gpg: Signature made Sat 10 Nov 2018 11:45:44 AM UTC
+gpg:                using RSA key 9DEAE0DC7063249FB05474681E4AED62986CD25D
+gpg: Good signature from "Wladimir J. van der Laan <laanwj@protonmail.com>" [unknown]
+gpg:                 aka "Wladimir J. van der Laan <laanwj@gmail.com>" [unknown]
+gpg:                 aka "Wladimir J. van der Laan <laanwj@visucore.com>" [unknown]
 gpg: WARNING: This key is not certified with a trusted signature!
 gpg:          There is no indication that the signature belongs to the owner.
-Primary key fingerprint: B8B3 F1C0 E58C 15DB 6A81  D30C 3648 A882 F431 6B9B
-     Subkey fingerprint: 60B0 B8A4 02FB 386B 24A0  39AC D2EA 4850 E752 8B25
+Primary key fingerprint: 71A3 B167 3540 5025 D447  E8F2 7481 0B01 2346 C9A6
+     Subkey fingerprint: 9DEA E0DC 7063 249F B054  7468 1E4A ED62 986C D25D
 ```
 ### B. Build Berkeley DB and Bitcoin.
 **Note:** these next two steps will take some time and produce a lot of output. This is normal, be patient.
