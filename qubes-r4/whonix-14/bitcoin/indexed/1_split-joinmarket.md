@@ -132,7 +132,7 @@ Primary key fingerprint: 2B6F C204 D9BF 332D 062B  461A 1410 01A1 AF77 F20B
 user@host:~/joinmarket-clientserver$ git checkout -q v0.4.2
 ```
 
-2. Create python virtual environment and install dependencies to it.
+2. Create python virtual environment.
 
 ```
 user@host:~/joinmarket-clientserver$ virtualenv jmvenv
@@ -141,11 +141,23 @@ New python executable in /home/user/joinmarket-clientserver/jmvenv/bin/python2
 Also creating executable in /home/user/joinmarket-clientserver/jmvenv/bin/python
 Installing setuptools, pkg_resources, pip, wheel...done.
 user@host:~/joinmarket-clientserver$ source jmvenv/bin/activate
-(jmvenv) user@host:~/joinmarket-clientserver$ python setupall.py --client-bitcoin && python setupall.py --daemon
+```
+
+3. Install dependencies to virtual environment.
+
+**Note:** this will produce a lot of output. This is normal, be patient.
+
+```
+(jmvenv) user@host:~/joinmarket-clientserver$ python setupall.py --all
+```
+
+4. Deactivate virtual environment.
+
+```
 (jmvenv) user@host:~/joinmarket-clientserver$ deactivate
 ```
 
-3. Copy `joinmarket-clientserver/` directory to the `joinmarket` VM.
+5. Copy `joinmarket-clientserver/` directory to the `joinmarket` VM.
 
 **Note:** select `joinmarket` from the `dom0` pop-up.
 
