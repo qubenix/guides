@@ -48,13 +48,24 @@ In addition to the security improvements, using a pruned Bitcoin node only requi
 ```
 user@host:~$ sudo apt-get update && sudo apt-get install automake build-essential curl git libffi-dev libsecp256k1-dev libsodium-dev libtool pkg-config python-dev python-pip python-sip python-virtualenv -y
 ```
-### B. Create system user.
+### B. Create system users.
+1. Add `bitcoind` user.
+
 ```
 user@host:~$ sudo adduser --group --system bitcoind
 Adding system user `bitcoind' (UID 116) ...
 Adding new group `bitcoind' (GID 122) ...
 Adding new user `bitcoind' (UID 116) with group `bitcoind' ...
 Creating home directory `/home/bitcoind' ...
+```
+2. Add `joinmarketd` user.
+
+```
+user@host:~$ sudo adduser --group --system joinmarketd
+Adding system user `joinmarketd' (UID 117) ...
+Adding new group `joinmarketd' (GID 123) ...
+Adding new user `joinmarketd' (UID 117) with group `joinmarketd' ...
+Creating home directory `/home/joinmarketd' ...
 ```
 ### C. Use `systemd` to keep `bitcoind` always running.
 1. Create `systemd` service file.
@@ -99,7 +110,6 @@ WantedBy=multi-user.target
 ```
 user@host:~$ sudo kwrite /lib/systemd/system/joinmarketd.service
 ```
-
 2. Paste the following.
 
 ```
@@ -109,11 +119,11 @@ ConditionPathExists=/var/run/qubes-service/joinmarketd
 After=qubes-sysinit.service
 
 [Service]
-User=user
-Group=user
+User=joinmarketd
+Group=joinmarketd
 
 Type=idle
-WorkingDirectory=/home/user/joinmarket-clientserver
+WorkingDirectory=/home/joinmarketd/joinmarket-clientserver
 ExecStart=/bin/sh -c 'jmvenv/bin/python scripts/joinmarketd.py > scripts/logs/joinmarketd.log'
 
 Restart=always
@@ -126,13 +136,11 @@ StartLimitBurst=5
 [Install]
 WantedBy=multi-user.target
 ```
-
 3. Save the file, switch back to the terminal, and fix permissions.
 
 ```
 user@host:~$ sudo chmod 0644 /lib/systemd/system/bitcoind.service /lib/systemd/system/joinmarketd.service
 ```
-
 4. Enable the services.
 
 ```
@@ -171,7 +179,6 @@ bitcoin-0.17.0.1-x86_64-linux-gnu.tar.gz: OK
 user@host:~$ tar xf bitcoin-0.17.0.1-x86_64-linux-gnu.tar.gz
 user@host:~$ sudo install -g staff -m 0755 -o root -t /usr/local/bin/ bitcoin-0.17.0.1/bin/bitcoin*
 ```
-
 2. Download and verify [JoinMarket](https://github.com/JoinMarket-Org/joinmarket-clientserver).
 
 **Note:** at the time of writing the most recent version of JoinMarket is `v0.4.2`, modify the following steps accordingly if the version has changed.
@@ -200,7 +207,6 @@ gpg:          There is no indication that the signature belongs to the owner.
 Primary key fingerprint: 2B6F C204 D9BF 332D 062B  461A 1410 01A1 AF77 F20B
 user@host:~/joinmarket-clientserver$ git checkout -q v0.4.2
 ```
-
 3. Create python virtual environment.
 
 ```
@@ -211,7 +217,6 @@ Also creating executable in /home/user/joinmarket-clientserver/jmvenv/bin/python
 Installing setuptools, pkg_resources, pip, wheel...done.
 user@host:~/joinmarket-clientserver$ source jmvenv/bin/activate
 ```
-
 4. Install dependencies to virtual environment.
 
 **Note:** this will produce a lot of output. This is normal, be patient.
@@ -219,13 +224,21 @@ user@host:~/joinmarket-clientserver$ source jmvenv/bin/activate
 ```
 (jmvenv) user@host:~/joinmarket-clientserver$ python setupall.py --all
 ```
-
-5. Deactivate virtual environment.
+5. Deactivate virtual environment and make relocatable.
 
 ```
 (jmvenv) user@host:~/joinmarket-clientserver$ deactivate
+user@host:~/joinmarket-clientserver$ virtualenv --relocatable jmvenv
 ```
-### B. Copy `joinmarket-clientserver/` directory to the `jm-wallet` VM.
+### B. Copy `joinmarket-clientserver/` directory.
+1. Copy `joinmarket-clientserver/` directory to the `joinmarketd` user's home directory and fix owner.
+
+```
+user@host:~/joinmarket-clientserver$ sudo cp -r ~/joinmarket-clientserver/ /home/joinmarketd
+user@host:~/joinmarket-clientserver$ sudo chown -R joinmarketd:joinmarketd /home/joinmarketd
+```
+2. Copy `joinmarket-clientserver/` directory to the `jm-wallet` VM.
+
 **Note:** select `jm-wallet` from the `dom0` pop-up.
 
 ```
