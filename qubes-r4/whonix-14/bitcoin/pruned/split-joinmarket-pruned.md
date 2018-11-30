@@ -139,7 +139,7 @@ WantedBy=multi-user.target
 3. Save the file, switch back to the terminal, and fix permissions.
 
 ```
-user@host:~$ sudo chmod 0644 /lib/systemd/system/bitcoind.service /lib/systemd/system/joinmarketd.service
+user@host:~$ sudo chmod 0644 /lib/systemd/system/{bitcoind,joinmarketd}.service
 ```
 4. Enable the services.
 
