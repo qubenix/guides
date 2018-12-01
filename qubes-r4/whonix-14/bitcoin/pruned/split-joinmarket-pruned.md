@@ -46,8 +46,19 @@ In addition to the security improvements, using a pruned Bitcoin node only requi
 ## II. Set Up TemplateVM
 ### A. In the `whonix-ws-14-jm` terminal, update and install dependencies.
 ```
-user@host:~$ sudo apt-get update && sudo apt-get install automake build-essential curl git libffi-dev libsecp256k1-dev libsodium-dev libtool pkg-config python-dev python-pip python-sip python-virtualenv -y
+user@host:~$ sudo apt-get update && sudo apt-get install -y automake build-essential curl git libffi-dev libsecp256k1-dev libsodium-dev libtool pkg-config python-cffi python-dev python-future python-libnacl python-pip python-pycparser python-service-identity python-mnemonic python-openssl python-qt4reactor python-sip python-txtorcon python-virtualenv
 ```
+<!--
+APT NOTES: These packages will be installed via `pip`.
+- python-twisted/v18.9.0 needed version not in repos yet
+- python-zope.interface/v4.6.0 needed version not in repos yet
+- python-hamcrest/v1.9.0 needed version not in repos yet
+- python-idna/v2.7 needed version not in repos yet
+- coincurve/v10.0.0 no version in repos
+- asn1crypto/v0.24.0 in stretch-backports
+- argon2_cffi/v18.3.0 no version in repos
+- bencoder.pyx/v2.0.0 no version in repos
+-->
 ### B. Create system users.
 1. Add `bitcoind` user.
 
@@ -215,13 +226,14 @@ Running virtualenv with interpreter /usr/bin/python2
 New python executable in /home/user/joinmarket-clientserver/jmvenv/bin/python2
 Also creating executable in /home/user/joinmarket-clientserver/jmvenv/bin/python
 Installing setuptools, pkg_resources, pip, wheel...done.
-user@host:~/joinmarket-clientserver$ source jmvenv/bin/activate
 ```
 4. Install dependencies to virtual environment.
 
-**Note:** this will produce a lot of output. This is normal, be patient.
+**Note:** the last command in this section will produce a lot of output. This is normal, be patient.
 
 ```
+user@host:~/joinmarket-clientserver$ cp -r /usr/lib/python2.7/dist-packages/ jmvenv/lib/python2.7/
+user@host:~/joinmarket-clientserver$ source jmvenv/bin/activate
 (jmvenv) user@host:~/joinmarket-clientserver$ python setupall.py --all
 ```
 5. Deactivate virtual environment and make relocatable.
