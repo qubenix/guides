@@ -215,7 +215,7 @@ wallet=joinmarket.dat
 
 ### D. Create `joinmarketd` action file.
 ```
-user@host:~$ sudo sh -c "echo 'socat STDIO TCP:localhost:27183' > /rw/usrlocal/etc/qubes-rpc/qubes.joinmarketd"
+user@host:~$ sudo sh -c "echo 'socat STDIO TCP:127.0.0.1:27183' > /rw/usrlocal/etc/qubes-rpc/qubes.joinmarketd"
 ```
 ## VI. Configure `joinmarket` VM
 ### A. In a `joinmarket` terminal, open communication ports on boot.
@@ -279,7 +279,7 @@ cd /home/user/joinmarket-clientserver/scripts/
 [DAEMON]
 no_daemon = 0
 daemon_port = 27183
-daemon_host = localhost
+daemon_host = 127.0.0.1
 use_ssl = false
 
 [BLOCKCHAIN]

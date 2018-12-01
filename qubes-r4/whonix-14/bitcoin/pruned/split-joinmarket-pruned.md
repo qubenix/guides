@@ -335,13 +335,13 @@ user@host:~$ sudo mkdir -m 0755 /rw/usrlocal/etc/qubes-rpc
 2. Create `bitcoind` action file.
 
 ```
-user@host:~$ sudo sh -c "echo 'socat STDIO TCP:localhost:8332' > /rw/usrlocal/etc/qubes-rpc/qubes.bitcoind"
+user@host:~$ sudo sh -c "echo 'socat STDIO TCP:127.0.0.1:8332' > /rw/usrlocal/etc/qubes-rpc/qubes.bitcoind"
 ```
 
 3. Create `joinmarketd` action file.
 
 ```
-user@host:~$ sudo sh -c "echo 'socat STDIO TCP:localhost:27183' > /rw/usrlocal/etc/qubes-rpc/qubes.joinmarketd"
+user@host:~$ sudo sh -c "echo 'socat STDIO TCP:127.0.0.1:27183' > /rw/usrlocal/etc/qubes-rpc/qubes.joinmarketd"
 ```
 ## VI. Configure JoinMarket.
 ### A. In a `jm-wallet` terminal, open communication ports on boot.
@@ -413,7 +413,7 @@ cd /home/user/joinmarket-clientserver/scripts/
 [DAEMON]
 no_daemon = 0
 daemon_port = 27183
-daemon_host = localhost
+daemon_host = 127.0.0.1
 use_ssl = false
 
 [BLOCKCHAIN]

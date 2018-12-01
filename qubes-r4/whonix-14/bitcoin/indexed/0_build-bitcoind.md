@@ -228,7 +228,7 @@ user@host:~$ sudo mkdir -m 0755 /rw/usrlocal/etc/qubes-rpc
 2. Create `bitcoind` action file.
 
 ```
-user@host:~$ sudo sh -c 'echo "socat STDIO TCP:localhost:8332" > /rw/usrlocal/etc/qubes-rpc/qubes.bitcoind'
+user@host:~$ sudo sh -c 'echo "socat STDIO TCP:127.0.0.1:8332" > /rw/usrlocal/etc/qubes-rpc/qubes.bitcoind'
 ```
 ## VII. Initial Blockchain Download
 ### A. In a `bitcoind` terminal, start the `bitcoind` service.
