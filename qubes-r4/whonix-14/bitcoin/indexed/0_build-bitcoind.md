@@ -140,7 +140,7 @@ Resolving deltas: 100% (88595/88595), done.
 **Note:** this step will take some time and produce a lot of output. This is normal, be patient.
 
 ```
-user@host:~$ cat ~/bitcoin/contrib/gitian-keys/keys.txt | while read fingerprint keyholder_name; do gpg --recv-keys ${fingerprint}; done
+user@host:~$ gpg --recv-keys $(<~/bitcoin/contrib/verify-commits/trusted-keys)
 ```
 
 3. Verify source code.
