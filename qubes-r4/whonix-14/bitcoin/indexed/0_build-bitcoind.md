@@ -137,15 +137,23 @@ Resolving deltas: 100% (88595/88595), done.
 
 2. Receive signing keys.
 
-**Note:** this step will take some time and produce a lot of output. This is normal, be patient.
-
 ```
 user@host:~$ gpg --recv-keys $(<~/bitcoin/contrib/verify-commits/trusted-keys)
+gpg: keybox '/home/user/.gnupg/pubring.kbx' created
+gpg: /home/user/.gnupg/trustdb.gpg: trustdb created
+gpg: key 0x3648A882F4316B9B: public key "Marco Falke <marco.falke@tum.de>" imported
+gpg: key 0x29D4BCB6416F53EC: public key "Jonas Schnelli <dev@jonasschnelli.ch>" imported
+gpg: key 0x860FEB804E669320: public key "Pieter Wuille <pieter.wuille@gmail.com>" imported
+gpg: key 0x74810B012346C9A6: public key "Wladimir J. van der Laan <laanwj@protonmail.com>" imported
+gpg: no ultimately trusted keys found
+gpg: Total number processed: 4
+gpg:               imported: 4
+
 ```
 
 3. Verify source code.
 
-**Note:** your signature may not match the example. Just check that it says `Good signature`.
+**Note:** your output may not match the example. Just check that it says `Good signature`.
 
 ```
 user@host:~$ cd ~/bitcoin/
@@ -166,10 +174,10 @@ Primary key fingerprint: 71A3 B167 3540 5025 D447  E8F2 7481 0B01 2346 C9A6
 1. Build Berkeley DB using the provided script.
 
 ```
-user@host:~/bitcoin$ ./contrib/install_db4.sh `pwd`
+user@host:~/bitcoin$ ~/bitcoin/contrib/install_db4.sh ~/bitcoin
 ```
 
-2. Build and install Bitcoin Core.
+2. Build and install Bitcoin Core
 
 ```
 user@host:~/bitcoin$ export BDB_PREFIX='/home/user/bitcoin/db4'; ./autogen.sh && ./configure BDB_LIBS="-L${BDB_PREFIX}/lib -ldb_cxx-4.8" BDB_CFLAGS="-I${BDB_PREFIX}/include" && sudo make install
