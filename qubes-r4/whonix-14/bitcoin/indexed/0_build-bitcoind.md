@@ -37,7 +37,10 @@ An indexed node can be used as a backend for other software which needs access t
 ## II. Set Up TemplateVM
 ### A. In the `whonix-ws-14-bitcoin` terminal, update and install dependencies.
 ```
-user@host:~$ sudo apt-get update && sudo apt-get install -y automake autotools-dev bsdmainutils build-essential git libboost-chrono-dev libboost-filesystem-dev libboost-system-dev libboost-test-dev libboost-thread-dev libevent-dev libprotobuf-dev libqrencode-dev libqt5core5a libqt5dbus5 libqt5gui5 libssl-dev libtool libzmq3-dev pkg-config protobuf-compiler python3 qttools5-dev qttools5-dev-tools
+user@host:~$ sudo apt-get update && sudo apt-get install -y automake autotools-dev bsdmainutils \
+build-essential git libboost-chrono-dev libboost-filesystem-dev libboost-system-dev libboost-test-dev \
+libboost-thread-dev libevent-dev libprotobuf-dev libqrencode-dev libqt5core5a libqt5dbus5 libqt5gui5 \
+libssl-dev libtool libzmq3-dev pkg-config protobuf-compiler python3 qttools5-dev qttools5-dev-tools
 ```
 ### B. Create system user.
 ```
@@ -158,15 +161,14 @@ gpg:               imported: 4
 ```
 user@host:~$ cd ~/bitcoin/
 user@host:~/bitcoin$ git verify-commit HEAD
-gpg: Signature made Sat 10 Nov 2018 11:45:44 AM UTC
-gpg:                using RSA key 9DEAE0DC7063249FB05474681E4AED62986CD25D
-gpg: Good signature from "Wladimir J. van der Laan <laanwj@protonmail.com>" [unknown]
-gpg:                 aka "Wladimir J. van der Laan <laanwj@gmail.com>" [unknown]
-gpg:                 aka "Wladimir J. van der Laan <laanwj@visucore.com>" [unknown]
+gpg: Signature made Wed 05 Dec 2018 03:35:31 PM UTC
+gpg:                using RSA key D2EA4850E7528B25
+gpg: Good signature from "Marco Falke <marco.falke@tum.de>" [unknown]
+gpg:                 aka "Marco Falke <falke.marco@gmail.com>" [unknown]
 gpg: WARNING: This key is not certified with a trusted signature!
 gpg:          There is no indication that the signature belongs to the owner.
-Primary key fingerprint: 71A3 B167 3540 5025 D447  E8F2 7481 0B01 2346 C9A6
-     Subkey fingerprint: 9DEA E0DC 7063 249F B054  7468 1E4A ED62 986C D25D
+Primary key fingerprint: B8B3 F1C0 E58C 15DB 6A81  D30C 3648 A882 F431 6B9B
+     Subkey fingerprint: 60B0 B8A4 02FB 386B 24A0  39AC D2EA 4850 E752 8B25
 ```
 ### B. Build Berkeley DB and Bitcoin.
 **Note:** these next two steps will take some time and produce a lot of output. This is normal, be patient.
@@ -177,10 +179,14 @@ Primary key fingerprint: 71A3 B167 3540 5025 D447  E8F2 7481 0B01 2346 C9A6
 user@host:~/bitcoin$ ~/bitcoin/contrib/install_db4.sh ~/bitcoin
 ```
 
-2. Build and install Bitcoin Core
+2. Build and install Bitcoin Core.
+
+**Note:** this step will take some time and produce a lot of output. This is normal, be patient.
 
 ```
-user@host:~/bitcoin$ export BDB_PREFIX='/home/user/bitcoin/db4'; ./autogen.sh && ./configure BDB_LIBS="-L${BDB_PREFIX}/lib -ldb_cxx-4.8" BDB_CFLAGS="-I${BDB_PREFIX}/include" && sudo make install
+user@host:~/bitcoin$ export BDB_PREFIX='/home/user/bitcoin/db4'; ./autogen.sh && \
+./configure BDB_LIBS="-L${BDB_PREFIX}/lib -ldb_cxx-4.8" BDB_CFLAGS="-I${BDB_PREFIX}/include" && \
+make check && sudo make install
 ```
 ## V. Set Up Bitcoin.
 ### A. In a `bitcoind` terminal, configure Bitcoin.
