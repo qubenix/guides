@@ -102,9 +102,7 @@ user@host:~$ sudo shutdown now
 ```
 ## III. Install JoinMarket
 ### A. In a `bitcoind` terminal, install JoinMarket and dependencies.
-1. Download and verify [JoinMarket](https://github.com/JoinMarket-Org/joinmarket-clientserver).
-
-**Note:** at the time of writing the most recent version of JoinMarket is `v0.4.2`, modify the following steps accordingly if the version has changed.
+1. Clone [JoinMarket](https://github.com/JoinMarket-Org/joinmarket-clientserver) repository.
 
 ```
 user@host:~$ git clone https://github.com/JoinMarket-Org/joinmarket-clientserver
@@ -115,11 +113,21 @@ remote: Compressing objects: 100% (68/68), done.
 remote: Total 3531 (delta 25), reused 43 (delta 10), pack-reused 3453
 Receiving objects: 100% (3531/3531), 3.03 MiB | 69.00 KiB/s, done.
 Resolving deltas: 100% (2287/2287), done.
+```
+2. Receive signing key.
+
+```
 user@host:~$ gpg --recv-keys 2B6FC204D9BF332D062B461A141001A1AF77F20B
 gpg: key 0x141001A1AF77F20B: public key "Adam Gibson (CODE SIGNING KEY) <ekaggata@gmail.com>" imported
 gpg: no ultimately trusted keys found
 gpg: Total number processed: 1
 gpg:               imported: 1
+```
+3. Verify source code.
+
+**Note:** at the time of writing the most recent version of JoinMarket is `v0.4.2`, modify the following steps accordingly if the version has changed.
+
+```
 user@host:~$ cd ~/joinmarket-clientserver
 user@host:~/joinmarket-clientserver$ git verify-tag v0.4.2
 gpg: Signature made Thu 22 Nov 2018 12:51:27 PM UTC
@@ -130,7 +138,8 @@ gpg:          There is no indication that the signature belongs to the owner.
 Primary key fingerprint: 2B6F C204 D9BF 332D 062B  461A 1410 01A1 AF77 F20B
 user@host:~/joinmarket-clientserver$ git checkout -q v0.4.2
 ```
-2. Create python virtual environment.
+### B. Get JoinMarket dependencies not available through `apt`.
+1. Create `python` virtual environment.
 
 ```
 user@host:~/joinmarket-clientserver$ virtualenv jmvenv
@@ -139,7 +148,7 @@ New python executable in /home/user/joinmarket-clientserver/jmvenv/bin/python2
 Also creating executable in /home/user/joinmarket-clientserver/jmvenv/bin/python
 Installing setuptools, pkg_resources, pip, wheel...done.
 ```
-3. Install dependencies to virtual environment.
+2. Install dependencies to virtual environment.
 
 **Note:** the last command in this section will produce a lot of output. This is normal, be patient.
 
@@ -148,19 +157,20 @@ user@host:~/joinmarket-clientserver$ cp -r /usr/lib/python2.7/dist-packages/ jmv
 user@host:~/joinmarket-clientserver$ source jmvenv/bin/activate
 (jmvenv) user@host:~/joinmarket-clientserver$ python setupall.py --all
 ```
-4. Deactivate virtual environment and make relocatable.
+3. Deactivate virtual environment and make relocatable.
 
 ```
 (jmvenv) user@host:~/joinmarket-clientserver$ deactivate
 user@host:~/joinmarket-clientserver$ virtualenv --relocatable jmvenv
 ```
-5. Copy `joinmarket-clientserver/` directory to the `joinmarketd` user's home directory and fix owner.
+### C. Relocate `joinmarket-clientserver/` directory.
+1. Copy `joinmarket-clientserver/` directory to the `joinmarketd` user's home directory and fix owner.
 
 ```
 user@host:~/joinmarket-clientserver$ sudo cp -r ~/joinmarket-clientserver/ /home/joinmarketd
 user@host:~/joinmarket-clientserver$ sudo chown -R joinmarketd:joinmarketd /home/joinmarketd
 ```
-6. Copy `joinmarket-clientserver/` directory to the `joinmarket` VM.
+2. Copy `joinmarket-clientserver/` directory to the `joinmarket` VM.
 
 **Note:** select `joinmarket` from the `dom0` pop-up.
 
