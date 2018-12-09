@@ -220,7 +220,7 @@ txindex=1
 user@host:~$ sudo chmod 0600 /home/bitcoind/.bitcoin/bitcoin.conf
 user@host:~$ sudo chown -R bitcoind:bitcoind /home/bitcoind/.bitcoin
 ```
-### B. Open p2p port.
+### B. Open p2p ports.
 1. Make persistent directory, configure firewall, and fix permissions.
 
 ```

@@ -29,7 +29,10 @@ The only way a remote attacker can compromise this system is to successfully exp
 ## II. Set Up TemplateVM
 ### A. In a `whonix-ws-14-bitcoin` terminal, update and install dependencies.
 ```
-user@host:~$ sudo apt-get update && sudo apt-get install -y automake build-essential curl git libffi-dev libsecp256k1-dev libsodium-dev libtool pkg-config python-cffi python-dev python-future python-libnacl python-mnemonic python-openssl python-pip python-pycparser python-qt4reactor python-service-identity python-sip python-txtorcon python-openssl python-virtualenv
+user@host:~$ sudo apt-get update && sudo apt-get install -y automake build-essential curl git \
+libffi-dev libsecp256k1-dev libsodium-dev libtool pkg-config python-cffi python-dev python-future \
+python-libnacl python-mnemonic python-openssl python-pip python-pycparser python-qt4reactor \
+python-service-identity python-sip python-txtorcon python-openssl python-virtualenv
 ```
 <!--
 APT NOTES: These packages will be installed via `pip`.
