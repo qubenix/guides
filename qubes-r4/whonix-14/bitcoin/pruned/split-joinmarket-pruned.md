@@ -14,13 +14,19 @@ In addition to the security improvements, using a pruned Bitcoin node only requi
 ```
 [user@dom0 ~]$ qvm-clone whonix-ws-14 whonix-ws-14-jm
 ```
-### B. Create two AppVMs from the new Whonix TemplateVM.
-1. Create the VM for `bitcoind` and `joinmarketd`, use a Whonix gateway for networking.
-
-**Note:** You must pick some label color for your VMs upon creation. The color does not have to match what is shown in these examples.
+### B. Create a gateway.
+**Note:** This gateway should be independent of your normal browsing gateway (`sys-whonix`) to isolate the onion service. You must choose a label color, but it does not have to match this example.
 
 ```
-[user@dom0 ~]$ qvm-create --label red --prop netvm='sys-whonix' --template whonix-ws-14-jm jm-bitcoind
+[user@dom0 ~]$ qvm-create --label purple --prop netvm='sys-firewall' --prop provides_network='True' --template whonix-gw-14 sys-bitcoind
+```
+### C. Create two AppVMs, use newly created gateway and template.
+1. Create the VM for `bitcoind` and `joinmarketd`, use a Whonix gateway for networking.
+
+**Note:** You must choose a label color, but it does not have to match this example.
+
+```
+[user@dom0 ~]$ qvm-create --label red --prop netvm='sys-bitcoind' --template whonix-ws-14-jm jm-bitcoind
 ```
 
 2. Create the VM for JoinMarket's wallet with no networking.
@@ -257,7 +263,7 @@ user@host:~/joinmarket-clientserver$ sudo chown -R joinmarketd:joinmarketd /home
 user@host:~/joinmarket-clientserver$ qvm-copy ~/joinmarket-clientserver/
 ```
 ## III. Configure Gateway
-### A. In a `sys-whonix` terminal, find out the gateway IP.
+### A. In a `sys-bitcoind` terminal, find out the gateway IP.
 **Note:** save your gateway IP for later to replace `<gateway-ip>` in examples.
 
 ```

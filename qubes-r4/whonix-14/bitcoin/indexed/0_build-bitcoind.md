@@ -19,13 +19,17 @@ An indexed node can be used as a backend for other software which needs access t
 ```
 [user@dom0 ~]$ qvm-clone whonix-ws-14 whonix-ws-14-bitcoin
 ```
-### B. Create an AppVM from the new Whonix TemplateVM.
-1. Create the VM for running `bitcoind` using a Whonix gateway for networking.
-
-**Note:** You must pick some label color for your VMs upon creation, it does not have to match what is shown here. `sys-whonix` is the default name of the Whonix gateway.
+### B. Create a gateway.
+**Note:** This gateway should be independent of your normal browsing gateway (`sys-whonix`) to isolate the onion service. You must choose a label color, but it does not have to match this example.
 
 ```
-[user@dom0 ~]$ qvm-create --label red --prop netvm='sys-whonix' --template whonix-ws-14-bitcoin bitcoind
+[user@dom0 ~]$ qvm-create --label purple --prop netvm='sys-firewall' --prop provides_network='True' --template whonix-gw-14 sys-bitcoind
+```
+### C. Create an AppVM, use newly created gateway and template.
+**Note:** You must choose a label color, but it does not have to match this example.
+
+```
+[user@dom0 ~]$ qvm-create --label red --prop netvm='sys-bitcoind' --template whonix-ws-14-bitcoin bitcoind
 ```
 
 2. Increase private volume size and enable `bitcoind` service.
@@ -102,7 +106,7 @@ Created symlink /etc/systemd/system/multi-user.target.wants/bitcoind.service →
 user@host:~$ sudo shutdown now
 ```
 ## III. Set Up Gateway.
-### A. In a `sys-whonix` terminal, find out the gateway IP.
+### A. In a `sys-bitcoind` terminal, find out the gateway IP.
 **Note:** save your gateway IP for later to replace `<gateway-ip>` in examples.
 
 ```
