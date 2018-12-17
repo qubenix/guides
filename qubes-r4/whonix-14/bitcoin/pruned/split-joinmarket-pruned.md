@@ -52,7 +52,7 @@ In addition to the security improvements, using a pruned Bitcoin node only requi
 ## II. Set Up TemplateVM
 ### A. In the `whonix-ws-14-jm` terminal, update and install dependencies.
 ```
-user@host:~$ sudo apt-get update && sudo apt-get install -y automake build-essential curl git libffi-dev libsecp256k1-dev libsodium-dev libtool pkg-config python-cffi python-dev python-future python-libnacl python-pip python-pycparser python-service-identity python-mnemonic python-openssl python-qt4reactor python-sip python-txtorcon python-virtualenv
+user@host:~$ sudo apt update && sudo apt install -y automake build-essential curl git libffi-dev libsecp256k1-dev libsodium-dev libtool pkg-config python-cffi python-dev python-future python-libnacl python-pip python-pycparser python-service-identity python-mnemonic python-openssl python-qt4reactor python-sip python-txtorcon python-virtualenv
 ```
 <!--
 APT NOTES: These packages will be installed via `pip`.

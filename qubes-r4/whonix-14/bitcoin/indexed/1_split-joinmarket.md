@@ -27,23 +27,26 @@ The only way a remote attacker can compromise this system is to successfully exp
 [user@dom0 ~]$ echo 'joinmarket bitcoind allow' | sudo tee -a /etc/qubes-rpc/policy/qubes.{bitcoind,joinmarketd} > /dev/null
 ```
 ## II. Set Up TemplateVM
-### A. In a `whonix-ws-14-bitcoin` terminal, update and install dependencies.
+### A. In a `whonix-ws-14-bitcoin` terminal, add `stretch-backports` repo.
 ```
-user@host:~$ sudo apt-get update && sudo apt-get install -y automake build-essential curl git \
-libffi-dev libsecp256k1-dev libsodium-dev libtool pkg-config python-cffi python-dev python-future \
-python-libnacl python-mnemonic python-openssl python-pip python-pycparser python-qt4reactor \
-python-service-identity python-sip python-txtorcon python-openssl python-virtualenv
+user@host:~$ sudo su -c "echo -e 'deb tor+http://vwakviie2ienjx6t.onion/debian stretch-backports main' > /etc/apt/sources.list.d/backports.list"
+```
+### B. Update and install dependencies.
+```
+user@host:~$ sudo apt-get update && sudo apt-get install -y curl git libsecp256k1-dev \
+libsodium-dev python-cffi python-dev python-future python-libnacl python-mnemonic \
+python-openssl python-pip python-pycparser python-service-identity python-sip \
+python-txtorcon python-virtualenv
 ```
 <!--
-APT NOTES: These packages will be installed via `pip`.
-- python-twisted/v18.9.0 needed version not in repos yet
-- python-zope.interface/v4.6.0 needed version not in repos yet
-- python-hamcrest/v1.9.0 needed version not in repos yet
-- python-idna/v2.7 needed version not in repos yet
-- coincurve/v10.0.0 no version in repos
-- asn1crypto/v0.24.0 in stretch-backports
-- argon2_cffi/v18.3.0 no version in repos
-- bencoder.pyx/v2.0.0 no version in repos
+NOTE: These packages will be installed via `pip`.
+NOTE: Versions checked on: 12-17-2018.
+- python-twisted==18.9.0 | buster==18.9.0-3
+- python-zope.interface>=4.4.2 | version not in repos
+- python-hamcrest>=1.9.0 | version not in repos
+- coincurve | not in repos
+- argon2_cffi | not in repos
+- bencoder.pyx | not in repos
 -->
 ### B. Create system user.
 ```

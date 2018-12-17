@@ -41,7 +41,7 @@ An indexed node can be used as a backend for other software which needs access t
 ## II. Set Up TemplateVM
 ### A. In the `whonix-ws-14-bitcoin` terminal, update and install dependencies.
 ```
-user@host:~$ sudo apt-get update && sudo apt-get install -y automake autotools-dev bsdmainutils \
+user@host:~$ sudo apt update && sudo apt install -y automake autotools-dev bsdmainutils \
 build-essential git libboost-chrono-dev libboost-filesystem-dev libboost-system-dev libboost-test-dev \
 libboost-thread-dev libevent-dev libprotobuf-dev libqrencode-dev libqt5core5a libqt5dbus5 libqt5gui5 \
 libssl-dev libtool libzmq3-dev pkg-config protobuf-compiler python3 qttools5-dev qttools5-dev-tools
