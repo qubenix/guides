@@ -264,6 +264,7 @@ txindex=1
 ```
 user@host:~$ sudo chmod 0600 /home/bitcoin/.bitcoin/bitcoin.conf
 user@host:~$ sudo chown -R bitcoind /home/bitcoin/.bitcoin
+user@host:~$ sudo chmod 0700 /home/bitcoin/
 ```
 ### B. Open p2p ports.
 1. Make persistent directory, configure firewall, and fix permissions.
@@ -281,17 +282,21 @@ user@host:~$ sudo systemctl restart whonix-firewall.service
 ```
 ## VI. Create Communication Channel
 **Note:** this only creates the possibility for other VMs to communicate with `bitcoind`, it does not yet give them permission.
-### A. In a `bitcoind` terminal, create `qubes-rpc` action files.
+### A. In a `bitcoind` terminal, set up `qubes-rpc` for `bitcoind`.
 1. Create persistent directory for `qrexec` action files.
 
 ```
 user@host:~$ sudo mkdir -m 0755 /rw/usrlocal/etc/qubes-rpc
 ```
-
 2. Create `bitcoind` action file.
 
 ```
 user@host:~$ sudo sh -c 'echo "socat STDIO TCP:127.0.0.1:8332" > /rw/usrlocal/etc/qubes-rpc/qubes.bitcoind'
+```
+3. Fix permissions.
+
+```
+user@host:~$ sudo chmod 0644 /rw/usrlocal/etc/qubes-rpc/qubes.bitcoind
 ```
 ## VII. Initial Blockchain Download
 ### A. In a `bitcoind` terminal, start the `bitcoind` service.

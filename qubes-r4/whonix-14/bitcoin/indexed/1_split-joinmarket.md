@@ -24,27 +24,23 @@ The only way a remote attacker can compromise this system is to successfully exp
 ```
 ### C. Create rpc policies for comms from `joinmarket` to `bitcoind` VM.
 ```
-[user@dom0 ~]$ echo 'joinmarket bitcoind allow' | sudo tee -a /etc/qubes-rpc/policy/qubes.{bitcoind,joinmarketd} > /dev/null
+[user@dom0 ~]$ echo 'joinmarket bitcoind allow' | sudo tee -a /etc/qubes-rpc/policy/qubes.{bitcoind,joinmarketd-2718{3,4}} > /dev/null
 ```
 ## II. Set Up TemplateVM
-### A. In a `whonix-ws-14-bitcoin` terminal, add `stretch-backports` repo.
+### A. Update and install dependencies.
 ```
-user@host:~$ sudo su -c "echo -e 'deb tor+http://vwakviie2ienjx6t.onion/debian stretch-backports main' > /etc/apt/sources.list.d/backports.list"
-```
-### B. Update and install dependencies.
-```
-user@host:~$ sudo apt update && sudo apt install -y libffi-dev libgmp-dev libsecp256k1-dev libsodium-dev libtool python-virtualenv python3-dev python3-pip
+user@host:~$ sudo apt update && sudo apt install -y libffi-dev libgmp-dev libsecp256k1-dev libsodium-dev \
+python-virtualenv python3-dev python3-pip
 ```
 <!--
 TODO NOTES: Try to limit package installs through pip
 -->
 ### B. Create system user.
 ```
-user@host:~$ sudo adduser --group --system joinmarketd
-Adding system user `joinmarketd' (UID 117) ...
-Adding new group `joinmarketd' (GID 123) ...
-Adding new user `joinmarketd' (UID 117) with group `joinmarketd' ...
-Creating home directory `/home/joinmarketd' ...
+user@host:~$ sudo adduser --system joinmarket
+Adding system user `joinmarket' (UID 117) ...
+Adding new user `joinmarket' (UID 117) with group `nogroup' ...
+Creating home directory `/home/joinmarket' ...
 ```
 ### C. Use `systemd` to keep `joinmarketd` running.
 1. Create `systemd` service file.
@@ -56,24 +52,25 @@ user@host:~$ sudo kwrite /lib/systemd/system/joinmarketd.service
 
 ```
 [Unit]
-Description=JoinMarket's server daemon
+Description=JoinMarket daemon
 ConditionPathExists=/var/run/qubes-service/joinmarketd
 After=qubes-sysinit.service
 
 [Service]
-User=joinmarketd
-Group=joinmarketd
+WorkingDirectory=/home/joinmarket/joinmarket-clientserver-0.5.2
+ExecStart=/bin/sh -c 'jmvenv/bin/python scripts/joinmarketd.py'
 
+RuntimeDirectory=joinmarketd
+User=joinmarket
 Type=idle
-WorkingDirectory=/home/joinmarketd/joinmarket-clientserver-0.5.2
-ExecStart=/bin/sh -c 'jmvenv/bin/python scripts/joinmarketd.py > scripts/logs/joinmarketd.log'
-
+PIDFile=/run/joinmarketd/joinmarketd.pid
 Restart=always
+
 PrivateTmp=true
-TimeoutStopSec=60s
-TimeoutStartSec=2s
-StartLimitInterval=120s
-StartLimitBurst=5
+ProtectSystem=full
+NoNewPrivileges=true
+PrivateDevices=true
+MemoryDenyWriteExecute=true
 
 [Install]
 WantedBy=multi-user.target
@@ -94,13 +91,30 @@ Created symlink /etc/systemd/system/multi-user.target.wants/joinmarketd.service 
 user@host:~$ sudo shutdown now
 ```
 ## III. Install JoinMarket
-### A. In a `bitcoind` terminal, install JoinMarket.
-1. Download and verify [JoinMarket](https://github.com/JoinMarket-Org/joinmarket-clientserver/releases).
+### A. In a `bitcoind` terminal, download and verify JoinMarket source code.
+1. Download [JoinMarket](https://github.com/JoinMarket-Org/joinmarket-clientserver/releases).
 
 **Note:** at the time of writing the most recent version of JoinMarket is `v0.5.2`, modify the following steps accordingly if the version has changed.
 
 ```
 user@host:~$ curl -LO "https://github.com/JoinMarket-Org/joinmarket-clientserver/archive/v0.5.2.tar.gz" -O "https://github.com/JoinMarket-Org/joinmarket-clientserver/releases/download/v0.5.2/joinmarket-clientserver-0.5.2.tar.gz.asc"
+```
+2. Receive signing key.
+
+**Note:** you can verify the key fingerprint in the [release notes](https://github.com/JoinMarket-Org/joinmarket-clientserver/releases).
+
+```
+user@host:~$ gpg --recv-keys "2B6F C204 D9BF 332D 062B 461A 1410 01A1 AF77 F20B"
+key 0x141001A1AF77F20B:
+2 signatures not checked due to missing keys
+gpg: key 0x141001A1AF77F20B: public key "Adam Gibson (CODE SIGNING KEY) <ekaggata@gmail.com>" imported
+gpg: no ultimately trusted keys found
+gpg: Total number processed: 1
+gpg:               imported: 1
+```
+3. Verify.
+
+```
 user@host:~$ gpg --verify joinmarket-clientserver-0.5.2.tar.gz.asc v0.5.2.tar.gz
 gpg: Signature made Sat 19 Jan 2019 07:48:07 PM UTC
 gpg:                using RSA key 0x141001A1AF77F20B
@@ -109,13 +123,14 @@ gpg: WARNING: This key is not certified with a trusted signature!
 gpg:          There is no indication that the signature belongs to the owner.
 Primary key fingerprint: 2B6F C204 D9BF 332D 062B  461A 1410 01A1 AF77 F20B
 ```
-2. Extract and enter JoinMarket directory.
+4. Extract and enter JoinMarket directory.
 
 ```
 user@host:~$ tar xf v0.5.2.tar.gz
 user@host:~$ cd joinmarket-clientserver-0.5.2
 ```
-3. Create python virtual environment.
+### B. Install JoinMarket dependencies.
+1. Create python virtual environment.
 
 ```
 user@host:~/joinmarket-clientserver-0.5.2$ virtualenv -p python3 jmvenv
@@ -125,7 +140,7 @@ New python executable in /home/user/joinmarket-clientserver-0.5.2/jmvenv/bin/pyt
 Also creating executable in /home/user/joinmarket-clientserver-0.5.2/jmvenv/bin/python
 Installing setuptools, pkg_resources, pip, wheel...done.
 ```
-4. Install dependencies to virtual environment.
+2. Install dependencies to virtual environment.
 
 **Note:** this will produce a lot of output. This is normal, be patient.
 
@@ -133,28 +148,38 @@ Installing setuptools, pkg_resources, pip, wheel...done.
 user@host:~/joinmarket-clientserver-0.5.2$ source jmvenv/bin/activate
 (jmvenv) user@host:~/joinmarket-clientserver-0.5.2$ python setupall.py --all
 ```
-5. Deactivate virtual environment and make relocatable.
+3. Deactivate virtual environment and make relocatable.
 
 ```
 (jmvenv) user@host:~/joinmarket-clientserver-0.5.2$ deactivate
 user@host:~/joinmarket-clientserver-0.5.2$ virtualenv -p python3 --relocatable jmvenv
 ```
-### B. Relocate `joinmarket-clientserver/` directory.
-1. Copy `joinmarket-clientserver/` directory to the `joinmarketd` user's home directory and fix owner.
+4. Return to home directory.
 
 ```
-user@host:~/joinmarket-clientserver-0.5.2$ sudo cp -r ~/joinmarket-clientserver-0.5.2/ /home/joinmarketd
-user@host:~/joinmarket-clientserver-0.5.2$ sudo chown -R joinmarketd:joinmarketd /home/joinmarketd
+user@host:~/joinmarket-clientserver-0.5.2$ cd
+```
+### C. Relocate `joinmarket-clientserver/` directory.
+1. Copy `joinmarket-clientserver/` directory to the `joinmarket` user's home directory, change owner, and fix permissions.
+
+```
+user@host:~$ sudo cp -r ~/joinmarket-clientserver-0.5.2/ /home/joinmarket
+user@host:~$ sudo chown -R joinmarket /home/joinmarket
+user@host:~$ sudo chmod 0700 /home/joinmarket/
 ```
 2. Copy `joinmarket-clientserver/` directory to the `joinmarket` VM.
 
 **Note:** select `joinmarket` from the `dom0` pop-up.
 
 ```
-user@host:~/joinmarket-clientserver-0.5.2$ qvm-copy ~/joinmarket-clientserver-0.5.2/
+user@host:~$ qvm-copy ~/joinmarket-clientserver-0.5.2/
+```
+### D. Start `joinmarketd` service.
+```
+user@host:~$ sudo systemctl start joinmarketd.service
 ```
 ## IV. Configure `bitcoind` and `joinmarketd`
-### A. In a `sys-whonix` terminal, find out the gateway IP.
+### A. In a `sys-bitcoind` terminal, find out the gateway IP.
 **Note:** save your gateway IP for later to replace `<gateway-ip>` in examples.
 
 ```
@@ -188,23 +213,38 @@ IuziNnTsOUkonsDD3jn5WatPnFrFOMSnGUsRSUaq5Qg=
 1. Open `bitcoin.conf`.
 
 ```
-user@host:~$ sudo -u bitcoind kwrite /home/bitcoind/.bitcoin/bitcoin.conf
+user@host:~$ sudo -u bitcoin kwrite /home/bitcoin/.bitcoin/bitcoin.conf
 ```
 2. Paste the following at the bottom of the file.
 
-**Note:** be sure not to alter any of the existing information. Replace `<rpc-user>` and `<hashed-pass>` with the information noted earlier.
+**Notes:**
+- Be sure not to alter any of the existing information.
+- Replace `<rpc-user>` and `<hashed-pass>` with the information noted earlier.
 
 ```
 # JoinMarket Auth
 rpcauth=<rpc-user>:<hashed-pass>
 # JoinMarket Wallet
-wallet=joinmarket.dat
+wallet=joinmarket
 ```
 3. Save the file.
+4. Switch back to `bitcoind` terminal, restart the `bitcoind` service.
 
-### D. Create `joinmarketd` action file.
 ```
-user@host:~$ sudo sh -c "echo 'socat STDIO TCP:127.0.0.1:27183' > /rw/usrlocal/etc/qubes-rpc/qubes.joinmarketd"
+user@host:~$ sudo systemctl restart bitcoind.service
+```
+
+### D. Set up `qubes-rpc` for `joinmarketd`.
+1. Create `joinmarketd` rpc action files.
+
+```
+user@host:~$ sudo sh -c "echo 'socat STDIO TCP:127.0.0.1:27183' > /rw/usrlocal/etc/qubes-rpc/qubes.joinmarketd-27183"
+user@host:~$ sudo sh -c "echo 'socat STDIO TCP:127.0.0.1:27184' > /rw/usrlocal/etc/qubes-rpc/qubes.joinmarketd-27184"
+```
+2. Fix permissions.
+
+```
+user@host:~$ sudo chmod 0644 /rw/usrlocal/etc/qubes-rpc/joinmarketd*
 ```
 ## VI. Configure `joinmarket` VM
 ### A. In a `joinmarket` terminal, open communication ports on boot.
@@ -217,7 +257,8 @@ user@host:~$ sudo kwrite /rw/config/rc.local
 
 ```
 socat TCP-LISTEN:8332,fork,bind=127.0.0.1 EXEC:"qrexec-client-vm bitcoind qubes.bitcoind" &
-socat TCP-LISTEN:27183,fork,bind=127.0.0.1 EXEC:"qrexec-client-vm bitcoind qubes.joinmarketd" &
+socat TCP-LISTEN:27183,fork,bind=127.0.0.1 EXEC:"qrexec-client-vm bitcoind qubes.joinmarketd-27183" &
+socat TCP-LISTEN:27184,fork,bind=127.0.0.1 EXEC:"qrexec-client-vm bitcoind qubes.joinmarketd-27184" &
 ```
 3. Save the file.
 4. Switch back to the `joinmarket` terminal, fix permissions, and execute the file.
@@ -226,28 +267,26 @@ socat TCP-LISTEN:27183,fork,bind=127.0.0.1 EXEC:"qrexec-client-vm bitcoind qubes
 user@host:~$ sudo chmod 0755 /rw/config/rc.local
 user@host:~$ sudo /rw/config/rc.local
 ```
-### B. Source the virtual environment and change directories on boot.
-1. Move the directory that was copied over from `bitcoind`.
-
+### B. Move copied JoinMarket directory to your home directory.
 ```
 user@host:~$ mv ~/QubesIncoming/bitcoind/joinmarket-clientserver-0.5.2/ ~
 ```
-2. Edit the file `~/.bashrc`.
-
+### C. Source the virtual environment and enter the JoinMarket directory on boot.
 **Note:** you should not be using the `joinmarket` VM for anything other than your JoinMarket wallet, therefore these changes should be helpful.
+1. Edit the file `~/.bashrc`.
 
 ```
 user@host:~$ kwrite ~/.bashrc & exit
 ```
-3. Paste the following at the bottom of the file.
+2. Paste the following at the bottom of the file.
 
 ```
 source /home/user/joinmarket-clientserver-0.5.2/jmvenv/bin/activate
 cd /home/user/joinmarket-clientserver-0.5.2/scripts/
 ```
-4. Save the file and open a new `joinmarket` terminal.
+3. Save the file and open a new `joinmarket` terminal.
 
-### C. In a `joinmarket` terminal, configure JoinMarket.
+### D. In a `joinmarket` terminal, configure JoinMarket.
 1. Generate a JoinMarket configuration file.
 
 ```
@@ -261,9 +300,11 @@ Created a new `joinmarket.cfg`. Please review and adopt the settings and restart
 (jmvenv) user@host:~/joinmarket-clientserver-0.5.2/scripts$ echo > joinmarket.cfg
 (jmvenv) user@host:~/joinmarket-clientserver-0.5.2/scripts$ kwrite joinmarket.cfg
 ```
-3. Paste the following, be sure to replace `<gateway-ip>`, `<rpc-user>`, and `<rpc-pass>` with the information noted earlier.
+3. Paste the following.
 
-**Note:** for verbose desciptions of these setting, look to the original config file: `joinmarket.cfg.orig`.
+**Notes:**
+- Be sure to replace `<gateway-ip>`, `<rpc-user>`, and `<rpc-pass>` with the information noted earlier.
+- For verbose desciptions of these setting, look to the original config file: `~/joinmarket-clientserver-0.5.2/scripts/joinmarket.cfg.orig`.
 
 ```
 [DAEMON]
@@ -279,10 +320,10 @@ rpc_host = 127.0.0.1
 rpc_port = 8332
 rpc_user = <rpc-user>
 rpc_password = <rpc-pass>
-rpc_wallet_file = joinmarket.dat
+rpc_wallet_file = joinmarket
 
 [MESSAGING:server1]
-# Cyberguerrilla IRC
+## Cyberguerrilla IRC
 channel = joinmarket-pit
 host = 6dvj6v5imhny3anf.onion
 port = 6698
@@ -292,7 +333,7 @@ socks5_port = 9180
 usessl = true
 
 [MESSAGING:server2]
-# Agora Anarplex IRC
+## Agora Anarplex IRC
 channel = joinmarket-pit
 host = cfyfz6afpgfeirst.onion
 port = 6667
@@ -302,7 +343,7 @@ socks5_port = 9181
 usessl = false
 
 [MESSAGING:server3]
-# DarkScience IRC
+## DarkScience IRC
 channel = joinmarket-pit
 host = darksci3bfoka7tw.onion
 port = 6697
@@ -323,9 +364,7 @@ confirm_timeout_hours = 6
 [POLICY]
 segwit = true
 native = false
-# merge_algorithm = greediest, greedy, gradual, default
 merge_algorithm = default
-# tx_fees = less than 144 is block time, more than 144 is satoshi/Kb
 tx_fees = 3
 absurd_fee_per_kb = 350000
 tx_broadcast = self
