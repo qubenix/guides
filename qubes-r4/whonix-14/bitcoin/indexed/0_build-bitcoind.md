@@ -310,7 +310,7 @@ user@host:~$ sudo chmod 0644 /rw/usrlocal/etc/qubes-rpc/qubes.bitcoind
 ```
 ## VII. Initial Blockchain Download
 ### A. In a `bitcoind` terminal, start the `bitcoind` service.
-**Note:**
+**Notes:**
 - The Bitcoin blockchain is over 200G on disk.
 - Initial Block Download can take anywhere from a day to a week (or even more) depending on a number of factors including your hardware and internet connection.
 
