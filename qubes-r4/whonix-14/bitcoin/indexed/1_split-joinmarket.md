@@ -94,7 +94,8 @@ user@host:~$ sudo shutdown now
 ### A. In a `bitcoind` terminal, download and verify JoinMarket source code.
 1. Download [JoinMarket](https://github.com/JoinMarket-Org/joinmarket-clientserver/releases).
 
-**Note:** at the time of writing the most recent version of JoinMarket is `v0.5.2`, modify the following steps accordingly if the version has changed.
+**Note:**
+- At the time of writing the most recent version of JoinMarket is `v0.5.2`, modify the following steps accordingly if the version has changed.
 
 ```
 user@host:~$ curl -LO "https://github.com/JoinMarket-Org/joinmarket-clientserver/archive/v0.5.2.tar.gz" -O "https://github.com/JoinMarket-Org/joinmarket-clientserver/releases/download/v0.5.2/joinmarket-clientserver-0.5.2.tar.gz.asc"
@@ -142,7 +143,8 @@ Installing setuptools, pkg_resources, pip, wheel...done.
 ```
 2. Install dependencies to virtual environment.
 
-**Note:** this will produce a lot of output. This is normal, be patient.
+**Note:**
+- This will produce a lot of output. This is normal, be patient.
 
 ```
 user@host:~/joinmarket-clientserver-0.5.2$ source jmvenv/bin/activate
@@ -169,7 +171,8 @@ user@host:~$ sudo chmod 0700 /home/joinmarket/
 ```
 2. Copy `joinmarket-clientserver/` directory to the `joinmarket` VM.
 
-**Note:** select `joinmarket` from the `dom0` pop-up.
+**Note:**
+- Select `joinmarket` from the `dom0` pop-up.
 
 ```
 user@host:~$ qvm-copy ~/joinmarket-clientserver-0.5.2/
@@ -180,7 +183,8 @@ user@host:~$ sudo systemctl start joinmarketd.service
 ```
 ## IV. Configure `bitcoind` and `joinmarketd`
 ### A. In a `sys-bitcoind` terminal, find out the gateway IP.
-**Note:** save your gateway IP for later to replace `<gateway-ip>` in examples.
+**Note:**
+- Save your gateway IP for later to replace `<gateway-ip>` in examples.
 
 ```
 user@host:~$ qubesdb-read /qubes-ip
@@ -189,7 +193,8 @@ user@host:~$ qubesdb-read /qubes-ip
 ### B. In a `bitcoind` terminal, create RPC credentials for JoinMarket to communicate with `bitcoind`.
 1. Create a random RPC username. Do not use the one shown.
 
-**Note:** save your username for later to replace `<rpc-user>` in examples.
+**Note:**
+- Save your username for later to replace `<rpc-user>` in examples.
 
 ```
 user@host:~$ head -c 15 /dev/urandom | base64
@@ -272,7 +277,8 @@ user@host:~$ sudo /rw/config/rc.local
 user@host:~$ mv ~/QubesIncoming/bitcoind/joinmarket-clientserver-0.5.2/ ~
 ```
 ### C. Source the virtual environment and enter the JoinMarket directory on boot.
-**Note:** you should not be using the `joinmarket` VM for anything other than your JoinMarket wallet, therefore these changes should be helpful.
+**Note:**
+- You should not be using the `joinmarket` VM for anything other than your JoinMarket wallet, therefore these changes should be helpful.
 1. Edit the file `~/.bashrc`.
 
 ```

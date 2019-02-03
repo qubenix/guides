@@ -15,7 +15,9 @@ In addition to the security improvements, a Whonix VM with a pruned Bitcoin node
 [user@dom0 ~]$ qvm-clone whonix-ws-14 whonix-ws-14-jm
 ```
 ### B. Create a gateway.
-**Note:** This gateway should be independent of your normal browsing gateway (`sys-whonix`) to isolate the onion service. You must choose a label color, but it does not have to match this example.
+**Notes:**
+- This gateway should be independent of the default Whonix gateway (`sys-whonix`) to isolate its onion service.
+- You must choose a label color, but it does not have to match this example.
 
 ```
 [user@dom0 ~]$ qvm-create --label purple --prop netvm='sys-firewall' --prop provides_network='True' --template whonix-gw-14 sys-bitcoind
@@ -23,7 +25,8 @@ In addition to the security improvements, a Whonix VM with a pruned Bitcoin node
 ### C. Create two AppVMs, use newly created gateway and template.
 1. Create the VM for `bitcoind` and `joinmarketd`, use a Whonix gateway for networking.
 
-**Note:** You must choose a label color, but it does not have to match this example.
+**Note:**
+- You must choose a label color, but it does not have to match this example.
 
 ```
 [user@dom0 ~]$ qvm-create --label red --prop netvm='sys-bitcoind' --template whonix-ws-14-jm jm-bitcoind
@@ -165,14 +168,16 @@ user@host:~$ sudo shutdown now
 ### A. In a `jm-bitcoind` terminal, install Bitcoin.
 1. Download the Linux 64 bit version of [Bitcoin Core](https://bitcoincore.org/en/download/).
 
-**Note:** at the time of writing the most recent version of Bitcoin Core is `0.17.1`, modify the following steps accordingly if the version has changed.
+**Note:**
+- At the time of writing the most recent version of Bitcoin Core is `0.17.1`, modify the following steps accordingly if the version has changed.
 
 ```
 user@host:~$ curl -O "https://bitcoincore.org/bin/bitcoin-core-0.17.1/bitcoin-0.17.1-x86_64-linux-gnu.tar.gz" -O "https://bitcoincore.org/bin/bitcoin-core-0.17.1/SHA256SUMS.asc"
 ```
 2. Receive signing key.
 
-**Note:** you can verify the key fingerprint in the [release notes](https://bitcoincore.org/en/download/).
+**Note:**
+- You can verify the key fingerprint in the [release notes](https://bitcoincore.org/en/download/).
 
 ```
 user@host:~$ gpg --recv-keys 01EA5486DE18A882D4C2684590C8019E36C2E964
@@ -211,14 +216,16 @@ user@host:~$ sudo install -g staff -m 0755 -o root -t /usr/local/bin/ ~/bitcoin-
 ### B. Install JoinMarket.
 1. Download [JoinMarket](https://github.com/JoinMarket-Org/joinmarket-clientserver/releases).
 
-**Note:** at the time of writing the most recent version of JoinMarket is `v0.5.2`, modify the following steps accordingly if the version has changed.
+**Note:**
+- At the time of writing the most recent version of JoinMarket is `v0.5.2`, modify the following steps accordingly if the version has changed.
 
 ```
 user@host:~$ curl -LO "https://github.com/JoinMarket-Org/joinmarket-clientserver/archive/v0.5.2.tar.gz" -O "https://github.com/JoinMarket-Org/joinmarket-clientserver/releases/download/v0.5.2/joinmarket-clientserver-0.5.2.tar.gz.asc"
 ```
 2. Receive signing key.
 
-**Note:** you can verify the key fingerprint in the [release notes](https://github.com/JoinMarket-Org/joinmarket-clientserver/releases).
+**Note:**
+- You can verify the key fingerprint in the [release notes](https://github.com/JoinMarket-Org/joinmarket-clientserver/releases).
 
 ```
 user@host:~$ gpg --recv-keys "2B6F C204 D9BF 332D 062B 461A 1410 01A1 AF77 F20B"
@@ -259,7 +266,8 @@ Installing setuptools, pkg_resources, pip, wheel...done.
 ```
 2. Install dependencies to virtual environment.
 
-**Note:** this will produce a lot of output. This is normal, be patient.
+**Note:**
+- This will produce a lot of output. This is normal, be patient.
 
 ```
 user@host:~/joinmarket-clientserver-0.5.2$ source jmvenv/bin/activate
@@ -285,14 +293,16 @@ user@host:~$ sudo chown -R joinmarket /home/joinmarketd
 ```
 2. Copy `joinmarket-clientserver-0.5.2/` directory to the `jm-wallet` VM.
 
-**Note:** select `jm-wallet` from the `dom0` pop-up.
+**Note:**
+- Select `jm-wallet` from the `dom0` pop-up.
 
 ```
 user@host:~$ qvm-copy ~/joinmarket-clientserver-0.5.2/
 ```
 ## III. Configure Gateway
 ### A. In a `sys-bitcoind` terminal, find out the gateway IP.
-**Note:** save your gateway IP for later to replace `<gateway-ip>` in examples.
+**Note:**
+- Save your gateway IP for later to replace `<gateway-ip>` in examples.
 
 ```
 user@host:~$ qubesdb-read /qubes-ip
@@ -313,7 +323,8 @@ user@host:~$ sudo systemctl restart onion-grater.service
 ### A. In a `jm-bitcoind` terminal, create RPC credentials.
 1. Create a random RPC username. Do not use the one shown.
 
-**Note:** save your username for later to replace `<rpc-user>` in examples.
+**Note:**
+- Save your username for later to replace `<rpc-user>` in examples.
 
 ```
 user@host:~$ head -c 15 /dev/urandom | base64
@@ -321,7 +332,8 @@ uJDzc07zxn5riJDx7N5m
 ```
 2. Create a random RPC password. Do not use the one shown.
 
-**Note:** save your password for later to replace `<rpc-pass>` in examples.
+**Note:**
+- Save your password for later to replace `<rpc-pass>` in examples.
 
 ```
 user@host:~$ head -c 30 /dev/urandom | base64
@@ -405,10 +417,9 @@ user@host:~$ sudo /rw/config/rc.local
 user@host:~$ mv ~/QubesIncoming/bitcoind/joinmarket-clientserver-0.5.2/ ~
 ```
 ### C. Source the virtual environment and enter the JoinMarket directory on boot.
-**Note:** you should not be using the `joinmarket` VM for anything other than your JoinMarket wallet, therefore these changes should be helpful.
+**Note:**
+- You should not be using the `joinmarket` VM for anything other than your JoinMarket wallet, therefore these changes should be helpful.
 1. Edit the file `~/.bashrc`.
-
-**Note:** you should not be using the `jm-wallet` VM for anything other than your JoinMarket wallet, therefore these changes should be helpful.
 
 ```
 user@host:~$ kwrite ~/.bashrc & exit

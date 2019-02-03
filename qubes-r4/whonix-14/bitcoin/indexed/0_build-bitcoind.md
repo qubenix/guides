@@ -20,13 +20,16 @@ An indexed node can be used as a backend for other software which needs access t
 [user@dom0 ~]$ qvm-clone whonix-ws-14 whonix-ws-14-bitcoin
 ```
 ### B. Create a gateway.
-**Note:** This gateway should be independent of your normal browsing gateway (`sys-whonix`) to isolate the onion service. You must choose a label color, but it does not have to match this example.
+**Notes:**
+- This gateway should be independent of the default Whonix gateway (`sys-whonix`) to isolate its onion service.
+- You must choose a label color, but it does not have to match this example.
 
 ```
 [user@dom0 ~]$ qvm-create --label purple --prop netvm='sys-firewall' --prop provides_network='True' --template whonix-gw-14 sys-bitcoind
 ```
 ### C. Create an AppVM, use newly created gateway and template.
-**Note:** You must choose a label color, but it does not have to match this example.
+**Note:**
+- You must choose a label color, but it does not have to match this example.
 
 ```
 [user@dom0 ~]$ qvm-create --label red --prop netvm='sys-bitcoind' --template whonix-ws-14-bitcoin bitcoind
@@ -106,7 +109,8 @@ user@host:~$ sudo shutdown now
 ```
 ## III. Set Up Gateway.
 ### A. In a `sys-bitcoind` terminal, find out the gateway IP.
-**Note:** save your gateway IP for later to replace `<gateway-ip>` in examples.
+**Note:**
+- Save your gateway IP for later to replace `<gateway-ip>` in examples.
 
 ```
 user@host:~$ qubesdb-read /qubes-ip
@@ -128,7 +132,8 @@ user@host:~$ sudo systemctl restart onion-grater.service
 ### A. In a `bitcoind` terminal, download and verify the Bitcoin source code.
 1. Clone the repository.
 
-**Note:** at the time of writing the branch of the current release is `0.17`, modify the following steps accordingly if the version has changed.
+**Note:**
+- At the time of writing the current release branch is `0.17`, modify the following steps accordingly if the version has changed.
 
 ```
 user@host:~$ git clone --branch 0.17 https://github.com/bitcoin/bitcoin ~/bitcoin
@@ -206,7 +211,8 @@ gpg:               imported: 4
 
 3. Verify source code.
 
-**Note:** your output may not match the example. Just check that it says `Good signature`.
+**Note:**
+- Your output may not match the example. Just check that it says `Good signature`.
 
 ```
 user@host:~$ cd ~/bitcoin/
@@ -222,7 +228,8 @@ Primary key fingerprint: 71A3 B167 3540 5025 D447  E8F2 7481 0B01 2346 C9A6
      Subkey fingerprint: 9DEA E0DC 7063 249F B054  7468 1E4A ED62 986C D25D
 ```
 ### B. Build Berkeley DB and Bitcoin.
-**Note:** these next two steps will take some time and produce a lot of output. This is normal, be patient.
+**Note:**
+- These next two steps will take some time and produce a lot of output. This is normal, be patient.
 
 1. Build Berkeley DB using the provided script.
 
@@ -248,7 +255,8 @@ user@host:~$ sudo kwrite /home/bitcoin/.bitcoin/bitcoin.conf
 
 2. Paste the following.
 
-**Note:** be sure to replace `<gateway-ip>` with the information noted earlier.
+**Note:**
+- Be sure to replace `<gateway-ip>` with the information noted earlier.
 
 ```
 daemon=1
@@ -281,7 +289,9 @@ user@host:~$ sudo chmod 0644 /rw/config/whonix_firewall.d/50_user.conf
 user@host:~$ sudo systemctl restart whonix-firewall.service
 ```
 ## VI. Create Communication Channel
-**Note:** this only creates the possibility for other VMs to communicate with `bitcoind`, it does not yet give them permission.
+**Note:**
+- This only creates the possibility for other VMs to communicate with `bitcoind`, it does not yet give them permission.
+
 ### A. In a `bitcoind` terminal, set up `qubes-rpc` for `bitcoind`.
 1. Create persistent directory for `qrexec` action files.
 
@@ -300,7 +310,9 @@ user@host:~$ sudo chmod 0644 /rw/usrlocal/etc/qubes-rpc/qubes.bitcoind
 ```
 ## VII. Initial Blockchain Download
 ### A. In a `bitcoind` terminal, start the `bitcoind` service.
-**Note:** the Bitcoin blockchain is over 200G on disk. It can take anywhere from a day to a week (or even more) depending on a number of factors including your hardware and internet connection.
+**Note:**
+- The Bitcoin blockchain is over 200G on disk.
+- Initial Block Download can take anywhere from a day to a week (or even more) depending on a number of factors including your hardware and internet connection.
 
 ```
 user@host:~$ sudo systemctl start bitcoind
