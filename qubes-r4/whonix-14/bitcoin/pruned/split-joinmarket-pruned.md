@@ -296,7 +296,7 @@ user@host:~/joinmarket-clientserver-0.5.3$ cd
 
 ```
 user@host:~$ sudo cp -r ~/joinmarket-clientserver-0.5.3/ /home/joinmarket/
-user@host:~$ sudo chown -R joinmarket /home/joinmarketd
+user@host:~$ sudo chown -R joinmarket:nogroup /home/joinmarket/joinmarket-clientserver-0.5.3/
 ```
 2. Copy `joinmarket-clientserver-0.5.3/` directory to the `jm-wallet` VM.
 
@@ -387,7 +387,7 @@ user@host:~$ sudo mkdir -m 0755 /rw/usrlocal/etc/qubes-rpc
 ```
 user@host:~$ sudo sh -c "echo 'socat STDIO TCP:127.0.0.1:8332' > /rw/usrlocal/etc/qubes-rpc/qubes.bitcoind"
 ```
-3. Create `joinmarketd` action file.
+3. Create `joinmarketd` action files.
 
 ```
 user@host:~$ sudo sh -c "echo 'socat STDIO TCP:127.0.0.1:27183' > /rw/usrlocal/etc/qubes-rpc/qubes.joinmarketd-27183"

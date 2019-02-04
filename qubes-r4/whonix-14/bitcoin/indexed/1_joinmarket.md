@@ -172,8 +172,8 @@ user@host:~/joinmarket-clientserver-0.5.3$ cd
 1. Copy `joinmarket-clientserver/` directory to the `joinmarket` user's home directory, change owner, and fix permissions.
 
 ```
-user@host:~$ sudo cp -r ~/joinmarket-clientserver-0.5.3/ /home/joinmarket
-user@host:~$ sudo chown -R joinmarket /home/joinmarket
+user@host:~$ sudo cp -r ~/joinmarket-clientserver-0.5.3/ /home/joinmarket/
+user@host:~$ sudo chown -R joinmarket:nogroup /home/joinmarket/joinmarket-clientserver-0.5.3/
 user@host:~$ sudo chmod 0700 /home/joinmarket/
 ```
 2. Copy `joinmarket-clientserver/` directory to the `joinmarket` VM.

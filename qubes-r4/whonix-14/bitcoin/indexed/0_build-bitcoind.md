@@ -34,7 +34,6 @@ An indexed node can be used as a backend for other software which needs access t
 ```
 [user@dom0 ~]$ qvm-create --label red --prop netvm='sys-bitcoind' --template whonix-ws-14-bitcoin bitcoind
 ```
-
 2. Increase private volume size and enable `bitcoind` service.
 
 ```
@@ -62,7 +61,6 @@ Creating home directory `/home/bitcoin' ...
 ```
 user@host:~$ sudo kwrite /lib/systemd/system/bitcoind.service
 ```
-
 2. Paste the following.
 
 ```
@@ -90,13 +88,11 @@ MemoryDenyWriteExecute=true
 [Install]
 WantedBy=multi-user.target
 ```
-
 3. Save the file, switch back to the terminal, and fix permissions.
 
 ```
 user@host:~$ sudo chmod 0644 /lib/systemd/system/bitcoind.service
 ```
-
 4. Enable the service.
 
 ```
@@ -122,7 +118,6 @@ user@host:~$ qubesdb-read /qubes-ip
 ```
 user@host:~$ sudo install -D -t /usr/local/etc/onion-grater-merger.d/ /usr/share/onion-grater-merger/examples/40_bitcoind.yml
 ```
-
 2. Restart `onion-grater` service.
 
 ```
@@ -145,7 +140,6 @@ remote: Total 131074 (delta 7), reused 5 (delta 3), pack-reused 131056
 Receiving objects: 100% (131074/131074), 113.98 MiB | 239.00 KiB/s, done.
 Resolving deltas: 100% (92931/92931), done.
 ```
-
 2. Receive signing keys.
 
 ```
@@ -208,7 +202,6 @@ gpg: no ultimately trusted keys found
 gpg: Total number processed: 4
 gpg:               imported: 4
 ```
-
 3. Verify source code.
 
 **Note:**
@@ -236,7 +229,6 @@ Primary key fingerprint: 71A3 B167 3540 5025 D447  E8F2 7481 0B01 2346 C9A6
 ```
 user@host:~/bitcoin$ ~/bitcoin/contrib/install_db4.sh ~/bitcoin
 ```
-
 2. Build and install Bitcoin Core.
 
 ```
@@ -252,7 +244,6 @@ make check && sudo make install
 user@host:~$ sudo mkdir -m 0700 /home/bitcoin/.bitcoin
 user@host:~$ sudo kwrite /home/bitcoin/.bitcoin/bitcoin.conf
 ```
-
 2. Paste the following.
 
 **Note:**
@@ -266,13 +257,12 @@ onlynet=onion
 proxy=<gateway-ip>:9111
 txindex=1
 ```
-
 3. Save the file, switch back to the terminal, and fix permissions.
 
 ```
 user@host:~$ sudo chmod 0600 /home/bitcoin/.bitcoin/bitcoin.conf
-user@host:~$ sudo chown -R bitcoind /home/bitcoin/.bitcoin
 user@host:~$ sudo chmod 0700 /home/bitcoin/
+user@host:~$ sudo chown -R bitcoind:nogroup /home/bitcoin/.bitcoin/
 ```
 ### B. Open p2p ports.
 1. Make persistent directory, configure firewall, and fix permissions.
@@ -282,7 +272,6 @@ user@host:~$ sudo mkdir -m 0755 /rw/config/whonix_firewall.d
 user@host:~$ sudo sh -c 'echo "EXTERNAL_OPEN_PORTS+=\" 8333 18333 \"" >> /rw/config/whonix_firewall.d/50_user.conf'
 user@host:~$ sudo chmod 0644 /rw/config/whonix_firewall.d/50_user.conf
 ```
-
 2. Restart firewall service.
 
 ```
