@@ -108,7 +108,7 @@ user@host:~$ sudo shutdown now
 1. Create a random RPC username. Do not use the one shown.
 
 **Note:**
-- Save your username for later to replace `<rpc-user>` in examples.
+- Save your username (`7PXaFZ5DLG2alSeiGxnM` in this example) for later to replace `<rpc-user>` in examples.
 
 ```
 user@host:~$ head -c 15 /dev/urandom | base64
@@ -117,8 +117,8 @@ user@host:~$ head -c 15 /dev/urandom | base64
 2. Use Bitcoin's tool to create a random RPC password and config entry. Do not use the one shown.
 
 **Notes:**
-- Save the hased password (the text on the `rpcauth=` line after `rpcauth=7PXaFZ5DLG2alSeiGxnM:` in the example) for later to replace `<hashed-pass>` in examples.
-- Save your password for later to replace `<rpc-pass>` in examples.
+- Save the hased password (`9ffa7d78e1ddcb25ace4597bc31a1c8d$541c44f5d34044d532db47b74e9755ca4f0d87f805dd5895f0b36ea3a8d8c84c` in this example) for later to replace `<hashed-pass>` in examples.
+- Save your password (`GKkkKy-GAEDUw_6dp32O7Rh3DhHAnYhBUwNwNWUZPrI=` in this example) for later to replace `<rpc-pass>` in examples.
 - Replace `<rpc-user>` with the information noted earlier.
 
 ```
@@ -200,11 +200,19 @@ user@host:~$ cd ~/Python-3.6.8/
 - This step will take some time and produce a lot of output. This is normal, be patient.
 
 ```
-user@host:~/Python-3.6.8$ ./configure --enable-optimizations --with-ensurepip=install && make && sudo make install && cd
+user@host:~/Python-3.6.8$ ./configure --enable-optimizations --with-ensurepip=install && make && sudo make install
 ```
+6. Return to home directory.
 
+```
+user@host:~/Python-3.6.8$ cd
+```
 ### B. Download and verify the Electrumx source code.
 1. Clone the repository.
+
+**Notes:**
+- This is a fork of the original Electrumx repository (located [here](https://github.com/kyuupichan/electrumx)) which still supports the version of Electrum in Debian's `stable-backports`.
+- This is the only source I've found which is signed.
 
 ```
 user@host:~$ git clone -b proto_compat_1_2 https://github.com/SomberNight/electrumx ~/electrumx
@@ -273,7 +281,7 @@ user@host:~$ source ~/exvenv/bin/activate
 (exvenv) user@host:~/electrumx$ deactivate
 user@host:~/electrumx$ virtualenv -p python3.6 --relocatable ~/exvenv/
 ```
-### D. Relocate `exvenv/` directory.
+### D. Relocate virtual environment directory.
 ```
 user@host:~$ sudo cp -r ~/exvenv/ /home/electrumx/
 ```
@@ -294,25 +302,28 @@ user@host:~$ sudo kwrite /home/electrumx/.electrumx/electrumx.conf
 
 **Notes:**
 - Be sure to replace `<rpc-user>` and `<rpc-pass>` with the information noted earlier.
-- For a verbose desciption of these settings, look to the file: `~/electrumx/docs/environment.rst`.
+- For a verbose desciption of these settings, look to the file: [`~/electrumx/docs/environment.rst`](https://electrumx.readthedocs.io/en/latest/environment.html).
 
 ```
+## Required
 COIN = BitcoinSegwit
 DB_DIRECTORY = /home/electrumx/.electrumx/electrumx-db
-DAEMON_URL = http://<rpc-user>:<rpc-pass>=@127.0.0.1:8332/
-NET = mainnet
-
-DB_ENGINE = leveldb
-SSL_CERTFILE = /home/electrumx/.electrumx/certs/server.crt
-SSL_KEYFILE = /home/electrumx/.electrumx/certs/server.key
-
-REPORT_TCP_PORT = 0
-PEER_DISCOVERY = ''
-PEER_ANNOUNCE = ''
-
+DAEMON_URL = http://<rpc-user>:<rpc-pass>@127.0.0.1:8332/
 USERNAME = electrumx
+## Miscellaneous
+NET = mainnet
+DB_ENGINE = leveldb
 HOST = ''
 SSL_PORT = 50002
+SSL_CERTFILE = /home/electrumx/.electrumx/certs/server.crt
+SSL_KEYFILE = /home/electrumx/.electrumx/certs/server.key
+## Peer Discovery
+PEER_DISCOVERY = 'self'
+PEER_ANNOUNCE = ''
+## Server Advertising
+REPORT_TCP_PORT = 0
+## Cache
+CACHE_MB = 1200
 ```
 4. Save the file.
 5. Fix permissions.
@@ -382,7 +393,7 @@ user@host:~$ sudo chown -R electrumx:nogroup /home/electrumx/
 user@host:~$ sudo chmod 0700 /home/electrumx/
 ```
 ## V. Set Up Communication Channels
-### ### A. Remain in an `electrumx` terminal, open communication with `bitcoind` on boot.
+### A. Remain in an `electrumx` terminal, open communication with `bitcoind` on boot.
 1. Edit the file `/rw/config/rc.local`.
 
 ```
@@ -456,7 +467,7 @@ HiddenServicePort 50002 <electrumx-ip>:50002
 3. Reload `tor`.
 
 ```
-user@host:~$ sudo systemctl reload tor
+user@host:~$ sudo systemctl reload tor.service
 ```
 4. Find out your onion hostname.
 
@@ -469,14 +480,14 @@ electrumxtoronionservicexxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx.onion
 ```
 ## VII. Initial Electrumx Synchronization
 ### A. In an `electrumx` terminal, start the `electrumx` service.
-**Notes:**
-- The intial sync can take anywhere from a day to multiple days depending on a number of factors including your hardware and resources dedicated to the `electrumx` VM.
-
 ```
-user@host:~$ sudo systemctl start electrumx
+user@host:~$ sudo systemctl start electrumx.service
 ```
 ### B. Check the status of the server.
-
 ```
 user@host:~$ sudo journalctl -fu electrumx
 ```
+### VIII. Final Notes
+- The intial sync can take anywhere from a day to multiple days depending on a number of factors including your hardware and resources dedicated to the `electrumx` VM.
+- Once the sync is complete, the server port (`50002`) will open and you can connect your Electrum wallet to the onion address.
+- To connect an offline Electrum wallet from a separate VM (split-electrum), you will have to wait for my guide (`2_electrum.md`) to be finished.
