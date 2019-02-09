@@ -16,6 +16,7 @@ An indexed node can be used as a backend for other software which needs access t
 - [BTCPay Server](https://github.com/btcpayserver/btcpayserver)
 - [c-Lightning](https://github.com/ElementsProject/lightning)
 - [Electrum Personal Server](https://github.com/chris-belcher/electrum-personal-server)
+  - Guide: [`1_electrum-personal-server.md`](https://github.com/qubenix/guides/blob/master/qubes-r4/whonix-14/bitcoin/indexed/1_electrum-personal-server.md)
 - [Electrumx](https://github.com/kyuupichan/electrumx)
   - Guide: [`1_electrumx.md`](https://github.com/qubenix/guides/blob/master/qubes-r4/whonix-14/bitcoin/indexed/1_electrumx.md)
 - [JoinMarket](https://github.com/JoinMarket-Org/joinmarket-clientserver)
@@ -34,7 +35,7 @@ Using `qrexec` we can connect any of these tools to `bitcoind` from their own VM
 - You must choose a label color, but it does not have to match this example.
 
 ```
-[user@dom0 ~]$ qvm-create --label purple --prop netvm='sys-firewall' --prop provides_network='True' --template whonix-gw-14 sys-bitcoind
+[user@dom0 ~]$ qvm-create --label purple --prop maxmem='400' --prop netvm='sys-firewall' --prop provides_network='True' --prop vcpus='1' --template whonix-gw-14 sys-bitcoind
 ```
 ### C. Create an AppVM, use newly created gateway and template.
 **Note:**

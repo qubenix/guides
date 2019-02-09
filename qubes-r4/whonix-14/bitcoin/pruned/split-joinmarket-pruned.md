@@ -20,7 +20,7 @@ In addition to the security improvements, a Whonix VM with a pruned Bitcoin node
 - You must choose a label color, but it does not have to match this example.
 
 ```
-[user@dom0 ~]$ qvm-create --label purple --prop netvm='sys-firewall' --prop provides_network='True' --template whonix-gw-14 sys-bitcoind
+[user@dom0 ~]$ qvm-create --label purple --prop maxmem='400' --prop netvm='sys-firewall' --prop provides_network='True' --prop vcpus='1' --template whonix-gw-14 sys-bitcoind
 ```
 ### C. Create two AppVMs, use newly created gateway and template.
 1. Create the VM for `bitcoind` and `joinmarketd`, use a Whonix gateway for networking.

@@ -20,7 +20,7 @@ In addition to preventing certain types of attacks, this setup also preserves yo
 - You must choose a label color, but it does not have to match this example.
 
 ```
-[user@dom0 ~]$ qvm-create --label purple --prop netvm='sys-firewall' --prop provides_network='True' --template whonix-gw-14 sys-electrumx
+[user@dom0 ~]$ qvm-create --label purple --prop maxmem='400' --prop netvm='sys-firewall' --prop provides_network='True' --prop vcpus='1' --template whonix-gw-14 sys-electrumx
 ```
 ### B. Create AppVM.
 1. Create the AppVM for Electrumx, with the newly created gateway and Bitcoin's TemplateVM.
