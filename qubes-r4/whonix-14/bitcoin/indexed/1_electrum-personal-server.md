@@ -244,8 +244,8 @@ user@host:~$ virtualenv -p python3 --relocatable ~/epsvenv/
 user@host:~$ sudo cp -r ~/epsvenv/ /home/eps/
 ```
 ## IV. Set Up EPS
-### A. Remain in an `eps` terminal, configure Electrumx data directory.
-1. Create Electrumx's data directory and subdirectories.
+### A. Remain in an `eps` terminal, configure EPS data directory.
+1. Create EPS's data directory and subdirectories.
 
 ```
 user@host:~$ sudo mkdir -m 0700 /home/eps/.eps
@@ -373,14 +373,14 @@ user@host:~$ sudo /rw/config/rc.local
 ```
 ### B. Set up `qubes-rpc` for `eps`.
 **Note:**
-- This only creates the possibility for other VMs to communicate with `electrumx`, it does not yet give them permission.
+- This only creates the possibility for other VMs to communicate with `eps`, it does not yet give them permission.
 
 1. Create persistent directory for `qrexec` action files.
 
 ```
 user@host:~$ sudo mkdir -m 0755 /rw/usrlocal/etc/qubes-rpc
 ```
-2. Create `electrumx` action file.
+2. Create `qubes.eps` action file.
 
 ```
 user@host:~$ sudo sh -c 'echo "socat STDIO TCP:127.0.0.1:50002" > /rw/usrlocal/etc/qubes-rpc/qubes.eps'

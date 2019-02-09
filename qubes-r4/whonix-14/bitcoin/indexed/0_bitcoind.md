@@ -297,7 +297,7 @@ user@host:~$ sudo systemctl restart whonix-firewall.service
 ```
 user@host:~$ sudo mkdir -m 0755 /rw/usrlocal/etc/qubes-rpc
 ```
-2. Create `bitcoind` action file.
+2. Create `qubes.bitcoind` action file.
 
 ```
 user@host:~$ sudo sh -c 'echo "socat STDIO TCP:127.0.0.1:8332" > /rw/usrlocal/etc/qubes-rpc/qubes.bitcoind'

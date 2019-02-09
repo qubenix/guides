@@ -391,12 +391,12 @@ user@host:~$ sudo chmod 0600 /home/bitcoin/.bitcoin/bitcoin.conf
 ```
 user@host:~$ sudo mkdir -m 0755 /rw/usrlocal/etc/qubes-rpc
 ```
-2. Create `bitcoind` action file.
+2. Create `qubes.bitcoind` action file.
 
 ```
 user@host:~$ sudo sh -c "echo 'socat STDIO TCP:127.0.0.1:8332' > /rw/usrlocal/etc/qubes-rpc/qubes.bitcoind"
 ```
-3. Create `joinmarketd` action files.
+3. Create `qubes.joinmarketd-27183` and `qubes.joinmarketd-27184` action files.
 
 ```
 user@host:~$ sudo sh -c "echo 'socat STDIO TCP:127.0.0.1:27183' > /rw/usrlocal/etc/qubes-rpc/qubes.joinmarketd-27183"

@@ -251,7 +251,7 @@ user@host:~$ sudo systemctl restart bitcoind.service
 ```
 
 ### D. Set up `qubes-rpc` for `joinmarketd`.
-1. Create `joinmarketd` rpc action files.
+1. Create `qubes.joinmarketd-27183` and `qubes.joinmarketd-27184` rpc action files.
 
 ```
 user@host:~$ sudo sh -c "echo 'socat STDIO TCP:127.0.0.1:27183' > /rw/usrlocal/etc/qubes-rpc/qubes.joinmarketd-27183"
