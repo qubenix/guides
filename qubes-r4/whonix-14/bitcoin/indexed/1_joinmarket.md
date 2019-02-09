@@ -22,7 +22,7 @@ The only way a remote attacker can compromise this system is to successfully exp
 ```
 [user@dom0 ~]$ qvm-service --enable bitcoind joinmarketd
 ```
-### C. Create rpc policies for comms from `joinmarket` to `bitcoind` VM.
+### C. Create rpc policies to allow comms from `joinmarket` to `bitcoind` VM.
 ```
 [user@dom0 ~]$ echo 'joinmarket bitcoind allow' | sudo tee -a /etc/qubes-rpc/policy/qubes.{bitcoind,joinmarketd-2718{3,4}} > /dev/null
 ```

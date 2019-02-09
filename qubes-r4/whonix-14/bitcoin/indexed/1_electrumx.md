@@ -35,7 +35,7 @@ In addition to preventing certain types of attacks, this setup also preserves yo
 [user@dom0 ~]$ qvm-service --enable electrumx electrumx
 ```
 
-### C. Create rpc policy for comms from `electrumx` VM to `bitcoind` VM.
+### C. Create rpc policy to allow comms from `electrumx` to `bitcoind`.
 ```
 [user@dom0 ~]$ echo 'electrumx bitcoind allow' | sudo tee -a /etc/qubes-rpc/policy/qubes.bitcoind
 ```

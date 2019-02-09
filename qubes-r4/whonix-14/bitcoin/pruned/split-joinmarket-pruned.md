@@ -43,7 +43,7 @@ In addition to the security improvements, a Whonix VM with a pruned Bitcoin node
 ```
 [user@dom0 ~]$ qvm-volume resize jm-bitcoind:private 20G
 ```
-### D. Create rpc policies for comms from `jm-wallet` to `jm-bitcoind`.
+### D. Create rpc policies to allow comms from `jm-wallet` to `jm-bitcoind`.
 ```
 [user@dom0 ~]$ echo 'jm-wallet jm-bitcoind allow' | sudo tee -a /etc/qubes-rpc/policy/qubes.{bitcoind,joinmarketd-2718{3,4}} > /dev/null
 ```
