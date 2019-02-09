@@ -1,21 +1,30 @@
 # Qubes 4 & Whonix 14: Building a Bitcoin Core Full Node
 Build a [Bitcoin Core](https://github.com/bitcoin/bitcoin) full node from source code and configure it to:
-+ allow other VMs to connect when given permission
-+ communicate only over Tor
-+ index all transactions
-+ prefer hidden services, use them exclusively if possible
-+ use ephemeral hidden services to serve peers
-+ utilize stream isolation
+- allow other VMs to connect when given permission
+- communicate only over Tor
+- index all transactions
+- prefer hidden services, use them exclusively if possible
+- use ephemeral hidden services to serve peers
+- utilize stream isolation
 
 ## What is Bitcoin Core?
 The server daemon for the Bitcoin distributed cryptocurrency (`bitcoind`), command line tools (`bitcoin-cli`), and a gui wallet (`bitcoin-qt`). These tools can be used to observe and interact with Bitcoin's blockchain.
 ## Why Do This?
 Bitcoin Core is a "full node" implementation, meaning it will verify that all incoming transactions and blocks are following Bitcoin's rules. This allows you to validate transactions without trusting third parties.
 
-An indexed node can be used as a backend for other software which needs access to the blockchain ([BTCPay Server](https://github.com/btcpayserver/btcpayserver), [c-lightning](https://github.com/ElementsProject/lightning), [electrum personal server](https://github.com/chris-belcher/electrum-personal-server), [joinmarket](https://github.com/JoinMarket-Org/joinmarket-clientserver), [lnd](https://github.com/LightningNetwork/lnd), etc.). Using `qrexec` we can connect any of these tools to `bitcoind` from their own VM, making use of the Qubes security by isolation model.
+An indexed node can be used as a backend for other software which needs access to the blockchain, such as:
+- [BTCPay Server](https://github.com/btcpayserver/btcpayserver)
+- [c-Lightning](https://github.com/ElementsProject/lightning)
+- [Electrum Personal Server](https://github.com/chris-belcher/electrum-personal-server)
+- [Electrumx](https://github.com/kyuupichan/electrumx)
+  - Guide: [`1_electrumx.md`](https://github.com/qubenix/guides/blob/master/qubes-r4/whonix-14/bitcoin/indexed/1_electrumx.md)
+- [JoinMarket](https://github.com/JoinMarket-Org/joinmarket-clientserver)
+  - Guide: [`1_joinmarket.md`](https://github.com/qubenix/guides/blob/master/qubes-r4/whonix-14/bitcoin/indexed/1_joinmarket.md)
+- [LND](https://github.com/LightningNetwork/lnd)
+
+Using `qrexec` we can connect any of these tools to `bitcoind` from their own VM, making use of the Qubes security by isolation model.
 ## I. Set Up Dom0
 ### A. In a `dom0` terminal, clone a Whonix workstation TemplateVM.
-
 ```
 [user@dom0 ~]$ qvm-clone whonix-ws-14 whonix-ws-14-bitcoin
 ```
