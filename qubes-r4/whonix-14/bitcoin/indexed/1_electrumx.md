@@ -7,7 +7,7 @@ This guide will set up a private server which will not broadcast it's onion addr
 ## Why Do This?
 This will protect you from having to trust nodes ran by volunteers to provide you with vital information and services regarding your Electrum wallet and the Bitcoin stored therein.
 
-There have already been multiple waves of attacks on Electrum users perpetrated by malicious Electrumx servers. These bad servers prevented users from sending transactions, instead sending back to them a bogus update requirement which was actually led to coin stealing malware.
+There have already been multiple waves of attacks on Electrum users perpetrated by malicious Electrumx servers. These bad servers prevent users from sending transactions, instead sending back to them a bogus update requirement which actually leads to coin stealing malware.
 
 In addition to preventing certain types of attacks, this setup also preserves your privacy. When connecting to any server your wallet will leak information which can be used to tie your addresses together. There are definitely servers on the network which are using this information to build profiles on addresses and their interactions.
 ## Prerequisites
@@ -444,11 +444,11 @@ user@host:~$ sudo systemctl restart whonix-firewall.service
 ```
 ### D. Find out the IP address of the `electrumx` VM.
 **Note:**
-- Save the `electrumx` IP for later to replace `<electrumx-ip>` in examples.
+- Save the `electrumx` IP (`10.137.0.50` in this example) for later to replace `<electrumx-ip>` in examples.
 
 ```
 user@host:~$ qubesdb-read /qubes-ip
-10.137.0.xx
+10.137.0.50
 ```
 ## VI. Set Up Gateway.
 ### A. In a `sys-electrumx` terminal, set up Tor.

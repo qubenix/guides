@@ -93,7 +93,7 @@ user@host:~$ sudo shutdown now
 ```
 ## III. Install JoinMarket
 ### A. In a `bitcoind` terminal, download and verify JoinMarket source code.
-1. Download [JoinMarket](https://github.com/JoinMarket-Org/joinmarket-clientserver/releases).
+1. Download the latest JoinMarket [release](https://github.com/JoinMarket-Org/joinmarket-clientserver/releases) and signature.
 
 **Note:**
 - At the time of writing the most recent version of JoinMarket is `v0.5.3`, modify the following steps accordingly if the version has changed.
@@ -109,7 +109,8 @@ user@host:~$ curl -LO "https://github.com/JoinMarket-Org/joinmarket-clientserver
 ```
 2. Receive signing key.
 
-**Note:** you can verify the key fingerprint in the [release notes](https://github.com/JoinMarket-Org/joinmarket-clientserver/releases).
+**Note:**
+- You can verify the key fingerprint in the [release notes](https://github.com/JoinMarket-Org/joinmarket-clientserver/releases).
 
 ```
 user@host:~$ gpg --recv-keys "2B6F C204 D9BF 332D 062B 461A 1410 01A1 AF77 F20B"

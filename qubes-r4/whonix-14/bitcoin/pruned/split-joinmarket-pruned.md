@@ -168,7 +168,7 @@ user@host:~$ sudo shutdown now
 ```
 ## II. Install Bitcoin and JoinMarket
 ### A. In a `jm-bitcoind` terminal, install Bitcoin.
-1. Download the Linux 64 bit version of [Bitcoin Core](https://bitcoincore.org/en/download/).
+1. Download the Linux 64 bit version of [Bitcoin Core](https://bitcoincore.org/en/download/) and the signature.
 
 **Note:**
 - At the time of writing the most recent version of Bitcoin Core is `0.17.1`, modify the following steps accordingly if the version has changed.
@@ -220,7 +220,7 @@ user@host:~$ tar -C ~ -xf bitcoin-0.17.1-x86_64-linux-gnu.tar.gz
 user@host:~$ sudo install -g staff -m 0755 -o root -t /usr/local/bin/ ~/bitcoin-0.17.1/bin/bitcoin*
 ```
 ### B. Install JoinMarket.
-1. Download [JoinMarket](https://github.com/JoinMarket-Org/joinmarket-clientserver/releases).
+1. Download the latest JoinMarket [release](https://github.com/JoinMarket-Org/joinmarket-clientserver/releases) and signature.
 
 **Note:**
 - At the time of writing the most recent version of JoinMarket is `v0.5.3`, modify the following steps accordingly if the version has changed.
