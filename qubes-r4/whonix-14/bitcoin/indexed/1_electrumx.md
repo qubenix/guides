@@ -1,9 +1,9 @@
 # Qubes 4 & Whonix 14: Electrumx
 Create a VM for running an Electrumx server which will connect to your `bitcoind` VM. The `electrumx` VM will be accessible from an Electrum Bitcoin wallet in an offline VM on the same host or remotely via a Tor onion service.
 ## What is Electrumx?
-Electrumx is the server implementation [suggested](https://electrum.org/#community) by the Electrum wallet developers. These are the servers that Electrum wallets connect to in lieu so they don't have to download large amounts of data. The vast majority of servers that an Electrum Bitcoin wallet will connect to are running this software.
+Electrumx is a server backend for the Electrum Bitcoin wallet. These are the servers that the lightweight Electrum wallet uses to query it's balance and transaction history. The vast majority of servers that an Electrum wallet will connect to are running this software.
 
-This guide will set up a private server which will not broadcast it's onion address. If a user wishes to serve other peers on the network, then they will be responsible for making the needed changes to the Electrumx configuration.
+This guide will set up a private server which will not broadcast it's onion address or connect to any peers. If a user wishes to serve other peers on the network, then they will be responsible for making the needed changes to the Electrumx configuration.
 ## Why Do This?
 This will protect you from having to trust nodes ran by volunteers to provide you with vital information and services regarding your Electrum wallet and the Bitcoin stored therein.
 
@@ -11,7 +11,7 @@ There have already been multiple waves of attacks on Electrum users perpetrated 
 
 In addition to preventing certain types of attacks, this setup also preserves your privacy. When connecting to any server your wallet will leak information which can be used to tie your addresses together. There are definitely servers on the network which are using this information to build profiles on addresses and their interactions.
 ## Prerequisites
-- Have completed [`0_build-bitcoind`](https://github.com/qubenix/guides/blob/master/qubes-r4/whonix-14/bitcoin/indexed/0_build-bitcoind.md) guide.
+- Have completed [`0_bitcoind`](https://github.com/qubenix/guides/blob/master/qubes-r4/whonix-14/bitcoin/indexed/0_bitcoind.md) guide.
 
 ## I. Set Up Dom0
 ### A. Create a gateway.
@@ -65,6 +65,7 @@ user@host:~$ sudo kwrite /lib/systemd/system/electrumx.service
 Description=Electrumx
 ConditionPathExists=/var/run/qubes-service/electrumx
 After=qubes-sysinit.service
+Requires=qubes-mount-dirs.service
 
 [Service]
 EnvironmentFile=/home/electrumx/.electrumx/electrumx.conf
@@ -159,6 +160,10 @@ user@host:~$ sudo systemctl restart bitcoind.service
 
 ```
 user@host:~$ curl -O "https://www.python.org/ftp/python/3.6.8/Python-3.6.8.tar.xz" -O "https://www.python.org/ftp/python/3.6.8/Python-3.6.8.tar.xz.asc"
+  % Total    % Received % Xferd  Average Speed   Time    Time     Time  Current
+                                 Dload  Upload   Total   Spent    Left  Speed
+100 16.4M  100 16.4M    0     0   325k      0  0:00:51  0:00:51 --:--:--  345k
+100   833  100   833    0     0    958      0 --:--:-- --:--:-- --:--:--     0
 ```
 2. Receive signing key.
 
@@ -167,8 +172,10 @@ user@host:~$ curl -O "https://www.python.org/ftp/python/3.6.8/Python-3.6.8.tar.x
 
 ```
 user@host:~$ gpg --recv-keys 0D96DF4D4110E5C43FBFB17F2D347EA6AA65421D
+gpg: keybox '/home/user/.gnupg/pubring.kbx' created
 key 0x2D347EA6AA65421D:
 18 signatures not checked due to missing keys
+gpg: /home/user/.gnupg/trustdb.gpg: trustdb created
 gpg: key 0x2D347EA6AA65421D: public key "Ned Deily (Python release signing key) <nad@python.org>" imported
 gpg: no ultimately trusted keys found
 gpg: Total number processed: 1
@@ -258,7 +265,7 @@ Primary key fingerprint: 4AD6 4339 DFA0 5E20 B3F6  AD51 E7B7 48CD AF5E 5ED9
 1. Create virtual environment.
 
 ```
-user@host:~$ virtualenv -p python3.6 ~/exvenv
+user@host:~/electrumx$ virtualenv -p python3.6 ~/exvenv
 Running virtualenv with interpreter /usr/local/bin/python3.6
 Using base prefix '/usr/local'
 New python executable in /home/user/exvenv/bin/python3.6
@@ -271,8 +278,7 @@ Installing setuptools, pkg_resources, pip, wheel...done.
 - This step will take some time and produce a lot of output. This is normal, be patient.
 
 ```
-user@host:~$ source ~/exvenv/bin/activate
-(exvenv) user@host:~$ cd ~/electrumx/
+user@host:~/electrumx$ source ~/exvenv/bin/activate
 (exvenv) user@host:~/electrumx$ python setup.py install
 ```
 3. Deactivate virtual environment and make relocatable.
@@ -280,6 +286,11 @@ user@host:~$ source ~/exvenv/bin/activate
 ```
 (exvenv) user@host:~/electrumx$ deactivate
 user@host:~/electrumx$ virtualenv -p python3.6 --relocatable ~/exvenv/
+```
+4. Return to home directory.
+
+```
+user@host:~/electrumx$ cd
 ```
 ### D. Relocate virtual environment directory.
 ```
@@ -322,8 +333,6 @@ PEER_DISCOVERY = 'self'
 PEER_ANNOUNCE = ''
 ## Server Advertising
 REPORT_TCP_PORT = 0
-## Cache
-CACHE_MB = 1200
 ```
 4. Save the file.
 5. Fix permissions.
@@ -381,16 +390,9 @@ Getting Private key
 ```
 user@host:~$ sudo install -m 0600 -t /home/electrumx/.electrumx/certs/ server.{crt,csr,key}
 ```
-### C. Fix owner and permission.
-1. Fix owner of everything in the `electrumx` home directory.
-
+### C. Change owner.
 ```
 user@host:~$ sudo chown -R electrumx:nogroup /home/electrumx/
-```
-2. Fix permissions of the `electrumx` home directory.
-
-```
-user@host:~$ sudo chmod 0700 /home/electrumx/
 ```
 ## V. Set Up Communication Channels
 ### A. Remain in an `electrumx` terminal, open communication with `bitcoind` on boot.
@@ -476,7 +478,7 @@ user@host:~$ sudo systemctl reload tor.service
 
 ```
 user@host:~$ sudo cat /var/lib/tor/electrumx/hostname
-electrumxtoronionservicexxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx.onion
+electrumxtoronionserviceaddressxxxxxxxxxxxxxxxxxxxxxxxxx.onion
 ```
 ## VII. Initial Electrumx Synchronization
 ### A. In an `electrumx` terminal, start the `electrumx` service.
@@ -487,7 +489,7 @@ user@host:~$ sudo systemctl start electrumx.service
 ```
 user@host:~$ sudo journalctl -fu electrumx
 ```
-### VIII. Final Notes
+## VIII. Final Notes
 - The intial sync can take anywhere from a day to multiple days depending on a number of factors including your hardware and resources dedicated to the `electrumx` VM.
 - Once the sync is complete, the server port (`50002`) will open and you can connect your Electrum wallet to the onion address.
 - To connect an offline Electrum wallet from a separate VM (split-electrum), you will have to wait for my guide (`2_electrum.md`) to be finished.

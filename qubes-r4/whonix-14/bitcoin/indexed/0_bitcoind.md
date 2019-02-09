@@ -68,6 +68,7 @@ user@host:~$ sudo kwrite /lib/systemd/system/bitcoind.service
 Description=Bitcoin daemon
 ConditionPathExists=/var/run/qubes-service/bitcoind
 After=qubes-sysinit.service
+Requires=qubes-mount-dirs.service
 
 [Service]
 ExecStart=/usr/local/bin/bitcoind
@@ -106,11 +107,11 @@ user@host:~$ sudo shutdown now
 ## III. Set Up Gateway.
 ### A. In a `sys-bitcoind` terminal, find out the gateway IP.
 **Note:**
-- Save your gateway IP for later to replace `<gateway-ip>` in examples.
+- Save your gateway IP (`10.137.0.50` in this example) for later to replace `<gateway-ip>` in examples.
 
 ```
 user@host:~$ qubesdb-read /qubes-ip
-10.137.0.xx
+10.137.0.50
 ```
 ### B. Configure `onion-grater`.
 1. Install provided profile for `bitcoind` to persistent directory.
@@ -261,7 +262,6 @@ txindex=1
 
 ```
 user@host:~$ sudo chmod 0600 /home/bitcoin/.bitcoin/bitcoin.conf
-user@host:~$ sudo chmod 0700 /home/bitcoin/
 user@host:~$ sudo chown -R bitcoind:nogroup /home/bitcoin/.bitcoin/
 ```
 ### B. Open p2p ports.
@@ -299,10 +299,13 @@ user@host:~$ sudo chmod 0644 /rw/usrlocal/etc/qubes-rpc/qubes.bitcoind
 ```
 ## VII. Initial Blockchain Download
 ### A. In a `bitcoind` terminal, start the `bitcoind` service.
-**Notes:**
-- The Bitcoin blockchain is over 200G on disk.
-- Initial Block Download can take anywhere from a day to a week (or even more) depending on a number of factors including your hardware and internet connection.
-
 ```
 user@host:~$ sudo systemctl start bitcoind
 ```
+### B. Check the status of `bitcoind`.
+```
+user@host:~$ sudo tail -f /home/bitcoin/.bitcoin/debug.log
+```
+## VIII. Final Notes
+- The Bitcoin blockchain is over 200G on disk.
+- Initial Block Download can take anywhere from a day to a week (or even more) depending on a number of factors including your hardware and internet connection.

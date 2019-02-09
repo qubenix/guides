@@ -92,6 +92,7 @@ user@host:~$ sudo kwrite /lib/systemd/system/bitcoind.service
 Description=Bitcoin daemon
 ConditionPathExists=/var/run/qubes-service/bitcoind
 After=qubes-sysinit.service
+Requires=qubes-mount-dirs.service
 
 [Service]
 ExecStart=/usr/local/bin/bitcoind
@@ -128,6 +129,7 @@ user@host:~$ sudo kwrite /lib/systemd/system/joinmarketd.service
 Description=JoinMarket daemon
 ConditionPathExists=/var/run/qubes-service/joinmarketd
 After=qubes-sysinit.service
+After=bitcoind.service
 
 [Service]
 WorkingDirectory=/home/joinmarket/joinmarket-clientserver-0.5.3
@@ -309,11 +311,11 @@ user@host:~$ qvm-copy ~/joinmarket-clientserver-0.5.3/
 ## III. Configure Gateway
 ### A. In a `sys-bitcoind` terminal, find out the gateway IP.
 **Note:**
-- Save your gateway IP for later to replace `<gateway-ip>` in examples.
+- Save your gateway IP (`10.137.0.50` in this example) for later to replace `<gateway-ip>` in examples.
 
 ```
 user@host:~$ qubesdb-read /qubes-ip
-10.137.0.xx
+10.137.0.50
 ```
 ### B. Configure `onion-grater`.
 1. Install provided profile for `bitcoind` to persistent directory.
@@ -331,7 +333,7 @@ user@host:~$ sudo systemctl restart onion-grater.service
 1. Create a random RPC username. Do not use the one shown.
 
 **Note:**
-- Save your username for later to replace `<rpc-user>` in examples.
+- Save your username (`uJDzc07zxn5riJDx7N5m` in this example) for later to replace `<rpc-user>` in examples.
 
 ```
 user@host:~$ head -c 15 /dev/urandom | base64
@@ -340,7 +342,7 @@ uJDzc07zxn5riJDx7N5m
 2. Create a random RPC password. Do not use the one shown.
 
 **Note:**
-- Save your password for later to replace `<rpc-pass>` in examples.
+- Save your password (`pGw0+tSSzxwCCkJIjDHFg8Jezn1d7Yc7WkksPlQ0` in this example) for later to replace `<rpc-pass>` in examples.
 
 ```
 user@host:~$ head -c 30 /dev/urandom | base64
@@ -397,7 +399,6 @@ user@host:~$ sudo sh -c "echo 'socat STDIO TCP:127.0.0.1:27184' > /rw/usrlocal/e
 
 ```
 user@host:~$ sudo chmod 0644 /rw/usrlocal/etc/qubes-rpc/joinmarketd*
-user@host:~$ sudo chmod 0700 /home/{bitcoin,joinmarket}
 ```
 ## VI. Configure JoinMarket.
 ### A. In a `jm-wallet` terminal, open communication ports on boot.
@@ -457,7 +458,7 @@ Created a new `joinmarket.cfg`. Please review and adopt the settings and restart
 
 **Notes:**
 - Be sure to replace `<gateway-ip>`, `<rpc-user>`, and `<rpc-pass>` with the information noted earlier.
-- For verbose desciptions of these setting, look to the original config file: `~/joinmarket-clientserver-0.5.3/scripts/joinmarket.cfg.orig`.
+- For verbose desciptions of the configuration file settings, look to the original config file: [`~/joinmarket-clientserver-0.5.3/scripts/joinmarket.cfg.orig`](https://raw.githubusercontent.com/JoinMarket-Org/joinmarket-clientserver/master/jmclient/jmclient/configure.py).
 
 ```
 [DAEMON]
@@ -475,8 +476,7 @@ rpc_user = <rpc-user>
 rpc_password = <rpc-pass>
 rpc_wallet_file = joinmarket
 
-[MESSAGING:server1]
-## Cyberguerrilla IRC
+[MESSAGING:CyberguerillaIRC]
 channel = joinmarket-pit
 host = 6dvj6v5imhny3anf.onion
 port = 6698
@@ -485,8 +485,7 @@ socks5_host = <gateway-ip>
 socks5_port = 9180
 usessl = true
 
-[MESSAGING:server2]
-## Agora Anarplex IRC
+[MESSAGING:AgoraAnarplexIRC]
 channel = joinmarket-pit
 host = cfyfz6afpgfeirst.onion
 port = 6667
@@ -495,8 +494,7 @@ socks5_host = <gateway-ip>
 socks5_port = 9181
 usessl = false
 
-[MESSAGING:server3]
-## DarkScience IRC
+[MESSAGING:DarkScienceIRC]
 channel = joinmarket-pit
 host = darksci3bfoka7tw.onion
 port = 6697
@@ -529,7 +527,5 @@ accept_commitment_broadcasts = 1
 ```
 4. Save the file.
 
-## VI. Finish
-The guide is complete.
-
-Once `bitcoind` has finished syncing in the `jm-bitcoind` VM you will be able to use JoinMarket's wallet from the `jm-wallet` VM. To learn more about using JoinMarket's wallet please see their [wiki](https://github.com/JoinMarket-Org/joinmarket/wiki).
+## VI. Final Notes
+- Once `bitcoind` has finished syncing in the `jm-bitcoind` VM you will be able to use JoinMarket's wallet from the `jm-wallet` VM. To learn more about using JoinMarket's wallet please see their [wiki](https://github.com/JoinMarket-Org/joinmarket/wiki).

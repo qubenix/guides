@@ -9,7 +9,7 @@ This method keeps the wallet VM offline, yet retains all the functionality of an
 
 The only way a remote attacker can compromise this system is to successfully exploit one of your internet connected VMs and then use a Qubes/Xen 0-day to escape that VM.
 ## Prerequisites
-- Have completed [`0_build-bitcoind`](https://github.com/qubenix/guides/blob/master/qubes-r4/whonix-14/bitcoin/indexed/0_build-bitcoind.md) guide.
+- Have completed [`0_bitcoind`](https://github.com/qubenix/guides/blob/master/qubes-r4/whonix-14/bitcoin/indexed/0_bitcoind.md) guide.
 
 ## I. Set Up Dom0
 ### A. Create an AppVM.
@@ -55,6 +55,7 @@ user@host:~$ sudo kwrite /lib/systemd/system/joinmarketd.service
 Description=JoinMarket daemon
 ConditionPathExists=/var/run/qubes-service/joinmarketd
 After=qubes-sysinit.service
+After=bitcoind.service
 
 [Service]
 WorkingDirectory=/home/joinmarket/joinmarket-clientserver-0.5.3
@@ -64,7 +65,7 @@ RuntimeDirectory=joinmarketd
 User=joinmarket
 Type=idle
 PIDFile=/run/joinmarketd/joinmarketd.pid
-Restart=always
+Restart=on-failure
 
 PrivateTmp=true
 ProtectSystem=full
@@ -169,12 +170,11 @@ user@host:~/joinmarket-clientserver-0.5.3$ virtualenv -p python3 --relocatable j
 user@host:~/joinmarket-clientserver-0.5.3$ cd
 ```
 ### C. Relocate `joinmarket-clientserver/` directory.
-1. Copy `joinmarket-clientserver/` directory to the `joinmarket` user's home directory, change owner, and fix permissions.
+1. Copy `joinmarket-clientserver/` directory to the `joinmarket` user's home directory, change ownership.
 
 ```
 user@host:~$ sudo cp -r ~/joinmarket-clientserver-0.5.3/ /home/joinmarket/
-user@host:~$ sudo chown -R joinmarket:nogroup /home/joinmarket/joinmarket-clientserver-0.5.3/
-user@host:~$ sudo chmod 0700 /home/joinmarket/
+user@host:~$ sudo chown -R joinmarket:nogroup /home/joinmarket/
 ```
 2. Copy `joinmarket-clientserver/` directory to the `joinmarket` VM.
 
@@ -191,17 +191,17 @@ user@host:~$ sudo systemctl start joinmarketd.service
 ## IV. Configure `bitcoind` and `joinmarketd`
 ### A. In a `sys-bitcoind` terminal, find out the gateway IP.
 **Note:**
-- Save your gateway IP for later to replace `<gateway-ip>` in examples.
+- Save your gateway IP (`10.137.0.50` in this example) for later to replace `<gateway-ip>` in examples.
 
 ```
 user@host:~$ qubesdb-read /qubes-ip
-10.137.0.xx
+10.137.0.50
 ```
 ### B. In a `bitcoind` terminal, create RPC credentials for JoinMarket to communicate with `bitcoind`.
 1. Create a random RPC username. Do not use the one shown.
 
 **Note:**
-- Save your username for later to replace `<rpc-user>` in examples.
+- Save your username (`uJDzc07zxn5riJDx7N5m` in this example) for later to replace `<rpc-user>` in examples.
 
 ```
 user@host:~$ head -c 15 /dev/urandom | base64
@@ -210,8 +210,8 @@ uJDzc07zxn5riJDx7N5m
 2. Use Bitcoin's tool to create a random RPC password and config entry. Do not use the one shown.
 
 **Notes:** 
-- Save the hased password (the text on the `rpcauth=` line after `rpcauth=uJDzc07zxn5riJDx7N5m:` in the example) for later to replace `<hashed-pass>` in examples. 
-- Save your password for later to replace `<rpc-pass>` in examples. 
+- Save the hased password (`838c4dd74606918f1f27a5a2a52b168$9634018b87451bca05082f51b0b5b876fc72ef877bad98298e97e277abd5f90c` in this example) for later to replace `<hashed-pass>` in examples.
+- Save your password (`IuziNnTsOUkonsDD3jn5WatPnFrFOMSnGUsRSUaq5Qg=` in this example) for later to replace `<rpc-pass>` in examples.
 - Replace `<rpc-user>` with the information noted earlier.
 
 ```
@@ -335,8 +335,7 @@ rpc_user = <rpc-user>
 rpc_password = <rpc-pass>
 rpc_wallet_file = joinmarket
 
-[MESSAGING:server1]
-## Cyberguerrilla IRC
+[MESSAGING:CyberguerrillaIRC]
 channel = joinmarket-pit
 host = 6dvj6v5imhny3anf.onion
 port = 6698
@@ -345,8 +344,7 @@ socks5_host = <gateway-ip>
 socks5_port = 9180
 usessl = true
 
-[MESSAGING:server2]
-## Agora Anarplex IRC
+[MESSAGING:AgoraAnarplexIRC]
 channel = joinmarket-pit
 host = cfyfz6afpgfeirst.onion
 port = 6667
@@ -355,8 +353,7 @@ socks5_host = <gateway-ip>
 socks5_port = 9181
 usessl = false
 
-[MESSAGING:server3]
-## DarkScience IRC
+[MESSAGING:DarkScienceIRC]
 channel = joinmarket-pit
 host = darksci3bfoka7tw.onion
 port = 6697
@@ -389,7 +386,5 @@ accept_commitment_broadcasts = 1
 ```
 4. Save the file.
 
-## VI. Finish
-The guide is complete.
-
-Once `bitcoind` has finished syncing in the `bitcoind` VM you will be able to use JoinMarket's wallet from the `joinmarket` VM. To learn more about using JoinMarket's wallet please see their [wiki](https://github.com/JoinMarket-Org/joinmarket/wiki).
+## VI. Final Notes
+- Once `bitcoind` has finished syncing in the `bitcoind` VM you will be able to use JoinMarket's wallet from the `joinmarket` VM. To learn more about using JoinMarket's wallet please see their [wiki](https://github.com/JoinMarket-Org/joinmarket/wiki).
