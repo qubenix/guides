@@ -100,6 +100,12 @@ user@host:~$ sudo shutdown now
 
 ```
 user@host:~$ curl -LO "https://github.com/JoinMarket-Org/joinmarket-clientserver/archive/v0.5.3.tar.gz" -O "https://github.com/JoinMarket-Org/joinmarket-clientserver/releases/download/v0.5.3/joinmarket-clientserver-0.5.3.tar.gz.asc"
+  % Total    % Received % Xferd  Average Speed   Time    Time     Time  Current
+                                 Dload  Upload   Total   Spent    Left  Speed
+100   146    0   146    0     0     40      0 --:--:--  0:00:03 --:--:--    40
+100 1812k    0 1812k    0     0  92094      0 --:--:--  0:00:20 --:--:--  105k
+100   630    0   630    0     0   1154      0 --:--:-- --:--:-- --:--:--  1154
+100   819  100   819    0     0    243      0  0:00:03  0:00:03 --:--:--   445
 ```
 2. Receive signing key.
 

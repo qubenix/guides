@@ -234,7 +234,7 @@ Resolving deltas: 100% (5795/5795), done.
 2. Receive signing key.
 
 **Note:**
-- You can verify the key fingerprint on the this developers [keybase page](https://keybase.io/ghost43).
+- You can verify the key fingerprint on the developers [keybase page](https://keybase.io/ghost43).
 
 ```
 user@host:~$ gpg --recv-keys 4AD64339DFA05E20B3F6AD51E7B748CDAF5E5ED9

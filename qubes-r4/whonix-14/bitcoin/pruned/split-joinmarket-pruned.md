@@ -175,6 +175,10 @@ user@host:~$ sudo shutdown now
 
 ```
 user@host:~$ curl -O "https://bitcoincore.org/bin/bitcoin-core-0.17.1/bitcoin-0.17.1-x86_64-linux-gnu.tar.gz" -O "https://bitcoincore.org/bin/bitcoin-core-0.17.1/SHA256SUMS.asc"
+  % Total    % Received % Xferd  Average Speed   Time    Time     Time  Current
+                                 Dload  Upload   Total   Spent    Left  Speed
+100 26.9M  100 26.9M    0     0   355k      0  0:01:17  0:01:17 --:--:--  407k
+100  1957  100  1957    0     0   4508      0 --:--:-- --:--:-- --:--:--  4508
 ```
 2. Receive signing key.
 
@@ -223,6 +227,12 @@ user@host:~$ sudo install -g staff -m 0755 -o root -t /usr/local/bin/ ~/bitcoin-
 
 ```
 user@host:~$ curl -LO "https://github.com/JoinMarket-Org/joinmarket-clientserver/archive/v0.5.3.tar.gz" -O "https://github.com/JoinMarket-Org/joinmarket-clientserver/releases/download/v0.5.3/joinmarket-clientserver-0.5.3.tar.gz.asc"
+  % Total    % Received % Xferd  Average Speed   Time    Time     Time  Current
+                                 Dload  Upload   Total   Spent    Left  Speed
+100   146    0   146    0     0     40      0 --:--:--  0:00:03 --:--:--    40
+100 1812k    0 1812k    0     0  92094      0 --:--:--  0:00:20 --:--:--  105k
+100   630    0   630    0     0   1154      0 --:--:-- --:--:-- --:--:--  1154
+100   819  100   819    0     0    243      0  0:00:03  0:00:03 --:--:--   445
 ```
 2. Receive signing key.
 
