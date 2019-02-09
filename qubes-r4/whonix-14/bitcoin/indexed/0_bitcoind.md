@@ -31,7 +31,7 @@ Using `qrexec` we can connect any of these tools to `bitcoind` from their own VM
 ```
 ### B. Create a gateway.
 **Notes:**
-- This gateway should be independent of the default Whonix gateway (`sys-whonix`) to isolate its onion service.
+- This gateway should be independent of any other Whonix gateway to isolate its onion service. See [here](https://www.whonix.org/wiki/Multiple_Whonix-Workstations#Multiple_Whonix-Gateways).
 - You must choose a label color, but it does not have to match this example.
 
 ```

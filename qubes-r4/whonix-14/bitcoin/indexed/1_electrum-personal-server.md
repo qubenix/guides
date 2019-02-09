@@ -24,7 +24,7 @@ This setup also preserves your privacy. When connecting to any server your walle
 ## I. Set Up Dom0
 ### A. Create a gateway.
 **Notes:**
-- This gateway should be independent of any other Whonix gateway to isolate its onion service.
+- This gateway should be independent of any other Whonix gateway to isolate its onion service. See [here](https://www.whonix.org/wiki/Multiple_Whonix-Workstations#Multiple_Whonix-Gateways).
 - You must choose a label color, but it does not have to match this example.
 
 ```
