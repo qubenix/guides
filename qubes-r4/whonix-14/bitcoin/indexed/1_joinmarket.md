@@ -61,10 +61,7 @@ After=bitcoind.service
 WorkingDirectory=/home/joinmarket/joinmarket-clientserver-0.5.3
 ExecStart=/bin/sh -c 'jmvenv/bin/python scripts/joinmarketd.py'
 
-RuntimeDirectory=joinmarketd
 User=joinmarket
-Type=idle
-PIDFile=/run/joinmarketd/joinmarketd.pid
 Restart=on-failure
 
 PrivateTmp=true

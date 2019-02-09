@@ -227,6 +227,7 @@ Installing setuptools, pkg_resources, pip, wheel...done.
 ```
 2. Source the virtual environment and enter the EPS directory.
 
+```
 user@host:~$ source ~/epsvenv/bin/activate
 (epsvenv) user@host:~$ cd ~/electrum-personal-server-eps-v0.1.6/
 (epsvenv) user@host:~/electrum-personal-server-eps-v0.1.6$ python setup.py install

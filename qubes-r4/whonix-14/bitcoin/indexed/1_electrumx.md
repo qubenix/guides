@@ -71,18 +71,16 @@ Requires=qubes-mount-dirs.service
 EnvironmentFile=/home/electrumx/.electrumx/electrumx.conf
 ExecStart=/home/electrumx/exvenv/bin/electrumx_server
 
-RuntimeDirectory=electrumx
 User=electrumx
-LimitNOFILE=8192
-PIDFile=/run/electrumx/electrumx.pid
 Restart=on-failure
+LimitNOFILE=8192
+TimeoutStopSec=30min
 
 PrivateTmp=true
 ProtectSystem=full
 NoNewPrivileges=true
 PrivateDevices=true
 MemoryDenyWriteExecute=true
-TimeoutStopSec=30min
 
 [Install]
 WantedBy=multi-user.target
