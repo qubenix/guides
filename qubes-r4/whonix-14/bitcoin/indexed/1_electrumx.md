@@ -3,6 +3,17 @@ Create a VM for running an [Electrumx](https://github.com/kyuupichan/electrumx) 
 ## What is Electrumx?
 Electrumx is a server backend for the Electrum Bitcoin wallet. These are the servers that the lightweight Electrum wallet uses to query it's balance and transaction history. The vast majority of servers that an Electrum wallet will connect to are running this software.
 
+Electrumx and Electrum Personal Server (EPS) are the two different server implementations for the Electrum wallet. There are a few difference between Electrumx and EPS:
+- Electrumx can provide information on any wallet once it is fully sync'd. EPS requires that you configure each wallet that will connect to it ahead of time.
+- Electrumx requires an indexed `bitcoind` node. EPS can work with a pruned blockchain (this guide only covers indexed).
+- An Electrumx VM requires more disk space.
+  - Electrumx VM disk space: 40G.
+  - EPS VM disk space: 1G
+- Electrumxc sync time is longer.
+  - Initial Electrumx Sync: 1 or more days.
+  - Initial EPS Sync: 10-20 min.
+- The Electrumx project is less concerned with user privacy and security than EPS.
+
 This guide will set up a private server which will not broadcast it's onion address or connect to any peers. If a user wishes to serve other peers on the network, then they will be responsible for making the needed changes to the Electrumx configuration.
 ## Why Do This?
 This will protect you from having to trust nodes ran by volunteers to provide you with vital information and services regarding your Electrum wallet and the Bitcoin stored therein.
@@ -489,5 +500,5 @@ user@host:~$ sudo journalctl -fu electrumx
 ```
 ## VIII. Final Notes
 - The intial sync can take anywhere from a day to multiple days depending on a number of factors including your hardware and resources dedicated to the `electrumx` VM.
-- Once the sync is complete, the server port (`50002`) will open and you can connect your Electrum wallet to the onion address.
-- To connect an offline Electrum wallet from a separate VM (split-electrum), you will have to wait for my guide (`2_electrum.md`) to be finished.
+- Once the sync is finished you may connect your Electrum wallet via the Tor onion address.
+- To connect an offline Electrum wallet from a separate VM (split-electrum), use the guide: [`2_electrum.md`](https://github.com/qubenix/guides/blob/master/qubes-r4/whonix-14/bitcoin/indexed/2_electrum.md).

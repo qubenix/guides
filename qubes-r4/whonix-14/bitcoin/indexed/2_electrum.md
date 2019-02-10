@@ -44,7 +44,7 @@ This increases the security and privacy of your Electrum wallet while still main
 
 **Notes:**
 - These instructions are taken from an older version of the [Whonix wiki](https://www.whonix.org/wiki/Electrum).
-- You should use the unstable repo since it has a newer version (`3.2.3`) than backports (`3.1.3`) with substantial [improvements](https://github.com/spesmilo/electrum/blob/master/RELEASE-NOTES).
+- You should use the unstable repo since it has a newer version of Electrum (`3.2.3`) than backports (`3.1.3`) with substantial [improvements](https://github.com/spesmilo/electrum/blob/master/RELEASE-NOTES).
 
 ```
 user@host:~$ sudo sh -c "echo 'deb tor+http://vwakviie2ienjx6t.onion/debian sid main' > /etc/apt/sources.list.d/unstable.list"
@@ -110,3 +110,5 @@ user@host:~$ kwrite ~/.electrum/config
 ```
 user@host:~$ chmod 0600 ~/.electrum/config
 ```
+## IV. Final Notes
+- Once your `electrumx` or `eps` server has sync'd you should be able to use your `electrum` wallet as you normally would.
