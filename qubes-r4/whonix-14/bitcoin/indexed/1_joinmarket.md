@@ -1,19 +1,20 @@
-# Qubes 4 & Whonix 14: Split JoinMarket Wallet
-Create a two VM system for a fully functional JoinMarket wallet in an offline VM. The `joinmarketd` daemon and `bitcoind` node run in a separate Whonix VM, communicate only over Tor, prefer hidden services, and use stream isolation.
+# Qubes 4 & Whonix 14: JoinMarket
+Create a VM without networking to [JoinMarket](https://github.com/JoinMarket-Org/joinmarket-clientserver) wallet. The `joinmarketd` daemon will run on the `bitcoind` VM, communicate only over Tor onion services, and use stream isolation.
+
+The offline `joinmarket` VM will communicate with the `bitcoind` VM using Qubes' [`qrexec`](https://www.qubes-os.org/doc/qrexec/) and `socat`.
 ## What is JoinMarket?
 Joinmarket is a decentralized, open source, and trustless market for Bitcoin privacy using [coinjoin](https://en.bitcoin.it/wiki/CoinJoin). Anyone holding Bitcoin can offer coinjoins for a fee, and anyone can pay a fee to have their transactions obfuscated.
 
 There is a detailed explanation of the concept by the creator [here](https://bitcointalk.org/index.php?topic=919116.0), and a descriptive infographic [here](https://imgur.com/C6w0Pgf).
 ## Why Do This?
-This method keeps the wallet VM offline, yet retains all the functionality of an internet connected JoinMarket wallet (send payments, run yield generator/tumbler, etc.).
-
-The only way a remote attacker can compromise this system is to successfully exploit one of your internet connected VMs and then use a Qubes/Xen 0-day to escape that VM.
+This increases the security of your JoinMarket wallet while still maintaining full functionality. The only way a remote attacker can compromise this system is to successfully exploit one of your internet connected VMs and then use a Qubes/Xen 0-day to escape that VM.
 ## Prerequisites
-- Have completed [`0_bitcoind`](https://github.com/qubenix/guides/blob/master/qubes-r4/whonix-14/bitcoin/indexed/0_bitcoind.md) guide.
+- To complete this guide you must have completed:
+  - [`0_bitcoind.md`](https://github.com/qubenix/guides/blob/master/qubes-r4/whonix-14/bitcoin/indexed/0_bitcoind.md)
 
 ## I. Set Up Dom0
-### A. Create an AppVM.
-1. Create the AppVM for JoinMarket's wallet, with no networking and using Bitcoin's TemplateVM.
+### A. In a `dom0` terminal, create an AppVM.
+1. Create the AppVM for JoinMarket's wallet with no networking, using the `whonix-ws-14-bitcoin` TemplateVM.
 
 ```
 [user@dom0 ~]$ qvm-create --label black --prop netvm='' --template whonix-ws-14-bitcoin joinmarket
@@ -27,7 +28,7 @@ The only way a remote attacker can compromise this system is to successfully exp
 [user@dom0 ~]$ echo 'joinmarket bitcoind allow' | sudo tee -a /etc/qubes-rpc/policy/qubes.{bitcoind,joinmarketd-2718{3,4}} > /dev/null
 ```
 ## II. Set Up TemplateVM
-### A. Update and install dependencies.
+### A. In a `whonix-ws-14-bitcoin` terminal, update and install dependencies.
 ```
 user@host:~$ sudo apt update && sudo apt install -y libffi-dev libgmp-dev libsecp256k1-dev libsodium-dev \
 python-virtualenv python3-dev python3-pip
@@ -73,7 +74,8 @@ MemoryDenyWriteExecute=true
 [Install]
 WantedBy=multi-user.target
 ```
-3. Save the file, switch back to the terminal, and fix permissions.
+3. Save the file and switch back to the terminal.
+4. Fix permissions.
 
 ```
 user@host:~$ sudo chmod 0644 /lib/systemd/system/joinmarketd.service
@@ -243,8 +245,8 @@ rpcauth=<rpc-user>:<hashed-pass>
 # JoinMarket Wallet
 wallet=joinmarket
 ```
-3. Save the file.
-4. Switch back to `bitcoind` terminal, restart the `bitcoind` service.
+3. Save the file and switch back to the terminal.
+4. Restart the `bitcoind` service.
 
 ```
 user@host:~$ sudo systemctl restart bitcoind.service
@@ -276,8 +278,8 @@ socat TCP-LISTEN:8332,fork,bind=127.0.0.1 EXEC:"qrexec-client-vm bitcoind qubes.
 socat TCP-LISTEN:27183,fork,bind=127.0.0.1 EXEC:"qrexec-client-vm bitcoind qubes.joinmarketd-27183" &
 socat TCP-LISTEN:27184,fork,bind=127.0.0.1 EXEC:"qrexec-client-vm bitcoind qubes.joinmarketd-27184" &
 ```
-3. Save the file.
-4. Switch back to the `joinmarket` terminal, fix permissions, and execute the file.
+3. Save the file and switch back to the terminal.
+4. Execute the file.
 
 ```
 user@host:~$ sudo chmod 0755 /rw/config/rc.local

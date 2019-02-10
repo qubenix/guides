@@ -1,5 +1,5 @@
 # Qubes 4 & Whonix 14: Electrumx
-Create a VM for running an Electrumx server which will connect to your `bitcoind` VM. The `electrumx` VM will be accessible from an Electrum Bitcoin wallet in an offline VM on the same host or remotely via a Tor onion service.
+Create a VM for running an [Electrumx](https://github.com/kyuupichan/electrumx) server which will connect to your `bitcoind` VM. The `electrumx` VM will be accessible from an Electrum Bitcoin wallet in an offline VM on the same host or remotely via a Tor onion service.
 ## What is Electrumx?
 Electrumx is a server backend for the Electrum Bitcoin wallet. These are the servers that the lightweight Electrum wallet uses to query it's balance and transaction history. The vast majority of servers that an Electrum wallet will connect to are running this software.
 
@@ -11,19 +11,20 @@ There have already been multiple waves of attacks on Electrum users perpetrated 
 
 In addition to preventing certain types of attacks, this setup also preserves your privacy. When connecting to any server your wallet will leak information which can be used to tie your addresses together. There are definitely servers on the network which are using this information to build profiles on addresses and their interactions.
 ## Prerequisites
-- Have completed [`0_bitcoind`](https://github.com/qubenix/guides/blob/master/qubes-r4/whonix-14/bitcoin/indexed/0_bitcoind.md) guide.
+- To complete this guide you must have completed:
+  - [`0_bitcoind.md`](https://github.com/qubenix/guides/blob/master/qubes-r4/whonix-14/bitcoin/indexed/0_bitcoind.md)
 
 ## I. Set Up Dom0
-### A. Create a gateway.
+### A. In a `dom0` terminal, create a gateway.
 **Notes:**
-- This gateway should be independent of any other Whonix gateway to isolate its onion service. See [here](https://www.whonix.org/wiki/Multiple_Whonix-Workstations#Multiple_Whonix-Gateways).
+- This gateway should be independent of other Whonix gateways to isolate its onion service. See [here](https://www.whonix.org/wiki/Multiple_Whonix-Workstations#Multiple_Whonix-Gateways).
 - You must choose a label color, but it does not have to match this example.
 
 ```
 [user@dom0 ~]$ qvm-create --label purple --prop maxmem='400' --prop netvm='sys-firewall' --prop provides_network='True' --prop vcpus='1' --template whonix-gw-14 sys-electrumx
 ```
 ### B. Create AppVM.
-1. Create the AppVM for Electrumx, with the newly created gateway and Bitcoin's TemplateVM.
+1. Create the AppVM for Electrumx with the newly created gateway, using the `whonix-ws-14-bitcoin` TemplateVM.
 
 ```
 [user@dom0 ~]$ qvm-create --label red --prop netvm='sys-electrumx' --template whonix-ws-14-bitcoin electrumx
@@ -57,7 +58,6 @@ Creating home directory `/home/electrumx' ...
 ```
 user@host:~$ sudo kwrite /lib/systemd/system/electrumx.service
 ```
-
 2. Paste the following.
 
 ```
@@ -85,14 +85,13 @@ MemoryDenyWriteExecute=true
 [Install]
 WantedBy=multi-user.target
 ```
-
-3. Save the file, switch back to the terminal, and fix permissions.
+3. Save the file and switch back to the terminal.
+4. Fix permissions.
 
 ```
 user@host:~$ sudo chmod 0644 /lib/systemd/system/electrumx.service
 ```
-
-4. Enable the service.
+5. Enable the service.
 
 ```
 user@host:~$ sudo systemctl enable electrumx.service
@@ -143,8 +142,8 @@ user@host:~$ sudo -u bitcoin kwrite /home/bitcoin/.bitcoin/bitcoin.conf
 # Electrumx Auth
 rpcauth=<rpc-user>:<hashed-pass>
 ```
-3. Save the file.
-4. Switch back to `bitcoind` terminal, restart the `bitcoind` service.
+3. Save the file and switch back to the terminal.
+4. Restart the `bitcoind` service.
 
 ```
 user@host:~$ sudo systemctl restart bitcoind.service
@@ -216,7 +215,7 @@ user@host:~/Python-3.6.8$ cd
 1. Clone the repository.
 
 **Notes:**
-- This is a fork of the original Electrumx repository (located [here](https://github.com/kyuupichan/electrumx)) which still supports the version of Electrum in Debian's `stable-backports`.
+- This is a fork of the [original](https://github.com/kyuupichan/electrumx) Electrumx repository which still supports the version of Electrum in Debian repos.
 - This is the only source I've found which is signed.
 
 ```
@@ -332,7 +331,7 @@ PEER_ANNOUNCE = ''
 ## Server Advertising
 REPORT_TCP_PORT = 0
 ```
-4. Save the file.
+4. Save the file and switch back to the terminal.
 5. Fix permissions.
 
 ```
@@ -464,12 +463,13 @@ user@host:~$ sudo kwrite /rw/usrlocal/etc/torrc.d/50_user.conf
 HiddenServiceDir /var/lib/tor/electrumx/
 HiddenServicePort 50002 <electrumx-ip>:50002
 ```
-3. Reload `tor`.
+3. Save the file and switch back to the terminal.
+4. Reload `tor`.
 
 ```
 user@host:~$ sudo systemctl reload tor.service
 ```
-4. Find out your onion hostname.
+5. Find out your onion hostname.
 
 **Note:**
 - Make a note of your server hostname for use with your remote Electrum wallet.

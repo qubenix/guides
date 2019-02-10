@@ -19,19 +19,20 @@ There have already been multiple waves of attacks on Electrum users perpetrated 
 
 This setup also preserves your privacy. When connecting to any server your wallet will leak information which can be used to tie your addresses together. There are definitely servers on the network which are using this information to build profiles on addresses and their interactions.
 ## Prerequisites
-- Have completed [`0_bitcoind`](https://github.com/qubenix/guides/blob/master/qubes-r4/whonix-14/bitcoin/indexed/0_bitcoind.md) guide.
+- To complete this guide you must have completed:
+  - [`0_bitcoind.md`](https://github.com/qubenix/guides/blob/master/qubes-r4/whonix-14/bitcoin/indexed/0_bitcoind.md)
 
 ## I. Set Up Dom0
-### A. Create a gateway.
+### A. In a `dom0` terminal, create a gateway.
 **Notes:**
-- This gateway should be independent of any other Whonix gateway to isolate its onion service. See [here](https://www.whonix.org/wiki/Multiple_Whonix-Workstations#Multiple_Whonix-Gateways).
+- This gateway should be independent of other Whonix gateways to isolate its onion service. See [here](https://www.whonix.org/wiki/Multiple_Whonix-Workstations#Multiple_Whonix-Gateways).
 - You must choose a label color, but it does not have to match this example.
 
 ```
 [user@dom0 ~]$ qvm-create --label purple --prop maxmem='400' --prop netvm='sys-firewall' --prop provides_network='True' --prop vcpus='1' --template whonix-gw-14 sys-eps
 ```
 ### B. Create AppVM.
-1. Create the AppVM for EPS, with the newly created gateway and Bitcoin's TemplateVM.
+1. Create the AppVM for EPS with the newly created gateway, using the `whonix-ws-14-bitcoin` TemplateVM.
 
 ```
 [user@dom0 ~]$ qvm-create --label red --prop netvm='sys-eps' --template whonix-ws-14-bitcoin eps
@@ -98,13 +99,14 @@ MemoryDenyWriteExecute=true
 WantedBy=multi-user.target
 ```
 
-3. Save the file, switch back to the terminal, and fix permissions.
+3. Save the file and switch back to the terminal.
+4. Fix permissions.
 
 ```
 user@host:~$ sudo chmod 0644 /lib/systemd/system/eps.service
 ```
 
-4. Enable the service.
+5. Enable the service.
 
 ```
 user@host:~$ sudo systemctl enable eps.service
@@ -157,8 +159,8 @@ rpcauth=<rpc-user>:<hashed-pass>
 # EPS Wallet
 wallet=eps
 ```
-3. Save the file.
-4. Switch back to `bitcoind` terminal, restart the `bitcoind` service.
+3. Save the file and switch back to the terminal.
+4. Restart the `bitcoind` service.
 
 ```
 user@host:~$ sudo systemctl restart bitcoind.service
@@ -299,7 +301,7 @@ ip_whitelist = *
 certfile = /home/eps/.eps/certs/server.crt
 keyfile = /home/eps/.eps/certs/server.key
 ```
-4. Save the file.
+4. Save the file and switch back to the terminal.
 5. Fix permissions.
 
 ```
@@ -431,12 +433,13 @@ user@host:~$ sudo kwrite /rw/usrlocal/etc/torrc.d/50_user.conf
 HiddenServiceDir /var/lib/tor/eps/
 HiddenServicePort 50002 <eps-ip>:50002
 ```
-3. Reload `tor`.
+3. Save the file and switch back to the terminal.
+4. Reload `tor`.
 
 ```
 user@host:~$ sudo systemctl reload tor.service
 ```
-4. Find out your onion hostname.
+5. Find out your onion hostname.
 
 **Note:**
 - Make a note of your server hostname for use with your remote Electrum wallet.

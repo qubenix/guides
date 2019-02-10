@@ -31,7 +31,7 @@ Using `qrexec` we can connect any of these tools to `bitcoind` from their own VM
 ```
 ### B. Create a gateway.
 **Notes:**
-- This gateway should be independent of any other Whonix gateway to isolate its onion service. See [here](https://www.whonix.org/wiki/Multiple_Whonix-Workstations#Multiple_Whonix-Gateways).
+- This gateway should be independent of other Whonix gateways to isolate its onion service. See [here](https://www.whonix.org/wiki/Multiple_Whonix-Workstations#Multiple_Whonix-Gateways).
 - You must choose a label color, but it does not have to match this example.
 
 ```
@@ -99,12 +99,13 @@ MemoryDenyWriteExecute=true
 [Install]
 WantedBy=multi-user.target
 ```
-3. Save the file, switch back to the terminal, and fix permissions.
+3. Save the file and switch back to the terminal.
+4. Fix permissions.
 
 ```
 user@host:~$ sudo chmod 0644 /lib/systemd/system/bitcoind.service
 ```
-4. Enable the service.
+5. Enable the service.
 
 ```
 user@host:~$ sudo systemctl enable bitcoind.service
@@ -268,7 +269,8 @@ onlynet=onion
 proxy=<gateway-ip>:9111
 txindex=1
 ```
-3. Save the file, switch back to the terminal, and fix permissions.
+3. Save the file and switch back to the terminal.
+4. Fix permissions.
 
 ```
 user@host:~$ sudo chmod 0600 /home/bitcoin/.bitcoin/bitcoin.conf

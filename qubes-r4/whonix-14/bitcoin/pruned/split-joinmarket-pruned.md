@@ -10,13 +10,12 @@ This method keeps the wallet VM offline, yet retains all the functionality of an
 In addition to the security improvements, a Whonix VM with a pruned Bitcoin node only requires about 10G of disk space.
 ## I. Set Up Dom0
 ### A. In a `dom0` terminal, clone Whonix TemplateVM.
-
 ```
 [user@dom0 ~]$ qvm-clone whonix-ws-14 whonix-ws-14-jm
 ```
 ### B. Create a gateway.
 **Notes:**
-- This gateway should be independent of any other Whonix gateway to isolate its onion service. See [here](https://www.whonix.org/wiki/Multiple_Whonix-Workstations#Multiple_Whonix-Gateways).
+- This gateway should be independent of other Whonix gateways to isolate its onion service. See [here](https://www.whonix.org/wiki/Multiple_Whonix-Workstations#Multiple_Whonix-Gateways).
 - You must choose a label color, but it does not have to match this example.
 
 ```
@@ -31,13 +30,11 @@ In addition to the security improvements, a Whonix VM with a pruned Bitcoin node
 ```
 [user@dom0 ~]$ qvm-create --label red --prop netvm='sys-bitcoind' --template whonix-ws-14-jm jm-bitcoind
 ```
-
 2. Create the VM for JoinMarket's wallet with no networking.
 
 ```
 [user@dom0 ~]$ qvm-create --label black --prop netvm='' --template whonix-ws-14-jm jm-wallet
 ```
-
 3. Resize `jm-bitcoind`.
 
 ```
@@ -53,14 +50,11 @@ In addition to the security improvements, a Whonix VM with a pruned Bitcoin node
 [user@dom0 ~]$ qvm-service --enable jm-bitcoind joinmarketd
 ```
 ## II. Set Up TemplateVM
-### A. In the `whonix-ws-14-jm` terminal, update and install dependencies.
+### A. In a `whonix-ws-14-jm` terminal, update and install dependencies.
 ```
 user@host:~$ sudo apt update && sudo apt install -y libffi-dev libgmp-dev libsecp256k1-dev libsodium-dev \
 python-virtualenv python3-dev python3-pip
 ```
-<!--
-TODO NOTES: Try to limit package installs through pip
--->
 ### B. Create system users.
 1. Add `bitcoin` user.
 
@@ -84,7 +78,6 @@ Creating home directory `/home/joinmarket' ...
 ```
 user@host:~$ sudo kwrite /lib/systemd/system/bitcoind.service
 ```
-
 2. Paste the following.
 
 ```
@@ -113,7 +106,6 @@ MemoryDenyWriteExecute=true
 [Install]
 WantedBy=multi-user.target
 ```
-
 3. Save the file and switch back to the terminal.
 
 ### D. Use `systemd` to keep `joinmarketd` always running.
