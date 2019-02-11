@@ -12,8 +12,11 @@ EPS is a lightweight server for users to connect their Electrum Bitcoin wallet t
   - Initial Electrumx Sync: 1 or more days.
 - The EPS project is more concerned with user privacy and security than Electrumx.
 
+For more information see the
+[mailing list email](https://lists.linuxfoundation.org/pipermail/bitcoin-dev/2018-February/015707.html)
+and [bitcointalk thread](https://bitcointalk.org/index.php?topic=2664747.msg27179198).
 ## Why Do This?
-This will protect you from having to trust nodes ran by volunteers to provide you with vital information and services regarding your Electrum wallet and the Bitcoin stored therein.
+This will protect you from having to trust nodes ran by volunteers to provide you with vital information and services regarding your Electrum wallet and your Bitcoin.
 
 There have already been multiple waves of attacks on Electrum users perpetrated by malicious servers. These bad servers prevent users from sending transactions, instead sending back to them a bogus update requirement which actually leads to coin stealing malware.
 
@@ -27,6 +30,7 @@ This setup also preserves your privacy. When connecting to any server your walle
 **Notes:**
 - This gateway should be independent of other Whonix gateways to isolate its onion service. See [here](https://www.whonix.org/wiki/Multiple_Whonix-Workstations#Multiple_Whonix-Gateways).
 - You must choose a label color, but it does not have to match this example.
+- It is safe to lower the `maxmem` and `vcpus` on this VM.
 
 ```
 [user@dom0 ~]$ qvm-create --label purple --prop maxmem='400' --prop netvm='sys-firewall' --prop provides_network='True' --prop vcpus='1' --template whonix-gw-14 sys-eps
@@ -34,8 +38,12 @@ This setup also preserves your privacy. When connecting to any server your walle
 ### B. Create AppVM.
 1. Create the AppVM for EPS with the newly created gateway, using the `whonix-ws-14-bitcoin` TemplateVM.
 
+**Notes:**
+- You must choose a label color, but it does not have to match this example.
+- It is safe to lower the `maxmem` and `vcpus` on this VM.
+
 ```
-[user@dom0 ~]$ qvm-create --label red --prop netvm='sys-eps' --template whonix-ws-14-bitcoin eps
+[user@dom0 ~]$ qvm-create --label red --prop maxmem='400' --prop netvm='sys-eps' --prop vcpus='1' --template whonix-ws-14-bitcoin eps
 ```
 2. Enable `eps` service.
 
@@ -263,13 +271,14 @@ user@host:~$ sudo kwrite /home/eps/.eps/config.cfg
 **Notes:**
 - Be sure to replace `<rpc-user>` and `<rpc-pass>` with the information noted earlier.
 - For a verbose desciption of these settings, look to the file: [`~/electrum-personal-server-eps-v0.1.6/config.cfg_sample`](https://github.com/chris-belcher/electrum-personal-server/blob/master/config.cfg_sample).
+- At this point you may add your Electrum master public keys or individual addresses to the config file.
 
 ```
 ## Electrum Personal Server configuration file
 
 [master-public-keys]
 ## Add electrum master public keys to this section.
-## Create a wallet in electrum then go Wallet -> Information to get the mpk.
+## Create a wallet in electrum then go Wallet -> Information to get the MPK.
 
 # any_name_works = xpub661MyMwAqRbcFseXCwRdRVkhVuzEiskg4QUp5XpUdNf2uGXvQmnD4zcofZ1MN6Fo8PjqQ5cemJQ39f7RTwDVVputHMFjPUn8VRp2pJQMgEF
 

@@ -33,6 +33,7 @@ Using `qrexec` we can connect any of these tools to `bitcoind` from their own VM
 **Notes:**
 - This gateway should be independent of other Whonix gateways to isolate its onion service. See [here](https://www.whonix.org/wiki/Multiple_Whonix-Workstations#Multiple_Whonix-Gateways).
 - You must choose a label color, but it does not have to match this example.
+- It is safe to lower the `maxmem` and `vcpus` on this VM.
 
 ```
 [user@dom0 ~]$ qvm-create --label purple --prop maxmem='400' --prop netvm='sys-firewall' --prop provides_network='True' --prop vcpus='1' --template whonix-gw-14 sys-bitcoind
@@ -281,7 +282,7 @@ user@host:~$ sudo chown -R bitcoind:nogroup /home/bitcoin/.bitcoin/
 
 ```
 user@host:~$ sudo mkdir -m 0755 /rw/config/whonix_firewall.d
-user@host:~$ sudo sh -c 'echo "EXTERNAL_OPEN_PORTS+=\" 8333 18333 \"" >> /rw/config/whonix_firewall.d/50_user.conf'
+user@host:~$ sudo sh -c 'echo "EXTERNAL_OPEN_PORTS+=\" 8333 \"" >> /rw/config/whonix_firewall.d/50_user.conf'
 user@host:~$ sudo chmod 0644 /rw/config/whonix_firewall.d/50_user.conf
 ```
 2. Restart firewall service.

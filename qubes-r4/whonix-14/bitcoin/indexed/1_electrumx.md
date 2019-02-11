@@ -20,7 +20,7 @@ This will protect you from having to trust nodes ran by volunteers to provide yo
 
 There have already been multiple waves of attacks on Electrum users perpetrated by malicious Electrumx servers. These bad servers prevent users from sending transactions, instead sending back to them a bogus update requirement which actually leads to coin stealing malware.
 
-In addition to preventing certain types of attacks, this setup also preserves your privacy. When connecting to any server your wallet will leak information which can be used to tie your addresses together. There are definitely servers on the network which are using this information to build profiles on addresses and their interactions.
+In addition to preventing certain types of attacks, this setup also increases your privacy by not leaking information about your wallet to server operators. There are servers on the network which are using this information to build profiles on addresses and their interactions (eg. [blockchain analytic companies](https://duckduckgo.com/html?q=blockchain%20analytics)).
 ## Prerequisites
 - To complete this guide you must have completed:
   - [`0_bitcoind.md`](https://github.com/qubenix/guides/blob/master/qubes-r4/whonix-14/bitcoin/indexed/0_bitcoind.md)
@@ -30,6 +30,7 @@ In addition to preventing certain types of attacks, this setup also preserves yo
 **Notes:**
 - This gateway should be independent of other Whonix gateways to isolate its onion service. See [here](https://www.whonix.org/wiki/Multiple_Whonix-Workstations#Multiple_Whonix-Gateways).
 - You must choose a label color, but it does not have to match this example.
+- It is safe to lower the `maxmem` and `vcpus` on this VM.
 
 ```
 [user@dom0 ~]$ qvm-create --label purple --prop maxmem='400' --prop netvm='sys-firewall' --prop provides_network='True' --prop vcpus='1' --template whonix-gw-14 sys-electrumx
@@ -37,8 +38,12 @@ In addition to preventing certain types of attacks, this setup also preserves yo
 ### B. Create AppVM.
 1. Create the AppVM for Electrumx with the newly created gateway, using the `whonix-ws-14-bitcoin` TemplateVM.
 
+**Notes:**
+- You must choose a label color, but it does not have to match this example.
+- It is safe to lower the `maxmem` and `vcpus` on this VM.
+
 ```
-[user@dom0 ~]$ qvm-create --label red --prop netvm='sys-electrumx' --template whonix-ws-14-bitcoin electrumx
+[user@dom0 ~]$ qvm-create --label red --prop maxmem='800' --prop netvm='sys-electrumx' --prop vcpus='1' --template whonix-ws-14-bitcoin electrumx
 ```
 2. Increase private volume size and enable `electrumx` service.
 
@@ -253,7 +258,7 @@ gpg: no ultimately trusted keys found
 gpg: Total number processed: 1
 gpg:               imported: 1
 ```
-3. Verify source code.
+3. Verify.
 
 **Note:**
 - Your output may not match the example. Just check that it says `Good signature`.
@@ -341,6 +346,8 @@ PEER_DISCOVERY = 'self'
 PEER_ANNOUNCE = ''
 ## Server Advertising
 REPORT_TCP_PORT = 0
+## Cache
+CACHE_MB = 400
 ```
 4. Save the file and switch back to the terminal.
 5. Fix permissions.

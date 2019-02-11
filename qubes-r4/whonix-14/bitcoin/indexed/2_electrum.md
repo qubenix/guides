@@ -3,13 +3,13 @@ Create a VM without networking to host an [Electrum](https://electrum.org) walle
 ## What is Electrum?
 Electrum is a popular lightweight Bitcoin wallet based on a client-server protocol. More info [here](https://en.bitcoin.it/wiki/Electrum).
 ## Why Do This?
-This increases the security and privacy of your Electrum wallet while still maintaining full functionality. Privacy is achieved through prevention of data leaks by only connecting to your own server. Security is enhanced by removing the need for an internet connection on the wallet.
+This increases the security and privacy of your Electrum wallet while still maintaining full functionality. Privacy is enhanced by preventing data leakage to server operators, and security is improved by removing the need for an internet connection on the wallet.
 ## Prerequisites
 - To complete this guide you must have completed:
   - [`0_bitcoind.md`](https://github.com/qubenix/guides/blob/master/qubes-r4/whonix-14/bitcoin/indexed/0_bitcoind.md)
   - You will also need either one of these, but not both:
-    - [`1_electrumx.md`](https://github.com/qubenix/guides/blob/master/qubes-r4/whonix-14/bitcoin/indexed/1_electrumx.md)
     - [`1_electrum-personal-server.md`](https://github.com/qubenix/guides/blob/master/qubes-r4/whonix-14/bitcoin/indexed/1_electrum-personal-server.md)
+    - [`1_electrumx.md`](https://github.com/qubenix/guides/blob/master/qubes-r4/whonix-14/bitcoin/indexed/1_electrumx.md)
 
 ## I. Set Up Dom0
 ### A. In a `dom0` terminal, create AppVM.
@@ -21,22 +21,22 @@ This increases the security and privacy of your Electrum wallet while still main
 ```
 [user@dom0 ~]$ qvm-create --label black --prop netvm='' --template whonix-ws-14-bitcoin electrum
 ```
-### B. Create rpc policy to allow comms from `electrum` to `electrumx` or `eps`.
-1. Allow `electrum` to communicate with `electrumx`.
+### B. Create rpc policy to allow comms from `electrum` to `eps` or `electrumx`.
+1. Allow `electrum` to communicate with `eps`.
 
 **Note:**
-- Skip this step is you did not install `electrumx` as your server.
-
-```
-[user@dom0 ~]$ echo 'electrum electrumx allow' | sudo tee -a /etc/qubes-rpc/policy/qubes.electrumx
-```
-2. Allow `electrum` to communicate with `eps`.
-
-**Note:**
-- Skip this step if you did not install `eps` as your server.
+- Skip this step if you did not install `eps` as your server VM.
 
 ```
 [user@dom0 ~]$ echo 'electrum eps allow' | sudo tee -a /etc/qubes-rpc/policy/qubes.eps
+```
+2. Allow `electrum` to communicate with `electrumx`.
+
+**Note:**
+- Skip this step is you did not install `electrumx` as your server VM.
+
+```
+[user@dom0 ~]$ echo 'electrum electrumx allow' | sudo tee -a /etc/qubes-rpc/policy/qubes.electrumx
 ```
 ## II. Set Up Template
 ### A. In a `whonix-ws-14-bitcoin` terminal, modify Debian sources.
@@ -64,21 +64,21 @@ user@host:~$ sudo apt install -y electrum/sid
 ```
 ## III. Set Up Electrum
 ### A. In an `electrum` terminal, open communication with `electrumx` or `eps` on boot.
-1. Edit the file `/rw/config/local` for `electrumx`.
+1. Edit the file `/rw/config/local` for `eps`.
 
 **Note:**
-- Skip this step is you did not install `electrumx` as your server.
-
-```
-user@host:~$ sudo sh -c 'echo "socat TCP-LISTEN:50002,fork,bind=127.0.0.1 EXEC:\"qrexec-client-vm electrumx qubes.electrumx\" &" >> /rw/config/rc.local'
-```
-2. Edit the file `/rw/config/local` for `eps`.
-
-**Note:**
-- Skip this step if you did not install `eps` as your server.
+- Skip this step if you did not install `eps` as your server VM.
 
 ```
 user@host:~$ sudo sh -c 'echo "socat TCP-LISTEN:50002,fork,bind=127.0.0.1 EXEC:\"qrexec-client-vm eps qubes.eps\" &" >> /rw/config/rc.local'
+```
+2. Edit the file `/rw/config/local` for `electrumx`.
+
+**Note:**
+- Skip this step is you did not install `electrumx` as your server VM.
+
+```
+user@host:~$ sudo sh -c 'echo "socat TCP-LISTEN:50002,fork,bind=127.0.0.1 EXEC:\"qrexec-client-vm electrumx qubes.electrumx\" &" >> /rw/config/rc.local'
 ```
 3. Execute the file.
 
@@ -111,4 +111,4 @@ user@host:~$ kwrite ~/.electrum/config
 user@host:~$ chmod 0600 ~/.electrum/config
 ```
 ## IV. Final Notes
-- Once your `electrumx` or `eps` server has sync'd you should be able to use your `electrum` wallet as you normally would.
+- Once your `eps` or `electrumx` server has sync'd you will be able to use your `electrum` wallet normally.
