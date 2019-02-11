@@ -1,11 +1,11 @@
 # Qubes 4 & Whonix 14: Electrum
-Create a VM without networking to host an [Electrum](https://electrum.org) wallet. The offline `electrum` VM will communicate with either an `electrumx` or `eps` VM using Qubes' [`qrexec`](https://www.qubes-os.org/doc/qrexec/) and `socat`.
+Create a VM without networking to host an [Electrum](https://electrum.org) Bitcoin wallet. The offline `electrum` VM will communicate with either an `electrumx` or `eps` VM using Qubes' [`qrexec`](https://www.qubes-os.org/doc/qrexec/) and `socat`.
 ## What is Electrum?
 Electrum is a popular lightweight Bitcoin wallet based on a client-server protocol. More info [here](https://en.bitcoin.it/wiki/Electrum).
 ## Why Do This?
 This increases the security and privacy of your Electrum wallet while still maintaining full functionality. Privacy is enhanced by preventing data leakage to server operators, and security is improved by removing the need for an internet connection on the wallet.
 ## Prerequisites
-- To complete this guide you must have completed:
+- To complete this guide you must have first completed:
   - [`0_bitcoind.md`](https://github.com/qubenix/guides/blob/master/qubes-r4/whonix-14/bitcoin/indexed/0_bitcoind.md)
   - You will also need either one of these, but not both:
     - [`1_electrum-personal-server.md`](https://github.com/qubenix/guides/blob/master/qubes-r4/whonix-14/bitcoin/indexed/1_electrum-personal-server.md)
@@ -17,6 +17,7 @@ This increases the security and privacy of your Electrum wallet while still main
 
 **Notes:**
 - You must choose a label color, but it does not have to match this example.
+- It is safe to lower the `maxmem` and `vcpus` on this VM.
 
 ```
 [user@dom0 ~]$ qvm-create --label black --prop netvm='' --template whonix-ws-14-bitcoin electrum

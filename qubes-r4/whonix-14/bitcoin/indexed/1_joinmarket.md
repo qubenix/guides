@@ -9,7 +9,7 @@ There is a detailed explanation of the concept by the creator [here](https://bit
 ## Why Do This?
 This increases the security of your JoinMarket wallet while still maintaining full functionality. The only way a remote attacker can compromise this system is to successfully exploit one of your internet connected VMs and then use a Qubes/Xen 0-day to escape that VM.
 ## Prerequisites
-- To complete this guide you must have completed:
+- To complete this guide you must have first completed:
   - [`0_bitcoind.md`](https://github.com/qubenix/guides/blob/master/qubes-r4/whonix-14/bitcoin/indexed/0_bitcoind.md)
 
 ## I. Set Up Dom0
@@ -21,7 +21,7 @@ This increases the security of your JoinMarket wallet while still maintaining fu
 - It is safe to lower the `maxmem` and `vcpus` on this VM.
 
 ```
-[user@dom0 ~]$ qvm-create --label black --prop maxmem='600' --prop netvm='' --prop vcpus='1' --template whonix-ws-14-bitcoin joinmarket
+[user@dom0 ~]$ qvm-create --label black --prop maxmem='800' --prop netvm='' --prop vcpus='1' --template whonix-ws-14-bitcoin joinmarket
 ```
 ### B. Enable `joinmarketd` service.
 ```
@@ -68,6 +68,7 @@ ExecStart=/bin/sh -c 'jmvenv/bin/python scripts/joinmarketd.py'
 
 User=joinmarket
 Restart=on-failure
+Type=idle
 
 PrivateTmp=true
 ProtectSystem=full

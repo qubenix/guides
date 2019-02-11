@@ -82,7 +82,7 @@ After=qubes-sysinit.service
 Requires=qubes-mount-dirs.service
 
 [Service]
-ExecStart=/usr/local/bin/bitcoind
+ExecStart=/usr/local/bin/bitcoind -daemon -pid=/run/bitcoind/bitcoind.pid
 ExecStop=/usr/local/bin/bitcoin-cli stop
 
 RuntimeDirectory=bitcoind
@@ -263,7 +263,6 @@ user@host:~$ sudo kwrite /home/bitcoin/.bitcoin/bitcoin.conf
 - Be sure to replace `<gateway-ip>` with the information noted earlier.
 
 ```
-daemon=1
 listen=1
 onion=<gateway-ip>:9111
 onlynet=onion

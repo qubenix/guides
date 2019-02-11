@@ -15,8 +15,9 @@ In addition to the security improvements, a Whonix VM with a pruned Bitcoin node
 ```
 ### B. Create a gateway.
 **Notes:**
-- This gateway should be independent of other Whonix gateways to isolate its onion service. See [here](https://www.whonix.org/wiki/Multiple_Whonix-Workstations#Multiple_Whonix-Gateways).
+- This gateway should be independent of other Whonix gateways to isolate its onion service. For more information see [here](https://www.whonix.org/wiki/Multiple_Whonix-Workstations#Multiple_Whonix-Gateways).
 - You must choose a label color, but it does not have to match this example.
+- It is safe to lower the `maxmem` and `vcpus` on this VM.
 
 ```
 [user@dom0 ~]$ qvm-create --label purple --prop maxmem='400' --prop netvm='sys-firewall' --prop provides_network='True' --prop vcpus='1' --template whonix-gw-14 sys-bitcoind
@@ -32,8 +33,12 @@ In addition to the security improvements, a Whonix VM with a pruned Bitcoin node
 ```
 2. Create the VM for JoinMarket's wallet with no networking.
 
+**Notes:**
+- You must choose a label color, but it does not have to match this example.
+- It is safe to lower the `maxmem` and `vcpus` on this VM.
+
 ```
-[user@dom0 ~]$ qvm-create --label black --prop netvm='' --template whonix-ws-14-jm jm-wallet
+[user@dom0 ~]$ qvm-create --label black --prop maxmem='800' --prop netvm='' --prop vcpus='1' --template whonix-ws-14-jm jm-wallet
 ```
 3. Resize `jm-bitcoind`.
 
@@ -88,7 +93,7 @@ After=qubes-sysinit.service
 Requires=qubes-mount-dirs.service
 
 [Service]
-ExecStart=/usr/local/bin/bitcoind
+ExecStart=/usr/local/bin/bitcoind -daemon -pid=/run/bitcoind/bitcoind.pid
 ExecStop=/usr/local/bin/bitcoin-cli stop
 
 RuntimeDirectory=bitcoind
@@ -129,6 +134,7 @@ ExecStart=/bin/sh -c 'jmvenv/bin/python scripts/joinmarketd.py'
 
 User=joinmarket
 Restart=on-failure
+Type=idle
 
 PrivateTmp=true
 ProtectSystem=full
@@ -361,7 +367,6 @@ user@host:~$ sudo -u bitcoin kwrite /home/bitcoin/.bitcoin/bitcoin.conf
 - Do not discard your note of these credentials, you will need them again.
 
 ```
-daemon=1
 listen=1
 onion=<gateway-ip>:9111
 onlynet=onion
