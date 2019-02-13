@@ -1,11 +1,12 @@
 # Qubes 4 & Whonix 14: Building a Bitcoin Core Full Node
 Build a [Bitcoin Core](https://github.com/bitcoin/bitcoin) full node from source code and configure it to:
-- allow other VMs to connect when given permission
-- communicate only over Tor
-- index all transactions
-- prefer hidden services, use them exclusively if possible
-- use ephemeral hidden services to serve peers
-- utilize stream isolation
+- Allow other VMs to connect when given explicit permission from `dom0`.
+- Communicate only over Tor.
+- Easily plugin other applications which require a `bitcoind` backend.
+- Index all transactions.
+- Prefer hidden services, use them exclusively if possible.
+- Use ephemeral hidden services when serving peers.
+- Utilize Tor stream isolation.
 
 ## What is Bitcoin Core?
 The server daemon for the Bitcoin distributed cryptocurrency (`bitcoind`), command line tools (`bitcoin-cli`), and a gui wallet (`bitcoin-qt`). These tools can be used to observe and interact with Bitcoin's blockchain.

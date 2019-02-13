@@ -1,5 +1,5 @@
 # Qubes 4 & Whonix 14: Electrum
-Create a VM without networking to host an [Electrum](https://electrum.org) Bitcoin wallet. The offline `electrum` VM will communicate with either an `electrumx` or `eps` VM using Qubes' [`qrexec`](https://www.qubes-os.org/doc/qrexec/) and `socat`.
+Create a VM without networking to host an [Electrum](https://electrum.org) Bitcoin wallet. The offline `electrum` VM will communicate with either an `electrumx` or `eps` VM using Qubes' [`qrexec`](https://www.qubes-os.org/doc/qrexec3/).
 ## What is Electrum?
 Electrum is a popular lightweight Bitcoin wallet based on a client-server protocol. More info [here](https://en.bitcoin.it/wiki/Electrum).
 ## Why Do This?
@@ -64,7 +64,7 @@ user@host:~$ sudo apt update
 user@host:~$ sudo apt install -y electrum/sid
 ```
 ## III. Set Up Electrum
-### A. In an `electrum` terminal, open communication with `electrumx` or `eps` on boot.
+### A. In an `electrum` terminal, open communication with `eps` or `electrumx` on boot.
 1. Edit the file `/rw/config/local` for `eps`.
 
 **Note:**
@@ -86,30 +86,6 @@ user@host:~$ sudo sh -c 'echo "socat TCP-LISTEN:50002,fork,bind=127.0.0.1 EXEC:\
 ```
 user@host:~$ sudo /rw/config/rc.local
 ```
-### B. Configure `electrum`.
-1. Make data directory.
-
-```
-user@host:~$ mkdir -m 0700 ~/.electrum
-```
-2. Create configuration file.
-
-```
-user@host:~$ kwrite ~/.electrum/config
-```
-3. Paste the following.
-
-```
-{
-    "oneserver": true,
-    "server": "127.0.0.1:50002:s",
-}
-```
-4. Save the file and switch back to the terminal.
-5. Fix permissions.
-
-```
-user@host:~$ chmod 0600 ~/.electrum/config
-```
 ## IV. Final Notes
-- Once your `eps` or `electrumx` server has sync'd you will be able to use your `electrum` wallet normally.
+- Once your `eps` or `electrumx` server has sync'd you will be able to use your `electrum` wallet.
+- To launch the wallet from the command line:
